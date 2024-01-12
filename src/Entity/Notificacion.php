@@ -10,6 +10,7 @@ use phpDocumentor\Reflection\Types\Integer;
 use TipoNotificacion;
 
 #[ORM\Entity(repositoryClass: NotificacionRepository::class)]
+#[ORM\Table(name: 'notificacion',schema: 'apollo')]
 class Notificacion
 {
     #[ORM\Id]

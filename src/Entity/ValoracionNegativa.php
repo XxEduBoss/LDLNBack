@@ -6,6 +6,7 @@ use App\Repository\ValoracionNegativaRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ValoracionNegativaRepository::class)]
+#[ORM\Table(name: 'valoracion_negativa',schema: 'apollo')]
 class ValoracionNegativa
 {
     #[ORM\Id]

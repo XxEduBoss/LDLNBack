@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UsuarioRepository::class)]
+#[ORM\Table(name: 'usuario',schema: 'apollo')]
 class Usuario
 {
     #[ORM\Id]
