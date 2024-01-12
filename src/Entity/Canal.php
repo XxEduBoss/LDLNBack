@@ -29,10 +29,10 @@ class Canal
     #[ORM\Column(name:'telefono', length: 10, nullable: true)]
     private ?string $telefono = null;
 
-    #[ORM\Column(name:'fecha_nacimiento', type: Types::DATE_MUTABLE)]
+    #[ORM\Column(name:'fecha_nacimiento', type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_nacimiento = null;
 
-    #[ORM\Column(name:'fecha_creacion', type: Types::DATE_MUTABLE)]
+    #[ORM\Column(name:'fecha_creacion', type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_creacion = null;
 
     #[ORM\Column(name:'etiquetas', nullable: true)]
@@ -197,7 +197,7 @@ class Canal
     {
         if (!$this->suscripciones->contains($suscripcione)) {
             $this->suscripciones->add($suscripcione);
-            $suscripcione->setIdCana�l($this);
+            $suscripcione->setIdCanal($this);
         }
 
         return $this;
@@ -207,8 +207,8 @@ class Canal
     {
         if ($this->suscripciones->removeElement($suscripcione)) {
             // set the owning side to null (unless already changed)
-            if ($suscripcione->getIdCana�l() === $this) {
-                $suscripcione->setIdCana�l(null);
+            if ($suscripcione->getIdCanal() === $this) {
+                $suscripcione->setIdCanal(null);
             }
         }
 

@@ -181,8 +181,8 @@ class Usuario
 
     public function addMensajeEmisor(Mensaje $mensajes_emisor): static
     {
-        if (!$this->$mensajes_emisor->contains($mensajes_emisor)) {
-            $this->$mensajes_emisor->add($mensajes_emisor);
+        if (!$this->mensajes_emisor->contains($mensajes_emisor)) {
+            $this->mensajes_emisor->add($mensajes_emisor);
             $mensajes_emisor->setIdUsuarioEmisor($this);
         }
 
@@ -191,7 +191,7 @@ class Usuario
 
     public function removeMensajeEmisor(Mensaje $mensajes_emisor): static
     {
-        if ($this->$mensajes_emisor->removeElement($mensajes_emisor)) {
+        if ($this->mensajes_emisor->removeElement($mensajes_emisor)) {
             // set the owning side to null (unless already changed)
             if ($mensajes_emisor->getIdUsuarioEmisor() === $this) {
                 $mensajes_emisor->setIdUsuarioEmisor(null);
@@ -211,8 +211,8 @@ class Usuario
 
     public function addMensajeReceptor(Mensaje $mensajes_receptor): static
     {
-        if (!$this->$mensajes_receptor->contains($mensajes_receptor)) {
-            $this->$mensajes_receptor->add($mensajes_receptor);
+        if (!$this->mensajes_receptor->contains($mensajes_receptor)) {
+            $this->mensajes_receptor->add($mensajes_receptor);
             $mensajes_receptor->setIdUsuarioEmisor($this);
         }
 
@@ -221,7 +221,7 @@ class Usuario
 
     public function removeMensajeReceptor(Mensaje $mensajes_receptor): static
     {
-        if ($this->$mensajes_receptor->removeElement($mensajes_receptor)) {
+        if ($this->mensajes_receptor->removeElement($mensajes_receptor)) {
             // set the owning side to null (unless already changed)
             if ($mensajes_receptor->getIdUsuarioEmisor() === $this) {
                 $mensajes_receptor->setIdUsuarioEmisor(null);

@@ -33,8 +33,8 @@ create table canal(
                       apellidos varchar(100),
                       nombre_canal varchar(100),
                       telefono varchar(10),
-                      fecha_nacimiento date not null,
-                      fecha_creacion date not null,
+                      fecha_nacimiento timestamp(6) not null,
+                      fecha_creacion timestamp(6) not null,
                       etiquetas int,
                       id_usuario int not null,
 
@@ -49,8 +49,8 @@ create table video(
                       descripcion varchar(500),
                       url varchar(10000),
                       etiquetas int not null,
-                      fecha_publicacion date not null,
-                      fecha_creacion date not null,
+                      fecha_publicacion timestamp(6) not null,
+                      fecha_creacion timestamp(6) not null,
                       id_canal int not null,
 
                       primary key (id),
@@ -61,7 +61,7 @@ create table video(
 
 create table suscripcion(
                             id serial,
-                            fecha_suscripcion date not null,
+                            fecha_suscripcion timestamp(6) not null,
                             id_canal int not null,
                             id_usuario int not null,
 
@@ -74,7 +74,7 @@ create table suscripcion(
 create table mensaje(
                         id serial,
                         texto varchar(10000) not null,
-                        fecha_envio date not null,
+                        fecha_envio timestamp(6) not null,
                         id_usuario_emisor int not null,
                         id_usuario_receptor int not null,
 
@@ -87,8 +87,8 @@ create table mensaje(
 create table token(
                       id serial,
                       apikey varchar(10000) not null,
-                      fecha_expedicion date not null,
-                      fecha_creacion date not null,
+                      fecha_expedicion timestamp(6) not null,
+                      fecha_creacion timestamp(6) not null,
                       id_usuario int not null,
 
                       primary key (id),
@@ -100,7 +100,7 @@ create table notificacion(
                              id serial,
                              texto varchar(10000) not null,
                              tipo int not null,
-                             fecha_notificacion date not null,
+                             fecha_notificacion timestamp(6) not null,
                              id_usuario int not null,
 
                              primary key (id),
@@ -110,7 +110,7 @@ create table notificacion(
 
 create table visita(
                        id serial,
-                       fecha_visita date not null,
+                       fecha_visita timestamp(6) not null,
                        id_video int not null,
                        id_usuario int not null,
 
@@ -123,7 +123,7 @@ create table visita(
 create table comentario(
                            id serial,
                            texto varchar(10000) not null,
-                           fecha_publicacion date not null,
+                           fecha_publicacion timestamp(6) not null,
                            id_video int not null,
                            id_usuario int not null,
 

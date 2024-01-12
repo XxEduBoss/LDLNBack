@@ -32,7 +32,7 @@ class Video
     #[ORM\Column(name:'fecha_publicacion', type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_publicacion = null;
 
-    #[ORM\Column(name:'fecha_creacion', type: Types::DATE_MUTABLE)]
+    #[ORM\Column(name:'fecha_creacion', type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_creacion = null;
 
     #[ORM\ManyToOne(inversedBy: 'videos')]
