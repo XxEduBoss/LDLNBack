@@ -45,26 +45,26 @@ class Token
         return $this;
     }
 
-    public function getFechaExpedicion(): ?\DateTimeInterface
+    public function getFechaExpedicion(): ? string
     {
-        return $this->fecha_expedicion;
+        return $this->fecha_expedicion->format('d/m/Y H:i:s');
     }
 
     public function setFechaExpedicion(\DateTimeInterface $fecha_expedicion): static
     {
-        $this->fecha_expedicion = $fecha_expedicion;
+        $this->fecha_expedicion = \DateTime::createFromFormat('d/m/Y H:i:s', $fecha_expedicion);
 
         return $this;
     }
 
-    public function getFechaCreacion(): ?\DateTimeInterface
+    public function getFechaCreacion(): ? string
     {
-        return $this->fecha_creacion;
+        return $this->fecha_creacion->format('d/m/Y H:i:s');
     }
 
     public function setFechaCreacion(\DateTimeInterface $fecha_creacion): static
     {
-        $this->fecha_creacion = $fecha_creacion;
+        $this->fecha_creacion = \DateTime::createFromFormat('d/m/Y H:i:s', $fecha_creacion);
 
         return $this;
     }
