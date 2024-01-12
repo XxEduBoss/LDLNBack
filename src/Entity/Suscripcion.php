@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\SuscripcionRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,17 +17,13 @@ class Suscripcion
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fecha_suscripcion = null;
 
-    #[ORM\ManyToMany(targetEntity: Canal::class, inversedBy: 'suscripciones')]
-    private Collection $id_canal;
+    #[ORM\ManyToOne(inversedBy: 'suscripciones')]
+    #[ORM\JoinColumn(name:'id_canal', nullable: false)]
+    private ?Canal $id_canal = null;
 
-    #[ORM\ManyToMany(targetEntity: Usuario::class, inversedBy: 'suscripciones')]
-    private Collection $id_usuario;
-
-    public function __construct()
-    {
-        $this->id_canal = new ArrayCollection();
-        $this->id_usuario = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'suscripciones')]
+    #[ORM\JoinColumn(name:'id_usuario', nullable: false)]
+    private ?Usuario $id_usuario = null;
 
     public function getId(): ?int
     {
@@ -48,50 +42,26 @@ class Suscripcion
         return $this;
     }
 
-    /**
-     * @return Collection<int, Canal>
-     */
-    public function getIdCanal(): Collection
+    public function getIdCanal(): ?Canal
     {
         return $this->id_canal;
     }
 
-    public function addIdCanal(Canal $idCanal): static
+    public function setIdCanal(?Canal $id_canal): static
     {
-        if (!$this->id_canal->contains($idCanal)) {
-            $this->id_canal->add($idCanal);
-        }
+        $this->id_canal = $id_canal;
 
         return $this;
     }
 
-    public function removeIdCanal(Canal $idCanal): static
-    {
-        $this->id_canal->removeElement($idCanal);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Usuario>
-     */
-    public function getIdUsuario(): Collection
+    public function getIdUsuario(): ?Usuario
     {
         return $this->id_usuario;
     }
 
-    public function addIdUsuario(Usuario $idUsuario): static
+    public function setIdUsuario(?Usuario $id_usuario): static
     {
-        if (!$this->id_usuario->contains($idUsuario)) {
-            $this->id_usuario->add($idUsuario);
-        }
-
-        return $this;
-    }
-
-    public function removeIdUsuario(Usuario $idUsuario): static
-    {
-        $this->id_usuario->removeElement($idUsuario);
+        $this->id_usuario = $id_usuario;
 
         return $this;
     }

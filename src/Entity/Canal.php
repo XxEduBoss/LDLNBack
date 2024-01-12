@@ -16,41 +16,41 @@ class Canal
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(name:'nombre', length: 100)]
     private ?string $nombre = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
+    #[ORM\Column(name:'apellidos', length: 100, nullable: true)]
     private ?string $apellidos = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
+    #[ORM\Column(name:'nombre_canal',length: 100, nullable: true)]
     private ?string $nombre_canal = null;
 
-    #[ORM\Column(length: 10, nullable: true)]
+    #[ORM\Column(name:'telefono', length: 10, nullable: true)]
     private ?string $telefono = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(name:'fecha_nacimiento', type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fecha_nacimiento = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(name:'fecha_creacion', type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fecha_creacion = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(name:'etiquetas', nullable: true)]
     private ?int $etiquetas = null;
 
     #[ORM\OneToOne(inversedBy: 'canal', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name:'id_usuario', nullable: false)]
     private ?Usuario $id_usuario = null;
 
     #[ORM\OneToMany(mappedBy: 'id_canal', targetEntity: Video::class, orphanRemoval: true)]
     private Collection $videos;
 
-    #[ORM\ManyToMany(targetEntity: Suscripcion::class, mappedBy: 'id_canal')]
-    private Collection $suscripcions;
+    #[ORM\OneToMany(mappedBy: 'id_canal', targetEntity: Suscripcion::class)]
+    private Collection $suscripciones;
 
     public function __construct()
     {
         $this->videos = new ArrayCollection();
-        $this->suscripcions = new ArrayCollection();
+        $this->suscripciones = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -187,27 +187,31 @@ class Canal
     /**
      * @return Collection<int, Suscripcion>
      */
-    public function getSuscripcions(): Collection
+    public function getSuscripciones(): Collection
     {
-        return $this->suscripcions;
+        return $this->suscripciones;
     }
 
-    public function addSuscripcion(Suscripcion $suscripcion): static
+    public function addSuscripcione(Suscripcion $suscripcione): static
     {
-        if (!$this->suscripcions->contains($suscripcion)) {
-            $this->suscripcions->add($suscripcion);
-            $suscripcion->addIdCanal($this);
+        if (!$this->suscripciones->contains($suscripcione)) {
+            $this->suscripciones->add($suscripcione);
+            $suscripcione->setIdCana�l($this);
         }
 
         return $this;
     }
 
-    public function removeSuscripcion(Suscripcion $suscripcion): static
+    public function removeSuscripcione(Suscripcion $suscripcione): static
     {
-        if ($this->suscripcions->removeElement($suscripcion)) {
-            $suscripcion->removeIdCanal($this);
+        if ($this->suscripciones->removeElement($suscripcione)) {
+            // set the owning side to null (unless already changed)
+            if ($suscripcione->getIdCana�l() === $this) {
+                $suscripcione->setIdCana�l(null);
+            }
         }
 
         return $this;
     }
+
 }
