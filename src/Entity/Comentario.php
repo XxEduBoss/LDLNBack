@@ -46,14 +46,14 @@ class Comentario
         return $this;
     }
 
-    public function getFechaPublicacion(): ?\DateTimeInterface
+    public function getFechaPublicacion(): ?string
     {
-        return $this->fecha_publicacion;
+        return $this->fecha_publicacion->format('d/m/Y H:i:s');
     }
 
-    public function setFechaPublicacion(\DateTimeInterface $fecha_publicacion): static
+    public function setFechaPublicacion(String $fecha_publicacion): static
     {
-        $this->fecha_publicacion = $fecha_publicacion;
+        $this->fecha_publicacion = \DateTime::createFromFormat('d/m/Y H:i:s', $fecha_publicacion);
 
         return $this;
     }
