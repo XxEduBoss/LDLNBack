@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Node\Scalar\String_;
 
 #[ORM\Entity(repositoryClass: CanalRepository::class)]
 #[ORM\Table(name: 'canal',schema: 'apollo')]
@@ -107,26 +108,27 @@ class Canal
         return $this;
     }
 
-    public function getFechaNacimiento(): ?\DateTimeInterface
+
+    public function getFechaNacimiento(): ?string
     {
-        return $this->fecha_nacimiento;
+        return $this->fecha_nacimiento->format('d/m/Y H:i:s');
     }
 
-    public function setFechaNacimiento(\DateTimeInterface $fecha_nacimiento): static
+    public function setFechaNacimiento(String $fecha_nacimiento): static
     {
-        $this->fecha_nacimiento = $fecha_nacimiento;
+        $this->fecha_nacimiento = \DateTime::createFromFormat('d/m/Y H:i:s', $fecha_nacimiento);
 
         return $this;
     }
 
-    public function getFechaCreacion(): ?\DateTimeInterface
+    public function getFechaCreacion(): ?string
     {
-        return $this->fecha_creacion;
+        return $this->fecha_creacion->format('d/m/Y H:i:s');
     }
 
-    public function setFechaCreacion(\DateTimeInterface $fecha_creacion): static
+    public function setFechaCreacion(String $fecha_creacion): static
     {
-        $this->fecha_creacion = $fecha_creacion;
+        $this->$fecha_creacion = \DateTime::createFromFormat('d/m/Y H:i:s', $fecha_creacion);
 
         return $this;
     }
