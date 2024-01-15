@@ -29,6 +29,9 @@ class Mensaje
     #[ORM\JoinColumn(name:'id_usuario_receptor', nullable: false)]
     private ?Usuario $id_usuario_receptor = null;
 
+    #[ORM\Column]
+    private ?bool $activo = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -78,6 +81,18 @@ class Mensaje
     public function setIdUsuarioReceptor(?Usuario $id_usuario_receptor): static
     {
         $this->id_usuario_receptor = $id_usuario_receptor;
+
+        return $this;
+    }
+
+    public function isActivo(): ?bool
+    {
+        return $this->activo;
+    }
+
+    public function setActivo(bool $activo): static
+    {
+        $this->activo = $activo;
 
         return $this;
     }

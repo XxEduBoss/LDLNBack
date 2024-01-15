@@ -29,6 +29,9 @@ class Comentario
     #[ORM\JoinColumn(name:'id_usuario', nullable: false)]
     private ?Usuario $id_usuario = null;
 
+    #[ORM\Column]
+    private ?bool $activo = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -78,6 +81,18 @@ class Comentario
     public function setIdUsuario(?Usuario $id_usuario): static
     {
         $this->id_usuario = $id_usuario;
+
+        return $this;
+    }
+
+    public function isActivo(): ?bool
+    {
+        return $this->activo;
+    }
+
+    public function setActivo(bool $activo): static
+    {
+        $this->activo = $activo;
 
         return $this;
     }

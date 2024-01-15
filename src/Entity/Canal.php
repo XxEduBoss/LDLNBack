@@ -49,6 +49,9 @@ class Canal
     #[ORM\OneToMany(mappedBy: 'id_canal', targetEntity: Suscripcion::class)]
     private Collection $suscripciones;
 
+    #[ORM\Column]
+    private ?bool $activo = null;
+
     public function __construct()
     {
         $this->videos = new ArrayCollection();
@@ -213,6 +216,18 @@ class Canal
                 $suscripcione->setIdCanal(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isActivo(): ?bool
+    {
+        return $this->activo;
+    }
+
+    public function setActivo(bool $activo): static
+    {
+        $this->activo = $activo;
 
         return $this;
     }

@@ -36,6 +36,7 @@ create table canal(
                       fecha_nacimiento timestamp(6) not null,
                       fecha_creacion timestamp(6) not null,
                       etiquetas int,
+                      activo bool default true not null,
                       id_usuario int not null,
 
                       primary key (id),
@@ -51,6 +52,7 @@ create table video(
                       etiquetas int not null,
                       fecha_publicacion timestamp(6) not null,
                       fecha_creacion timestamp(6) not null,
+                      activo bool default true not null,
                       id_canal int not null,
 
                       primary key (id),
@@ -62,6 +64,7 @@ create table video(
 create table suscripcion(
                             id serial,
                             fecha_suscripcion timestamp(6) not null,
+                            activo bool default true not null,
                             id_canal int not null,
                             id_usuario int not null,
 
@@ -75,6 +78,7 @@ create table mensaje(
                         id serial,
                         texto varchar(10000) not null,
                         fecha_envio timestamp(6) not null,
+                        activo bool default true not null,
                         id_usuario_emisor int not null,
                         id_usuario_receptor int not null,
 
@@ -89,6 +93,7 @@ create table token(
                       apikey varchar(10000) not null,
                       fecha_expedicion timestamp(6) not null,
                       fecha_creacion timestamp(6) not null,
+                      activo bool default true not null,
                       id_usuario int not null,
 
                       primary key (id),
@@ -101,6 +106,7 @@ create table notificacion(
                              texto varchar(10000) not null,
                              tipo int not null,
                              fecha_notificacion timestamp(6) not null,
+                             activo bool default true not null,
                              id_usuario int not null,
 
                              primary key (id),
@@ -111,6 +117,7 @@ create table notificacion(
 create table visita(
                        id serial,
                        fecha_visita timestamp(6) not null,
+                       activo bool default true not null,
                        id_video int not null,
                        id_usuario int not null,
 
@@ -124,6 +131,7 @@ create table comentario(
                            id serial,
                            texto varchar(10000) not null,
                            fecha_publicacion timestamp(6) not null,
+                           activo bool default true not null,
                            id_video int not null,
                            id_usuario int not null,
 
@@ -136,6 +144,7 @@ create table comentario(
 create table valoracion_positiva(
                                     id serial,
                                     likes boolean,
+                                    activo bool default true not null,
                                     id_video int not null,
                                     id_usuario int not null,
 
@@ -148,6 +157,7 @@ create table valoracion_positiva(
 create table valoracion_negativa(
                                     id serial,
                                     dislikes boolean,
+                                    activo bool default true not null,
                                     id_video int not null,
                                     id_usuario int not null,
 
