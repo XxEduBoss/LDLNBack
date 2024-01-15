@@ -46,7 +46,7 @@ class CanalController extends AbstractController
 
 
         $usuario = $entityManager->getRepository(Usuario::class)->findBy(["id"=>$json["id_usuario"]]);
-        $nuevoCanal->setIdUsuario($usuario[0]);
+        $nuevoCanal->setUsuario($usuario[0]);
 
         $entityManager->persist($nuevoCanal);
         $entityManager->flush();
@@ -68,18 +68,18 @@ class CanalController extends AbstractController
         $canal->setFechaCreacion($json["fecha_creacion"]);
 
         $usuario = $entityManager->getRepository(Usuario::class)->findBy(["id"=>$json["id_usuario"]]);
-        $canal->setIdUsuario($usuario[0]);
+        $canal->setUsuario($usuario[0]);
 
         $entityManager->flush();
 
         return $this->json(['message' => 'Canal modificada'], Response::HTTP_OK);
     }
 
-    //Eliminar canal
-    #[Route('/{id}', name: "delete_by_id", methods: ["DELETE"])]
-    public function deleteById(EntityManagerInterface $entityManager, Canal $canal):JsonResponse
+    //Desactivar canal
+    #[Route('/borrar/{id}', name: "delete_by_id", methods: ["PUT"])]
+    public function deletedById(EntityManagerInterface $entityManager, Canal $canal):JsonResponse
     {
-        $entityManager->remove($canal);
+        $canal-> setActivo(false);
         $entityManager->flush();
 
         return $this->json(['message' => 'Canal eliminado'], Response::HTTP_OK);
