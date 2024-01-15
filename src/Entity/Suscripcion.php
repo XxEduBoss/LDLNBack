@@ -19,12 +19,15 @@ class Suscripcion
     private ?\DateTimeInterface $fecha_suscripcion = null;
 
     #[ORM\ManyToOne(inversedBy: 'suscripciones')]
-    #[ORM\JoinColumn(name:'id_canal', nullable: false)]
-    private ?Canal $id_canal = null;
+    #[ORM\JoinColumn(name:'canal', nullable: false)]
+    private ?Canal $canal = null;
 
     #[ORM\ManyToOne(inversedBy: 'suscripciones')]
-    #[ORM\JoinColumn(name:'id_usuario', nullable: false)]
-    private ?Usuario $id_usuario = null;
+    #[ORM\JoinColumn(name:'usuario', nullable: false)]
+    private ?Usuario $usuario = null;
+
+    #[ORM\Column]
+    private ?bool $activo = null;
 
     public function getId(): ?int
     {
@@ -43,26 +46,38 @@ class Suscripcion
         return $this;
     }
 
-    public function getIdCanal(): ?Canal
+    public function getCanal(): ?Canal
     {
-        return $this->id_canal;
+        return $this->canal;
     }
 
-    public function setIdCanal(?Canal $id_canal): static
+    public function setCanal(?Canal $canal): static
     {
-        $this->id_canal = $id_canal;
+        $this->canal = $canal;
 
         return $this;
     }
 
-    public function getIdUsuario(): ?Usuario
+    public function getUsuario(): ?Usuario
     {
-        return $this->id_usuario;
+        return $this->usuario;
     }
 
-    public function setIdUsuario(?Usuario $id_usuario): static
+    public function setUsuario(?Usuario $usuario): static
     {
-        $this->id_usuario = $id_usuario;
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    public function isActivo(): ?bool
+    {
+        return $this->activo;
+    }
+
+    public function setActivo(bool $activo): static
+    {
+        $this->activo = $activo;
 
         return $this;
     }

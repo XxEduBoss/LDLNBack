@@ -36,10 +36,11 @@ create table canal(
                       fecha_nacimiento timestamp(6) not null,
                       fecha_creacion timestamp(6) not null,
                       etiquetas int,
-                      id_usuario int not null,
+                      usuario int not null,
+                      activo bool default true not null,
 
                       primary key (id),
-                      constraint fk_canal_usuario foreign key (id_usuario) references usuario(id)
+                      constraint fk_canal_usuario foreign key (usuario) references usuario(id)
 
 );
 
@@ -51,10 +52,12 @@ create table video(
                       etiquetas int not null,
                       fecha_publicacion timestamp(6) not null,
                       fecha_creacion timestamp(6) not null,
-                      id_canal int not null,
+                      canal int not null,
+                      activo bool default true not null,
+
 
                       primary key (id),
-                      constraint fk_video_canal foreign key (id_canal) references canal(id)
+                      constraint fk_video_canal foreign key (canal) references canal(id)
 
 );
 
@@ -62,12 +65,13 @@ create table video(
 create table suscripcion(
                             id serial,
                             fecha_suscripcion timestamp(6) not null,
-                            id_canal int not null,
-                            id_usuario int not null,
+                            canal int not null,
+                            usuario int not null,
+                            activo bool default true not null,
 
                             primary key (id),
-                            constraint fk_suscripcion_usuario foreign key (id_usuario) references usuario(id),
-                            constraint fk_suscripcion_canal foreign key (id_canal) references canal(id)
+                            constraint fk_suscripcion_usuario foreign key (usuario) references usuario(id),
+                            constraint fk_suscripcion_canal foreign key (canal) references canal(id)
 
 );
 
@@ -75,12 +79,13 @@ create table mensaje(
                         id serial,
                         texto varchar(10000) not null,
                         fecha_envio timestamp(6) not null,
-                        id_usuario_emisor int not null,
-                        id_usuario_receptor int not null,
+                        usuario_emisor int not null,
+                        usuario_receptor int not null,
+                        activo bool default true not null,
 
                         primary key (id),
-                        constraint fk_mensaje_emisor foreign key (id_usuario_emisor) references usuario(id),
-                        constraint fk_mensaje_receptor foreign key (id_usuario_receptor) references usuario (id)
+                        constraint fk_mensaje_emisor foreign key (usuario_emisor) references usuario(id),
+                        constraint fk_mensaje_receptor foreign key (usuario_receptor) references usuario (id)
 
 );
 
@@ -89,10 +94,12 @@ create table token(
                       apikey varchar(10000) not null,
                       fecha_expedicion timestamp(6) not null,
                       fecha_creacion timestamp(6) not null,
-                      id_usuario int not null,
+                      usuario int not null,
+                      activo bool default true not null,
+
 
                       primary key (id),
-                      constraint fk_token_usuario foreign key (id_usuario) references usuario(id)
+                      constraint fk_token_usuario foreign key (usuario) references usuario(id)
 
 );
 
@@ -101,22 +108,26 @@ create table notificacion(
                              texto varchar(10000) not null,
                              tipo int not null,
                              fecha_notificacion timestamp(6) not null,
-                             id_usuario int not null,
+                             usuario int not null,
+                             activo bool default true not null,
+
 
                              primary key (id),
-                             constraint fk_notificacion_usuario foreign key (id_usuario) references usuario(id)
+                             constraint fk_notificacion_usuario foreign key (usuario) references usuario(id)
 
 );
 
 create table visita(
                        id serial,
                        fecha_visita timestamp(6) not null,
-                       id_video int not null,
-                       id_usuario int not null,
+                       activo bool default true not null,
+
+                       video int not null,
+                       usuario int not null,
 
                        primary key (id),
-                       constraint fk_visita_usuario foreign key (id_usuario) references usuario(id),
-                       constraint fk_visita_video foreign key (id_video) references video(id)
+                       constraint fk_visita_usuario foreign key (usuario) references usuario(id),
+                       constraint fk_visita_video foreign key (video) references video(id)
 
 );
 
@@ -124,35 +135,41 @@ create table comentario(
                            id serial,
                            texto varchar(10000) not null,
                            fecha_publicacion timestamp(6) not null,
-                           id_video int not null,
-                           id_usuario int not null,
+                           activo bool default true not null,
+
+                           video int not null,
+                           usuario int not null,
 
                            primary key (id),
-                           constraint fk_comentario_usuario foreign key (id_usuario) references usuario(id),
-                           constraint fk_comentario_video foreign key (id_video) references video(id)
+                           constraint fk_comentario_usuario foreign key (usuario) references usuario(id),
+                           constraint fk_comentario_video foreign key (video) references video(id)
 
 );
 
 create table valoracion_positiva(
                                     id serial,
                                     likes boolean,
-                                    id_video int not null,
-                                    id_usuario int not null,
+                                    activo bool default true not null,
+
+                                    video int not null,
+                                    usuario int not null,
 
                                     primary key (id),
-                                    constraint fk_like_usuario foreign key (id_usuario) references usuario(id),
-                                    constraint fk_like_video foreign key (id_video) references video(id)
+                                    constraint fk_like_usuario foreign key (usuario) references usuario(id),
+                                    constraint fk_like_video foreign key (video) references video(id)
 
 );
 
 create table valoracion_negativa(
                                     id serial,
                                     dislikes boolean,
-                                    id_video int not null,
-                                    id_usuario int not null,
+                                    activo bool default true not null,
+
+                                    video int not null,
+                                    usuario int not null,
 
                                     primary key (id),
-                                    constraint fk_dislike_usuario foreign key (id_usuario) references usuario(id),
-                                    constraint fk_dislike_video foreign key (id_video) references video(id)
+                                    constraint fk_dislike_usuario foreign key (usuario) references usuario(id),
+                                    constraint fk_dislike_video foreign key (video) references video(id)
 
 );

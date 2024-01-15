@@ -36,19 +36,19 @@ class Video
     private ?\DateTimeInterface $fecha_creacion = null;
 
     #[ORM\ManyToOne(inversedBy: 'videos')]
-    #[ORM\JoinColumn(name:'id_canal', nullable: false)]
-    private ?Canal $id_canal = null;
+    #[ORM\JoinColumn(name:'canal', nullable: false)]
+    private ?Canal $canal = null;
 
-    #[ORM\OneToMany(mappedBy: 'id_video', targetEntity: Visita::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'video', targetEntity: Visita::class, orphanRemoval: true)]
     private Collection $visitas;
 
-    #[ORM\OneToMany(mappedBy: 'id_video', targetEntity: Comentario::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'video', targetEntity: Comentario::class, orphanRemoval: true)]
     private Collection $comentarios;
 
-    #[ORM\OneToMany(mappedBy: 'id_video', targetEntity: ValoracionPositiva::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'video', targetEntity: ValoracionPositiva::class, orphanRemoval: true)]
     private Collection $valoracionesPositivas;
 
-    #[ORM\OneToMany(mappedBy: 'id_video', targetEntity: ValoracionNegativa::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'video', targetEntity: ValoracionNegativa::class, orphanRemoval: true)]
     private Collection $valoracionesNegativas;
 
     #[ORM\Column]
@@ -139,14 +139,14 @@ class Video
         return $this;
     }
 
-    public function getIdCanal(): ?Canal
+    public function getCanal(): ?Canal
     {
-        return $this->id_canal;
+        return $this->canal;
     }
 
-    public function setIdCanal(?Canal $id_canal): static
+    public function setCanal(?Canal $canal): static
     {
-        $this->id_canal = $id_canal;
+        $this->canal = $canal;
 
         return $this;
     }
@@ -163,7 +163,7 @@ class Video
     {
         if (!$this->visitas->contains($visita)) {
             $this->visitas->add($visita);
-            $visita->setIdVideo($this);
+            $visita->setVideo($this);
         }
 
         return $this;
@@ -173,8 +173,8 @@ class Video
     {
         if ($this->visitas->removeElement($visita)) {
             // set the owning side to null (unless already changed)
-            if ($visita->getIdVideo() === $this) {
-                $visita->setIdVideo(null);
+            if ($visita->getVideo() === $this) {
+                $visita->setVideo(null);
             }
         }
 
@@ -193,7 +193,7 @@ class Video
     {
         if (!$this->comentarios->contains($comentario)) {
             $this->comentarios->add($comentario);
-            $comentario->setIdVideo($this);
+            $comentario->setVideo($this);
         }
 
         return $this;
@@ -203,8 +203,8 @@ class Video
     {
         if ($this->comentarios->removeElement($comentario)) {
             // set the owning side to null (unless already changed)
-            if ($comentario->getIdVideo() === $this) {
-                $comentario->setIdVideo(null);
+            if ($comentario->getVideo() === $this) {
+                $comentario->setVideo(null);
             }
         }
 
@@ -219,22 +219,22 @@ class Video
         return $this->valoracionesPositivas;
     }
 
-    public function addValoracionesPositiva(ValoracionPositiva $valoracionesPositiva): static
+    public function addValoracionPositiva(ValoracionPositiva $valoracionPositiva): static
     {
-        if (!$this->valoracionesPositivas->contains($valoracionesPositiva)) {
-            $this->valoracionesPositivas->add($valoracionesPositiva);
-            $valoracionesPositiva->setIdVideo($this);
+        if (!$this->valoracionesPositivas->contains($valoracionPositiva)) {
+            $this->valoracionesPositivas->add($valoracionPositiva);
+            $valoracionPositiva->setVideo($this);
         }
 
         return $this;
     }
 
-    public function removeValoracionesPositiva(ValoracionPositiva $valoracionesPositiva): static
+    public function removeValoracionPositiva(ValoracionPositiva $valoracionPositiva): static
     {
-        if ($this->valoracionesPositivas->removeElement($valoracionesPositiva)) {
+        if ($this->valoracionesPositivas->removeElement($valoracionPositiva)) {
             // set the owning side to null (unless already changed)
-            if ($valoracionesPositiva->getIdVideo() === $this) {
-                $valoracionesPositiva->setIdVideo(null);
+            if ($valoracionPositiva->getVideo() === $this) {
+                $valoracionPositiva->setVideo(null);
             }
         }
 
@@ -249,22 +249,22 @@ class Video
         return $this->valoracionesNegativas;
     }
 
-    public function addValoracionesNegativa(ValoracionNegativa $valoracionesNegativa): static
+    public function addValoracionesNegativa(ValoracionNegativa $valoracionNegativa): static
     {
-        if (!$this->valoracionesNegativas->contains($valoracionesNegativa)) {
-            $this->valoracionesNegativas->add($valoracionesNegativa);
-            $valoracionesNegativa->setIdVideo($this);
+        if (!$this->valoracionesNegativas->contains($valoracionNegativa)) {
+            $this->valoracionesNegativas->add($valoracionNegativa);
+            $valoracionNegativa->setVideo($this);
         }
 
         return $this;
     }
 
-    public function removeValoracionesNegativa(ValoracionNegativa $valoracionesNegativa): static
+    public function removeValoracionesNegativa(ValoracionNegativa $valoracionNegativa): static
     {
-        if ($this->valoracionesNegativas->removeElement($valoracionesNegativa)) {
+        if ($this->valoracionesNegativas->removeElement($valoracionNegativa)) {
             // set the owning side to null (unless already changed)
-            if ($valoracionesNegativa->getIdVideo() === $this) {
-                $valoracionesNegativa->setIdVideo(null);
+            if ($valoracionNegativa->getVideo() === $this) {
+                $valoracionNegativa->setVideo(null);
             }
         }
 
