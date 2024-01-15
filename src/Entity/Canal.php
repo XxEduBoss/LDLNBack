@@ -40,13 +40,13 @@ class Canal
     private ?int $etiquetas = null;
 
     #[ORM\OneToOne(inversedBy: 'canal', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name:'id_usuario', nullable: false)]
-    private ?Usuario $id_usuario = null;
+    #[ORM\JoinColumn(name:'usuario', nullable: false)]
+    private ?Usuario $usuario = null;
 
-    #[ORM\OneToMany(mappedBy: 'id_canal', targetEntity: Video::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'canal', targetEntity: Video::class, orphanRemoval: true)]
     private Collection $videos;
 
-    #[ORM\OneToMany(mappedBy: 'id_canal', targetEntity: Suscripcion::class)]
+    #[ORM\OneToMany(mappedBy: 'canal', targetEntity: Suscripcion::class)]
     private Collection $suscripciones;
 
     public function __construct()
@@ -128,7 +128,7 @@ class Canal
 
     public function setFechaCreacion(String $fecha_creacion): static
     {
-        $this->$fecha_creacion = \DateTime::createFromFormat('d/m/Y H:i:s', $fecha_creacion);
+        $this->fecha_creacion = \DateTime::createFromFormat('d/m/Y H:i:s', $fecha_creacion);
 
         return $this;
     }
@@ -145,14 +145,14 @@ class Canal
         return $this;
     }
 
-    public function getIdUsuario(): ?Usuario
+    public function getUsuario(): ?Usuario
     {
-        return $this->id_usuario;
+        return $this->usuario;
     }
 
-    public function setIdUsuario(Usuario $id_usuario): static
+    public function setUsuario(Usuario $usuario): static
     {
-        $this->id_usuario = $id_usuario;
+        $this->usuario = $usuario;
 
         return $this;
     }
@@ -169,7 +169,7 @@ class Canal
     {
         if (!$this->videos->contains($video)) {
             $this->videos->add($video);
-            $video->setIdCanal($this);
+            $video->setCanal($this);
         }
 
         return $this;
@@ -179,8 +179,8 @@ class Canal
     {
         if ($this->videos->removeElement($video)) {
             // set the owning side to null (unless already changed)
-            if ($video->getIdCanal() === $this) {
-                $video->setIdCanal(null);
+            if ($video->getCanal() === $this) {
+                $video->setCanal(null);
             }
         }
 
@@ -195,22 +195,22 @@ class Canal
         return $this->suscripciones;
     }
 
-    public function addSuscripcione(Suscripcion $suscripcione): static
+    public function addSuscripciones(Suscripcion $suscripcion): static
     {
-        if (!$this->suscripciones->contains($suscripcione)) {
-            $this->suscripciones->add($suscripcione);
-            $suscripcione->setIdCanal($this);
+        if (!$this->suscripciones->contains($suscripcion)) {
+            $this->suscripciones->add($suscripcion);
+            $suscripcion->setCanal($this);
         }
 
         return $this;
     }
 
-    public function removeSuscripcione(Suscripcion $suscripcione): static
+    public function removeSuscripciones(Suscripcion $suscripcion): static
     {
-        if ($this->suscripciones->removeElement($suscripcione)) {
+        if ($this->suscripciones->removeElement($suscripcion)) {
             // set the owning side to null (unless already changed)
-            if ($suscripcione->getIdCanal() === $this) {
-                $suscripcione->setIdCanal(null);
+            if ($suscripcion->getCanal() === $this) {
+                $suscripcion->setCanal(null);
             }
         }
 

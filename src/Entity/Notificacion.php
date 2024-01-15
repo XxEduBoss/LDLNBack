@@ -28,8 +28,8 @@ class Notificacion
     private ?DateTimeInterface $fecha_notificacion = null;
 
     #[ORM\ManyToOne(inversedBy: 'notificaciones')]
-    #[ORM\JoinColumn(name:'id_usuario', nullable: false)]
-    private ?Usuario $id_usuario = null;
+    #[ORM\JoinColumn(name:'usuario', nullable: false)]
+    private ?Usuario $usuario = null;
 
     public function getId(): ?int
     {
@@ -72,14 +72,14 @@ class Notificacion
         return $this;
     }
 
-    public function getIdUsuario(): ?Usuario
+    public function getUsuario(): ?Usuario
     {
-        return $this->id_usuario;
+        return $this->usuario;
     }
 
-    public function setIdUsuario(?Usuario $id_usuario): static
+    public function setUsuario(?Usuario $usuario): static
     {
-        $this->id_usuario = $id_usuario;
+        $this->usuario = $usuario;
 
         return $this;
     }

@@ -132,8 +132,8 @@ class Usuario
     public function setCanal(Canal $canal): static
     {
         // set the owning side of the relation if necessary
-        if ($canal->getIdUsuario() !== $this) {
-            $canal->setIdUsuario($this);
+        if ($canal->getUsuario() !== $this) {
+            $canal->setUsuario($this);
         }
 
         $this->canal = $canal;
@@ -149,22 +149,22 @@ class Usuario
         return $this->suscripciones;
     }
 
-    public function addSuscripciones(Suscripcion $suscripciones): static
+    public function addSuscripciones(Suscripcion $suscripcion): static
     {
-        if (!$this->suscripciones->contains($suscripciones)) {
-            $this->suscripciones->add($suscripciones);
-            $suscripciones->setIdUsuario($this);
+        if (!$this->suscripciones->contains($suscripcion)) {
+            $this->suscripciones->add($suscripcion);
+            $suscripcion->setUsuario($this);
         }
 
         return $this;
     }
 
-    public function removeSuscripciones(Suscripcion $suscripciones): static
+    public function removeSuscripciones(Suscripcion $suscripcion): static
     {
-        if ($this->suscripciones->removeElement($suscripciones)) {
+        if ($this->suscripciones->removeElement($suscripcion)) {
             // set the owning side to null (unless already changed)
-            if ($suscripciones->getIdUsuario() === $this) {
-                $suscripciones->setIdUsuario(null);
+            if ($suscripcion->getUsuario() === $this) {
+                $suscripcion->setUsuario(null);
             }
         }
 
@@ -179,22 +179,22 @@ class Usuario
         return $this->mensajes_emisor;
     }
 
-    public function addMensajeEmisor(Mensaje $mensajes_emisor): static
+    public function addMensajeEmisor(Mensaje $mensaje_emisor): static
     {
-        if (!$this->mensajes_emisor->contains($mensajes_emisor)) {
-            $this->mensajes_emisor->add($mensajes_emisor);
-            $mensajes_emisor->setIdUsuarioEmisor($this);
+        if (!$this->mensajes_emisor->contains($mensaje_emisor)) {
+            $this->mensajes_emisor->add($mensaje_emisor);
+            $mensaje_emisor->setUsuarioEmisor($this);
         }
 
         return $this;
     }
 
-    public function removeMensajeEmisor(Mensaje $mensajes_emisor): static
+    public function removeMensajeEmisor(Mensaje $mensaje_emisor): static
     {
-        if ($this->mensajes_emisor->removeElement($mensajes_emisor)) {
+        if ($this->mensajes_emisor->removeElement($mensaje_emisor)) {
             // set the owning side to null (unless already changed)
-            if ($mensajes_emisor->getIdUsuarioEmisor() === $this) {
-                $mensajes_emisor->setIdUsuarioEmisor(null);
+            if ($mensaje_emisor->getUsuarioEmisor() === $this) {
+                $mensaje_emisor->setUsuarioEmisor(null);
             }
         }
 
@@ -209,22 +209,22 @@ class Usuario
         return $this->mensajes_receptor;
     }
 
-    public function addMensajeReceptor(Mensaje $mensajes_receptor): static
+    public function addMensajeReceptor(Mensaje $mensaje_receptor): static
     {
-        if (!$this->mensajes_receptor->contains($mensajes_receptor)) {
-            $this->mensajes_receptor->add($mensajes_receptor);
-            $mensajes_receptor->setIdUsuarioEmisor($this);
+        if (!$this->mensajes_receptor->contains($mensaje_receptor)) {
+            $this->mensajes_receptor->add($mensaje_receptor);
+            $mensaje_receptor->setUsuarioEmisor($this);
         }
 
         return $this;
     }
 
-    public function removeMensajeReceptor(Mensaje $mensajes_receptor): static
+    public function removeMensajeReceptor(Mensaje $mensaje_receptor): static
     {
-        if ($this->mensajes_receptor->removeElement($mensajes_receptor)) {
+        if ($this->mensajes_receptor->removeElement($mensaje_receptor)) {
             // set the owning side to null (unless already changed)
-            if ($mensajes_receptor->getIdUsuarioEmisor() === $this) {
-                $mensajes_receptor->setIdUsuarioEmisor(null);
+            if ($mensaje_receptor->getUsuarioEmisor() === $this) {
+                $mensaje_receptor->setUsuarioEmisor(null);
             }
         }
 
@@ -243,7 +243,7 @@ class Usuario
     {
         if (!$this->tokens->contains($token)) {
             $this->tokens->add($token);
-            $token->setIdUsuario($this);
+            $token->setUsuario($this);
         }
 
         return $this;
@@ -253,8 +253,8 @@ class Usuario
     {
         if ($this->tokens->removeElement($token)) {
             // set the owning side to null (unless already changed)
-            if ($token->getIdUsuario() === $this) {
-                $token->setIdUsuario(null);
+            if ($token->getUsuario() === $this) {
+                $token->setUsuario(null);
             }
         }
 
@@ -269,22 +269,22 @@ class Usuario
         return $this->notificaciones;
     }
 
-    public function addNotificacione(Notificacion $notificacione): static
+    public function addNotificacion(Notificacion $notificacion): static
     {
-        if (!$this->notificaciones->contains($notificacione)) {
-            $this->notificaciones->add($notificacione);
-            $notificacione->setIdUsuario($this);
+        if (!$this->notificaciones->contains($notificacion)) {
+            $this->notificaciones->add($notificacion);
+            $notificacion->setUsuario($this);
         }
 
         return $this;
     }
 
-    public function removeNotificacione(Notificacion $notificacione): static
+    public function removeNotificacion(Notificacion $notificacion): static
     {
-        if ($this->notificaciones->removeElement($notificacione)) {
+        if ($this->notificaciones->removeElement($notificacion)) {
             // set the owning side to null (unless already changed)
-            if ($notificacione->getIdUsuario() === $this) {
-                $notificacione->setIdUsuario(null);
+            if ($notificacion->getUsuario() === $this) {
+                $notificacion->setUsuario(null);
             }
         }
 
@@ -303,7 +303,7 @@ class Usuario
     {
         if (!$this->visitas->contains($visita)) {
             $this->visitas->add($visita);
-            $visita->setIdUsuario($this);
+            $visita->setUsuario($this);
         }
 
         return $this;
@@ -313,8 +313,8 @@ class Usuario
     {
         if ($this->visitas->removeElement($visita)) {
             // set the owning side to null (unless already changed)
-            if ($visita->getIdUsuario() === $this) {
-                $visita->setIdUsuario(null);
+            if ($visita->getUsuario() === $this) {
+                $visita->setUsuario(null);
             }
         }
 
@@ -333,7 +333,7 @@ class Usuario
     {
         if (!$this->comentarios->contains($comentario)) {
             $this->comentarios->add($comentario);
-            $comentario->setIdUsuario($this);
+            $comentario->setUsuario($this);
         }
 
         return $this;
@@ -343,8 +343,8 @@ class Usuario
     {
         if ($this->comentarios->removeElement($comentario)) {
             // set the owning side to null (unless already changed)
-            if ($comentario->getIdUsuario() === $this) {
-                $comentario->setIdUsuario(null);
+            if ($comentario->getUsuario() === $this) {
+                $comentario->setUsuario(null);
             }
         }
 
@@ -359,22 +359,22 @@ class Usuario
         return $this->valoracionesPositivas;
     }
 
-    public function addValoracionesPositiva(ValoracionPositiva $valoracionesPositiva): static
+    public function addValoracionesPositiva(ValoracionPositiva $valoracionPositiva): static
     {
-        if (!$this->valoracionesPositivas->contains($valoracionesPositiva)) {
-            $this->valoracionesPositivas->add($valoracionesPositiva);
-            $valoracionesPositiva->setIdUsuario($this);
+        if (!$this->valoracionesPositivas->contains($valoracionPositiva)) {
+            $this->valoracionesPositivas->add($valoracionPositiva);
+            $valoracionPositiva->setUsuario($this);
         }
 
         return $this;
     }
 
-    public function removeValoracionesPositiva(ValoracionPositiva $valoracionesPositiva): static
+    public function removeValoracionesPositiva(ValoracionPositiva $valoracionPositiva): static
     {
-        if ($this->valoracionesPositivas->removeElement($valoracionesPositiva)) {
+        if ($this->valoracionesPositivas->removeElement($valoracionPositiva)) {
             // set the owning side to null (unless already changed)
-            if ($valoracionesPositiva->getIdUsuario() === $this) {
-                $valoracionesPositiva->setIdUsuario(null);
+            if ($valoracionPositiva->getUsuario() === $this) {
+                $valoracionPositiva->setUsuario(null);
             }
         }
 
@@ -389,22 +389,22 @@ class Usuario
         return $this->valoracionesNegativas;
     }
 
-    public function addValoracionesNegativa(ValoracionNegativa $valoracionesNegativa): static
+    public function addValoracionesNegativa(ValoracionNegativa $valoracionNegativa): static
     {
-        if (!$this->valoracionesNegativas->contains($valoracionesNegativa)) {
-            $this->valoracionesNegativas->add($valoracionesNegativa);
-            $valoracionesNegativa->setIdUsuario($this);
+        if (!$this->valoracionesNegativas->contains($valoracionNegativa)) {
+            $this->valoracionesNegativas->add($valoracionNegativa);
+            $valoracionNegativa->setUsuario($this);
         }
 
         return $this;
     }
 
-    public function removeValoracionesNegativa(ValoracionNegativa $valoracionesNegativa): static
+    public function removeValoracionNegativa(ValoracionNegativa $valoracionNegativa): static
     {
-        if ($this->valoracionesNegativas->removeElement($valoracionesNegativa)) {
+        if ($this->valoracionesNegativas->removeElement($valoracionNegativa)) {
             // set the owning side to null (unless already changed)
-            if ($valoracionesNegativa->getIdUsuario() === $this) {
-                $valoracionesNegativa->setIdUsuario(null);
+            if ($valoracionNegativa->getUsuario() === $this) {
+                $valoracionNegativa->setUsuario(null);
             }
         }
 

@@ -22,12 +22,12 @@ class Mensaje
     private ?\DateTimeInterface $fecha_envio = null;
 
     #[ORM\ManyToOne(inversedBy: '$mensajes_emisor')]
-    #[ORM\JoinColumn(name:'id_usuario_emisor', nullable: false)]
-    private ?Usuario $id_usuario_emisor = null;
+    #[ORM\JoinColumn(name:'usuario_emisor', nullable: false)]
+    private ?Usuario $usuario_emisor = null;
 
     #[ORM\ManyToOne(inversedBy: 'mensajes_receptor')]
-    #[ORM\JoinColumn(name:'id_usuario_receptor', nullable: false)]
-    private ?Usuario $id_usuario_receptor = null;
+    #[ORM\JoinColumn(name:'usuario_receptor', nullable: false)]
+    private ?Usuario $usuario_receptor = null;
 
     public function getId(): ?int
     {
@@ -58,26 +58,26 @@ class Mensaje
         return $this;
     }
 
-    public function getIdUsuarioEmisor(): ?Usuario
+    public function getUsuarioEmisor(): ?Usuario
     {
-        return $this->id_usuario_emisor;
+        return $this->usuario_emisor;
     }
 
-    public function setIdUsuarioEmisor(?Usuario $id_usuario_emisor): static
+    public function setUsuarioEmisor(?Usuario $usuario_emisor): static
     {
-        $this->id_usuario_emisor = $id_usuario_emisor;
+        $this->usuario_emisor = $usuario_emisor;
 
         return $this;
     }
 
-    public function getIdUsuarioReceptor(): ?Usuario
+    public function getUsuarioReceptor(): ?Usuario
     {
-        return $this->id_usuario_receptor;
+        return $this->usuario_receptor;
     }
 
-    public function setIdUsuarioReceptor(?Usuario $id_usuario_receptor): static
+    public function setUsuarioReceptor(?Usuario $usuario_receptor): static
     {
-        $this->id_usuario_receptor = $id_usuario_receptor;
+        $this->usuario_receptor = $usuario_receptor;
 
         return $this;
     }
