@@ -51,6 +51,9 @@ class Video
     #[ORM\OneToMany(mappedBy: 'id_video', targetEntity: ValoracionNegativa::class, orphanRemoval: true)]
     private Collection $valoracionesNegativas;
 
+    #[ORM\Column]
+    private ?bool $Activo = null;
+
     public function __construct()
     {
         $this->visitas = new ArrayCollection();
@@ -264,6 +267,18 @@ class Video
                 $valoracionesNegativa->setIdVideo(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isActivo(): ?bool
+    {
+        return $this->Activo;
+    }
+
+    public function setActivo(bool $Activo): static
+    {
+        $this->Activo = $Activo;
 
         return $this;
     }

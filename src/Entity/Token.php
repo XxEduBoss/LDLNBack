@@ -28,6 +28,9 @@ class Token
     #[ORM\JoinColumn(name:'id_usuario', nullable: false)]
     private ?Usuario $id_usuario = null;
 
+    #[ORM\Column]
+    private ?bool $Activo = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -77,6 +80,18 @@ class Token
     public function setIdUsuario(?Usuario $id_usuario): static
     {
         $this->id_usuario = $id_usuario;
+
+        return $this;
+    }
+
+    public function isActivo(): ?bool
+    {
+        return $this->Activo;
+    }
+
+    public function setActivo(bool $Activo): static
+    {
+        $this->Activo = $Activo;
 
         return $this;
     }
