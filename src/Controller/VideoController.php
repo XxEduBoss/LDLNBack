@@ -6,7 +6,7 @@ use App\Entity\Canal;
 use App\Entity\Video;
 use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use http\Env\Request;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,7 +49,7 @@ class VideoController extends AbstractController
         $nuevoVideo->setUrl($json["url"]);
 
         $canal = $entityManager->getRepository(Canal::class)->find($json["id_canal"]);
-        $nuevoVideo->setIdCanal($canal[0]);
+        $nuevoVideo->setCanal($canal[0]);
 
 
         $entityManager->persist($nuevoVideo);
@@ -60,7 +60,7 @@ class VideoController extends AbstractController
 
     }
 
-    #[Route('/{id}', name:"video_crear" , methods : ["PUT"])]
+    #[Route('/{id}', name:"video_modificar" , methods : ["PUT"])]
     public function modificarVideo(EntityManagerInterface $entityManager , Request $request , Video $video) :JsonResponse
     {
 
@@ -75,7 +75,7 @@ class VideoController extends AbstractController
         $video->setUrl($json["url"]);
 
         $canal = $entityManager->getRepository(Canal::class)->find($json["id_canal"]);
-        $video->setIdCanal($canal[0]);
+        $video->setCanal($canal[0]);
 
 
         $entityManager->flush();
