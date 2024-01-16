@@ -44,15 +44,33 @@ class MensajeController extends AbstractController
 
         $nuevoMensaje = new Mensaje();
         $nuevoMensaje -> setTexto($json["texto"]);
-        $nuevoMensaje -> setUsuarioEmisor($json["usuarioEmisor"]);
-        $nuevoMensaje -> setUsuarioReceptor($json["usuarioReceptor"]);
         $nuevoMensaje -> setFechaEnvio($json(date_create(now())));
+        $nuevoMensaje-> setActivo(false);
+
+        $emisor = $entityManager->getRepository(Usuario::class)->findBy(["id"=> $json["id_usuario_emisor"]]);
+        $nuevoMensaje->setUsuarioEmisor($emisor[0]);
+
+        $receptor = $entityManager->getRepository(Usuario::class)->findBy(["id"=> $json["id_usuario_receptor"]]);
+        $nuevoMensaje->setUsuarioEmisor($receptor[0]);
 
 
-        return $this->json(['message' => 'Clase creada'], Response::HTTP_CREATED);
+
+
+        $entityManager->persist($nuevoMensaje);
+        $entityManager->flush();
+
+        return $this->json(['message' => 'Mensaje enviado'], Response::HTTP_CREATED);
 
     }
 
+    // Controller para desactivar canal
+    #[Route('/borrar/{id}', name: "delete_by_id", methods: ["PUT"])]
+    public function deletedById(EntityManagerInterface $entityManager, Mensaje $mensaje):JsonResponse
+    {
+        $mensaje-> setActivo(false);
+        $entityManager->flush();
 
+        return $this->json(['message' => 'Mensaje eliminado'], Response::HTTP_OK);
+    }
 
 }

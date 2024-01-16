@@ -18,6 +18,7 @@ class Mensaje
     #[ORM\Column(name:'texto', length: 10000)]
     private ?string $texto = null;
 
+
     #[ORM\Column(name:'fecha_envio', type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_envio = null;
 
