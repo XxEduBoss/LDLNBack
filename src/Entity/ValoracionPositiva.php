@@ -18,11 +18,11 @@ class ValoracionPositiva
     private ?bool $likes = null;
 
     #[ORM\ManyToOne(inversedBy: 'valoracionesPositivas')]
-    #[ORM\JoinColumn(name:'video', nullable: false)]
+    #[ORM\JoinColumn(name:'id_video', nullable: false)]
     private ?Video $video = null;
 
     #[ORM\ManyToOne(inversedBy: 'valoracionesPositivas')]
-    #[ORM\JoinColumn(name:'usuario', nullable: false)]
+    #[ORM\JoinColumn(name:'id_usuario', nullable: false)]
     private ?Usuario $usuario = null;
 
     #[ORM\Column]

@@ -35,20 +35,20 @@ class Video
     #[ORM\Column(name:'fecha_creacion', type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_creacion = null;
 
-    #[ORM\ManyToOne(inversedBy: 'videos')]
-    #[ORM\JoinColumn(name:'canal', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Canal::class,inversedBy: "videos")]
+    #[ORM\JoinColumn(name:'id_canal', nullable: false)]
     private ?Canal $canal = null;
 
-    #[ORM\OneToMany(mappedBy: 'video', targetEntity: Visita::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'id_video', targetEntity: Visita::class, orphanRemoval: true)]
     private Collection $visitas;
 
-    #[ORM\OneToMany(mappedBy: 'video', targetEntity: Comentario::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'id_video', targetEntity: Comentario::class, orphanRemoval: true)]
     private Collection $comentarios;
 
-    #[ORM\OneToMany(mappedBy: 'video', targetEntity: ValoracionPositiva::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'id_video', targetEntity: ValoracionPositiva::class, orphanRemoval: true)]
     private Collection $valoracionesPositivas;
 
-    #[ORM\OneToMany(mappedBy: 'video', targetEntity: ValoracionNegativa::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'id_video', targetEntity: ValoracionNegativa::class, orphanRemoval: true)]
     private Collection $valoracionesNegativas;
 
     #[ORM\Column]

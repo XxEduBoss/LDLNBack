@@ -22,11 +22,11 @@ class Mensaje
     private ?\DateTimeInterface $fecha_envio = null;
 
     #[ORM\ManyToOne(inversedBy: '$mensajes_emisor')]
-    #[ORM\JoinColumn(name:'usuario_emisor', nullable: false)]
+    #[ORM\JoinColumn(name:'id_usuario_emisor', nullable: false)]
     private ?Usuario $usuario_emisor = null;
 
     #[ORM\ManyToOne(inversedBy: 'mensajes_receptor')]
-    #[ORM\JoinColumn(name:'usuario_receptor', nullable: false)]
+    #[ORM\JoinColumn(name:'id_usuario_receptor', nullable: false)]
     private ?Usuario $usuario_receptor = null;
 
     #[ORM\Column]

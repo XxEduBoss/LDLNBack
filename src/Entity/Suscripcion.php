@@ -18,12 +18,12 @@ class Suscripcion
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_suscripcion = null;
 
-    #[ORM\ManyToOne(inversedBy: 'suscripciones')]
-    #[ORM\JoinColumn(name:'canal', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Canal::class,inversedBy: "suscripciones")]
+    #[ORM\JoinColumn(name:'id_canal', nullable: false)]
     private ?Canal $canal = null;
 
     #[ORM\ManyToOne(inversedBy: 'suscripciones')]
-    #[ORM\JoinColumn(name:'usuario', nullable: false)]
+    #[ORM\JoinColumn(name:'id_usuario', nullable: false)]
     private ?Usuario $usuario = null;
 
     #[ORM\Column]

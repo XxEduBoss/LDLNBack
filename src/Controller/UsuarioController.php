@@ -23,12 +23,12 @@ class UsuarioController extends AbstractController
     }
 
     #[Route('/{id}', name: 'usuario_by_id', methods: ['GET'])]
-    public function getById(Usuario $usuario): JsonResponse
+    public function buscarPorId(Usuario $usuario): JsonResponse
     {
         return $this->json($usuario);
     }
 
-    #[Route('', name: 'crear_usuario', methods: ['POST'])]
+    #[Route('/crear', name: 'crear_usuario', methods: ['POST'])]
     public function crear(EntityManagerInterface $entityManager, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);

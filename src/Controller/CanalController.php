@@ -11,11 +11,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-#[Route('/api/canal')]
+
+#[Route('/api/canal', host: "database-1.cz84c44uyfzu.eu-west-3.rds.amazonaws.com", schemes: "apollo")]
 class CanalController extends AbstractController
 {
     //Listar canales
-    #[Route('', name: "lista_de_canales", methods: ["GET"])]
+    #[Route('/listar', name: "lista_de_canales", methods: ["GET"])]
     public function list(CanalRepository $canalRepository):JsonResponse
     {
         $list = $canalRepository->findAll();
@@ -45,7 +46,7 @@ class CanalController extends AbstractController
         $nuevoCanal->setFechaCreacion($json["fecha_creacion"]);
 
 
-        $usuario = $entityManager->getRepository(Usuario::class)->findBy(["id"=>$json["id_usuario"]]);
+        $usuario = $entityManager->getRepository(Usuario::class)->findBy(["id"=>$json["usuario"]]);
         $nuevoCanal->setUsuario($usuario[0]);
 
         $entityManager->persist($nuevoCanal);
@@ -67,7 +68,7 @@ class CanalController extends AbstractController
         $canal->setFechaNacimiento($json["fecha_nacimiento"]);
         $canal->setFechaCreacion($json["fecha_creacion"]);
 
-        $usuario = $entityManager->getRepository(Usuario::class)->findBy(["id"=>$json["id_usuario"]]);
+        $usuario = $entityManager->getRepository(Usuario::class)->findBy(["id"=>$json["usuario"]]);
         $canal->setUsuario($usuario[0]);
 
         $entityManager->flush();

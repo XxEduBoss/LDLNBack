@@ -22,13 +22,13 @@ class Notificacion
     private ?string $texto = null;
 
     #[ORM\Column(name:'tipo', type: Types::INTEGER)]
-    private ?TipoNotificacion $tipo = null;
+    private ?int $tipo = null;
 
     #[ORM\Column(name:'fecha_notificacion', type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $fecha_notificacion = null;
 
     #[ORM\ManyToOne(inversedBy: 'notificaciones')]
-    #[ORM\JoinColumn(name:'usuario', nullable: false)]
+    #[ORM\JoinColumn(name:'id_usuario', nullable: false)]
     private ?Usuario $usuario = null;
 
     #[ORM\Column]
@@ -51,12 +51,12 @@ class Notificacion
         return $this;
     }
 
-    public function getTipo(): ?TipoNotificacion
+    public function getTipo(): ?int
     {
         return $this->tipo;
     }
 
-    public function setTipo(TipoNotificacion $tipo): static
+    public function setTipo(int $tipo): static
     {
         $this->tipo = $tipo;
 

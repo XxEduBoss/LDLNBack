@@ -28,7 +28,7 @@ class Usuario
     #[ORM\Column(name: 'activo')]
     private ?bool $activo = true;
 
-    #[ORM\OneToOne(mappedBy: 'id_usuario', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'usuario')]
     private ?Canal $canal = null;
 
     #[ORM\OneToMany(mappedBy: 'id_usuario', targetEntity: Suscripcion::class, orphanRemoval: true)]

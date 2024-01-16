@@ -25,7 +25,7 @@ class Token
     private ?\DateTimeInterface $fecha_creacion = null;
 
     #[ORM\ManyToOne(inversedBy: 'tokens')]
-    #[ORM\JoinColumn(name:'usuario', nullable: false)]
+    #[ORM\JoinColumn(name:'id_usuario', nullable: false)]
     private ?Usuario $usuario = null;
 
     #[ORM\Column]

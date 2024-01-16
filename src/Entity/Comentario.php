@@ -22,11 +22,11 @@ class Comentario
     private ?\DateTimeInterface $fecha_publicacion = null;
 
     #[ORM\ManyToOne(inversedBy: 'comentarios')]
-    #[ORM\JoinColumn(name:'video', nullable: false)]
+    #[ORM\JoinColumn(name:'id_video', nullable: false)]
     private ?Video $video = null;
 
     #[ORM\ManyToOne(inversedBy: 'comentarios')]
-    #[ORM\JoinColumn(name:'usuario', nullable: false)]
+    #[ORM\JoinColumn(name:'id_usuario', nullable: false)]
     private ?Usuario $usuario = null;
 
     #[ORM\Column]

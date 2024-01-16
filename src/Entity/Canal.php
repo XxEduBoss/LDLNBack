@@ -7,10 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use PhpParser\Node\Scalar\String_;
 
 #[ORM\Entity(repositoryClass: CanalRepository::class)]
-#[ORM\Table(name: 'canal',schema: 'apollo')]
 class Canal
 {
     #[ORM\Id]
@@ -18,32 +16,32 @@ class Canal
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(name:'nombre', length: 100)]
+    #[ORM\Column(length: 100)]
     private ?string $nombre = null;
 
-    #[ORM\Column(name:'apellidos', length: 100, nullable: true)]
+    #[ORM\Column(length: 100, nullable: true)]
     private ?string $apellidos = null;
 
-    #[ORM\Column(name:'nombre_canal',length: 100, nullable: true)]
+    #[ORM\Column(length: 100, nullable: true)]
     private ?string $nombre_canal = null;
 
-    #[ORM\Column(name:'telefono', length: 10, nullable: true)]
+    #[ORM\Column(length: 10, nullable: true)]
     private ?string $telefono = null;
 
-    #[ORM\Column(name:'fecha_nacimiento', type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_nacimiento = null;
 
-    #[ORM\Column(name:'fecha_creacion', type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_creacion = null;
 
-    #[ORM\Column(name:'etiquetas', nullable: true)]
+    #[ORM\Column(nullable: true)]
     private ?int $etiquetas = null;
 
-    #[ORM\OneToOne(inversedBy: 'canal', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name:'usuario', nullable: false)]
+    #[ORM\OneToOne]
+    #[ORM\JoinColumn(name:"id_usuario", nullable: false)]
     private ?Usuario $usuario = null;
 
-    #[ORM\OneToMany(mappedBy: 'canal', targetEntity: Video::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'canal', targetEntity: Video::class)]
     private Collection $videos;
 
     #[ORM\OneToMany(mappedBy: 'canal', targetEntity: Suscripcion::class)]
@@ -111,27 +109,26 @@ class Canal
         return $this;
     }
 
-
-    public function getFechaNacimiento(): ?string
+    public function getFechaNacimiento(): ?\DateTimeInterface
     {
-        return $this->fecha_nacimiento->format('d/m/Y H:i:s');
+        return $this->fecha_nacimiento;
     }
 
-    public function setFechaNacimiento(String $fecha_nacimiento): static
+    public function setFechaNacimiento(\DateTimeInterface $fecha_nacimiento): static
     {
-        $this->fecha_nacimiento = \DateTime::createFromFormat('d/m/Y H:i:s', $fecha_nacimiento);
+        $this->fecha_nacimiento = $fecha_nacimiento;
 
         return $this;
     }
 
-    public function getFechaCreacion(): ?string
+    public function getFechaCreacion(): ?\DateTimeInterface
     {
-        return $this->fecha_creacion->format('d/m/Y H:i:s');
+        return $this->fecha_creacion;
     }
 
-    public function setFechaCreacion(String $fecha_creacion): static
+    public function setFechaCreacion(\DateTimeInterface $fecha_creacion): static
     {
-        $this->fecha_creacion = \DateTime::createFromFormat('d/m/Y H:i:s', $fecha_creacion);
+        $this->fecha_creacion = $fecha_creacion;
 
         return $this;
     }
@@ -190,15 +187,12 @@ class Canal
         return $this;
     }
 
-    /**
-     * @return Collection<int, Suscripcion>
-     */
     public function getSuscripciones(): Collection
     {
         return $this->suscripciones;
     }
 
-    public function addSuscripciones(Suscripcion $suscripcion): static
+    public function addSuscripcion(Video $suscripcion): static
     {
         if (!$this->suscripciones->contains($suscripcion)) {
             $this->suscripciones->add($suscripcion);
@@ -208,7 +202,7 @@ class Canal
         return $this;
     }
 
-    public function removeSuscripciones(Suscripcion $suscripcion): static
+    public function removeSuscripcion(Video $suscripcion): static
     {
         if ($this->suscripciones->removeElement($suscripcion)) {
             // set the owning side to null (unless already changed)
@@ -231,5 +225,4 @@ class Canal
 
         return $this;
     }
-
 }
