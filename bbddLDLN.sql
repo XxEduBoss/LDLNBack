@@ -37,6 +37,7 @@ create table canal(
                       fecha_creacion timestamp(6) not null,
                       etiquetas int,
                       usuario int not null,
+                      activo bool default true not null,
 
                       primary key (id),
                       constraint fk_canal_usuario foreign key (usuario) references usuario(id)
@@ -52,6 +53,8 @@ create table video(
                       fecha_publicacion timestamp(6) not null,
                       fecha_creacion timestamp(6) not null,
                       canal int not null,
+                      activo bool default true not null,
+
 
                       primary key (id),
                       constraint fk_video_canal foreign key (canal) references canal(id)
@@ -64,6 +67,7 @@ create table suscripcion(
                             fecha_suscripcion timestamp(6) not null,
                             canal int not null,
                             usuario int not null,
+                            activo bool default true not null,
 
                             primary key (id),
                             constraint fk_suscripcion_usuario foreign key (usuario) references usuario(id),
@@ -77,6 +81,7 @@ create table mensaje(
                         fecha_envio timestamp(6) not null,
                         usuario_emisor int not null,
                         usuario_receptor int not null,
+                        activo bool default true not null,
 
                         primary key (id),
                         constraint fk_mensaje_emisor foreign key (usuario_emisor) references usuario(id),
@@ -90,6 +95,8 @@ create table token(
                       fecha_expedicion timestamp(6) not null,
                       fecha_creacion timestamp(6) not null,
                       usuario int not null,
+                      activo bool default true not null,
+
 
                       primary key (id),
                       constraint fk_token_usuario foreign key (usuario) references usuario(id)
@@ -102,6 +109,8 @@ create table notificacion(
                              tipo int not null,
                              fecha_notificacion timestamp(6) not null,
                              usuario int not null,
+                             activo bool default true not null,
+
 
                              primary key (id),
                              constraint fk_notificacion_usuario foreign key (usuario) references usuario(id)
@@ -111,6 +120,8 @@ create table notificacion(
 create table visita(
                        id serial,
                        fecha_visita timestamp(6) not null,
+                       activo bool default true not null,
+
                        video int not null,
                        usuario int not null,
 
@@ -124,6 +135,8 @@ create table comentario(
                            id serial,
                            texto varchar(10000) not null,
                            fecha_publicacion timestamp(6) not null,
+                           activo bool default true not null,
+
                            video int not null,
                            usuario int not null,
 
@@ -136,6 +149,8 @@ create table comentario(
 create table valoracion_positiva(
                                     id serial,
                                     likes boolean,
+                                    activo bool default true not null,
+
                                     video int not null,
                                     usuario int not null,
 
@@ -148,6 +163,8 @@ create table valoracion_positiva(
 create table valoracion_negativa(
                                     id serial,
                                     dislikes boolean,
+                                    activo bool default true not null,
+
                                     video int not null,
                                     usuario int not null,
 

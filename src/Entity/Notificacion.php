@@ -31,6 +31,9 @@ class Notificacion
     #[ORM\JoinColumn(name:'usuario', nullable: false)]
     private ?Usuario $usuario = null;
 
+    #[ORM\Column]
+    private ?bool $activo = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -80,6 +83,18 @@ class Notificacion
     public function setUsuario(?Usuario $usuario): static
     {
         $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    public function isActivo(): ?bool
+    {
+        return $this->activo;
+    }
+
+    public function setActivo(bool $activo): static
+    {
+        $this->activo = $activo;
 
         return $this;
     }
