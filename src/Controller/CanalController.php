@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/canal', host: "database-1.cz84c44uyfzu.eu-west-3.rds.amazonaws.com", schemes: "apollo")]
+#[Route('/api/canal')]
 class CanalController extends AbstractController
 {
     //Listar canales
@@ -42,12 +42,17 @@ class CanalController extends AbstractController
         $nuevoCanal->setApellidos($json["apellidos"]);
         $nuevoCanal->setNombreCanal($json["nombre_canal"]);
         $nuevoCanal->setTelefono($json["telefono"]);
-        $nuevoCanal->setFechaNacimiento($json["fecha_nacimiento"]);
-        $nuevoCanal->setFechaCreacion($json["fecha_creacion"]);
+
+        $fechaNacimientoString = $json["fecha_nacimiento"];
+        $fechaNacimientoDateTime = \DateTime::createFromFormat('d/m/Y', $fechaNacimientoString);
+
+        $nuevoCanal->setFechaNacimiento(new \DateTime($fechaNacimientoDateTime, '00:00:00.000000'));
+        $nuevoCanal->setFechaCreacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
 
 
         $usuario = $entityManager->getRepository(Usuario::class)->findBy(["id"=>$json["usuario"]]);
         $nuevoCanal->setUsuario($usuario[0]);
+        $nuevoCanal->setActivo(true);
 
         $entityManager->persist($nuevoCanal);
         $entityManager->flush();

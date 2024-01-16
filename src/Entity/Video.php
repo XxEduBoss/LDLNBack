@@ -120,9 +120,9 @@ class Video
         return $this->fecha_publicacion->format('d/m/Y H:i:s');
     }
 
-    public function setFechaPublicacion(String $fecha_publicacion): static
+    public function setFechaPublicacion(\DateTimeInterface $fecha_publicacion): static
     {
-        $this->fecha_publicacion = \DateTime::createFromFormat('d/m/Y H:i:s', $fecha_publicacion);
+        $this->fecha_publicacion = $fecha_publicacion;
 
         return $this;
     }
@@ -132,9 +132,9 @@ class Video
         return $this->fecha_creacion->format('d/m/Y H:i:s');
     }
 
-    public function setFechaCreacion(String $fecha_creacion): static
+    public function setFechaCreacion(\DateTimeInterface $fecha_creacion): static
     {
-        $this->fecha_creacion = \DateTime::createFromFormat('d/m/Y H:i:s', $fecha_creacion);
+        $this->fecha_creacion = $fecha_creacion;
 
         return $this;
     }

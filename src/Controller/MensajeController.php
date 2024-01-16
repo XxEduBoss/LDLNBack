@@ -6,7 +6,6 @@ use App\Entity\Mensaje;
 use App\Entity\Usuario;
 use App\Repository\MensajeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

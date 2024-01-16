@@ -12,9 +12,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
-
-
 #[Route('/api/video')]
 class VideoController extends AbstractController
 {
@@ -44,13 +41,15 @@ class VideoController extends AbstractController
         $nuevoVideo-> setTitulo($json["titulo"]);
         $nuevoVideo-> setDescripcion($json["descripcion"]);
         $nuevoVideo->setEtiquetas($json["etiquetas"]);
-        $nuevoVideo-> setFechaCreacion($json["fecha_creacion"]);
-        $nuevoVideo->setFechaPublicacion($json["fecha_publicaion"]);
+        $nuevoVideo->setFechaCreacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
+        $fechaPublicacionDateTime = \DateTime::createFromFormat('d/m/Y H:i:s', $json["fecha_publicacion"]);
+        $nuevoVideo->setFechaPublicacion(new \DateTime($fechaPublicacionDateTime));
         $nuevoVideo->setUrl($json["url"]);
 
-        $canal = $entityManager->getRepository(Canal::class)->find($json["id_canal"]);
+        $canal = $entityManager->getRepository(Canal::class)->findBy(["id"=>$json["canal"]]);
         $nuevoVideo->setCanal($canal[0]);
 
+        $nuevoVideo->setActivo(true);
 
         $entityManager->persist($nuevoVideo);
         $entityManager->flush();
