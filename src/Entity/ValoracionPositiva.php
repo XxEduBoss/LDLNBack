@@ -26,7 +26,7 @@ class ValoracionPositiva
     private ?Usuario $usuario = null;
 
     #[ORM\Column]
-    private ?bool $Activo = null;
+    private ?bool $activo = null;
 
     public function getId(): ?int
     {
@@ -74,9 +74,9 @@ class ValoracionPositiva
         return $this->Activo;
     }
 
-    public function setActivo(bool $Activo): static
+    public function setActivo(bool $activo): static
     {
-        $this->Activo = $Activo;
+        $this->Activo = $activo;
 
         return $this;
     }
