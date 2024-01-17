@@ -3,6 +3,7 @@
 namespace App\Dto;
 
 use App\Entity\Usuario;
+use App\Entity\Video;
 
 class VisitaDTO
 {

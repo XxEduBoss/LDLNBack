@@ -34,14 +34,14 @@ class Visita
         return $this->id;
     }
 
-    public function getFechaVisita(): ?string
+    public function getFechaVisita(): ?\DateTimeInterface
     {
-        return $this->fecha_visita->format('d/m/Y H:i:s');
+        return $this->fecha_visita;
     }
 
-    public function setFechaVisita(String $fecha_visita): static
+    public function setFechaVisita(\DateTimeInterface $fecha_visita): static
     {
-        $this->fecha_visita = \DateTime::createFromFormat('d/m/Y H:i:s', $fecha_visita);;
+        $this->fecha_visita = $fecha_visita;
 
         return $this;
     }
