@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Dto\MensajeDTO;
 use App\Entity\Mensaje;
 use App\Entity\Usuario;
 use App\Repository\MensajeRepository;
@@ -21,9 +22,22 @@ class MensajeController extends AbstractController
     #[Route('', name: "mensaje_list", methods: ["GET"])]
     public function list(MensajeRepository $mensajeRepository):JsonResponse
     {
-        $list = $mensajeRepository->findAll();
+        $mensajes = $mensajeRepository->findAll();
 
-        return $this->json($list);
+        $listaMensajesDTO = [];
+
+        foreach ($mensajes as $m){
+
+            $mensaje = new MensajeDTO();
+            $mensaje->setId($m->getId());
+            $mensaje->setTexto($m->getTexto());
+            $mensaje->setFechaEnvio($m->getFechaEnvio());
+            $mensaje->setUsuarioEmisor($m->getUsuarioEmisor());
+            $mensaje->setUsuarioReceptor($m->getUsuarioReceptor());
+
+            $listaMensajesDTO[] = $mensaje;
+        }
+        return $this->json($listaMensajesDTO);
     }
 
     // Controller para mostrar mensaje por id
