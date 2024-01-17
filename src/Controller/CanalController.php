@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Dto\CanalDTO;
+use App\Dto\UsuarioDTO;
 use App\Entity\Canal;
 use App\Entity\Usuario;
 use App\Repository\CanalRepository;
@@ -19,9 +21,32 @@ class CanalController extends AbstractController
     #[Route('/listar', name: "lista_de_canales", methods: ["GET"])]
     public function list(CanalRepository $canalRepository):JsonResponse
     {
-        $list = $canalRepository->findAll();
 
-        return $this->json($list);
+        $canales = $canalRepository->findAll();
+
+        $listaCanalesDTOs = [];
+
+        foreach ($canales as $c){
+
+            $canal = new CanalDTO();
+            $canal->setId($c->getId());
+            $canal->setNombre($c->getNombre());
+            $canal->setApellidos($c->getApellidos());
+            $canal->setNombreCanal($c->getNombreCanal());
+            $canal->setTelefono($c->getTelefono());
+            $canal->setFechaNacimiento($c->getFechaNacimiento());
+            $canal->setFechaCreacion($c->getFechaCreacion());
+            $canal->setEtiquetas($c->getEtiquetas());
+            $canal->setUsuario($c->getUsuario());
+            $canal->setActivo($c->isActivo());
+
+            $listaCanalesDTOs[] = $canal;
+
+        }
+
+
+        return $this->json($listaCanalesDTOs);
+
     }
 
     //Buscar canales por id
