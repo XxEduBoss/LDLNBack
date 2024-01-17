@@ -50,16 +50,25 @@ class UsuarioController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        $usuario = new Usuario();
-        $usuario->setUsername($data['username']);
-        $usuario->setPassword($data['password']);
-        $usuario->setRolUsuario($data['rol']);
-        $usuario->setActivo(true);
+        if($entityManager->getRepository(Usuario::class)->findBy(["username"=>$data['username']]) != null){
 
-        $entityManager->persist($usuario);
-        $entityManager->flush();
+            $usuario = new Usuario();
+            $usuario->setUsername($data['username']);
+            $usuario->setPassword($data['password']);
+            $usuario->setRolUsuario($data['rol']);
+            $usuario->setActivo(true);
 
-        return $this->json(['message' => 'Usuario creado'], Response::HTTP_CREATED);
+            $entityManager->persist($usuario);
+            $entityManager->flush();
+
+            return $this->json(['message' => 'Usuario creado'], Response::HTTP_CREATED);
+
+        }else{
+
+            return $this->json(['message' => 'Ya existe un usuario con ese username'], Response::HTTP_NOT_IMPLEMENTED);
+
+        }
+
     }
 
     #[Route('/{id}', name: 'update_usuario', methods: ['PUT'])]
