@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Dto\VideoDTO;
 use App\Entity\Canal;
 use App\Entity\Video;
 use App\Repository\VideoRepository;
@@ -18,9 +19,29 @@ class VideoController extends AbstractController
     #[Route('/listar', name: 'listar_videos', methods: ["GET"])]
     public function listar(VideoRepository $videoRepository): JsonResponse
     {
-       $list = $videoRepository->findAll();
+       $videos = $videoRepository->findAll();
 
-       return $this->json($list);
+       $listaVideosDTOs = [];
+
+       foreach ($videos as $v){
+
+           $video = new VideoDTO();
+
+           $video->setId($v->getId());
+           $video->setTitulo($v->getTitulo());
+           $video->setDescripcion($v->getDescripcion());
+           $video->setEtiquetas($v->getEtiquetas());
+           $video->setFechaCreacion($v->getFechaCreacion());
+           $video->setFechaPublicacion($v->getFechaPublicacion());
+           $video->setUrl($v->getUrl());
+           $video->setCanal($v->getCanal());
+           $video->setActivo($v->isActivo());
+
+           $listaVideosDTOs = $video;
+
+       }
+
+       return $this->json($listaVideosDTOs);
     }
 
     #[Route('/{id}', name: "video_by_id", methods: ["GET"])]
