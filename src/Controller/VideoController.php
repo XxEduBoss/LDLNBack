@@ -56,7 +56,6 @@ class VideoController extends AbstractController
 
         return $this->json(['message' => 'Video creado'], Response::HTTP_CREATED);
 
-
     }
 
     #[Route('/{id}', name:"video_modificar" , methods : ["PUT"])]

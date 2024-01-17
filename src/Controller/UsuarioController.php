@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Dto\UsuarioDTO;
 use App\Entity\Usuario;
 use App\Repository\UsuarioRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +20,23 @@ class UsuarioController extends AbstractController
     {
         $usuarios = $usuarioRepository->findAll();
 
-        return $this->json($usuarios);
+        $listaUsuariosDTOs = [];
+
+        foreach ($usuarios as $usuario){
+
+            $user = new UsuarioDTO();
+            $user->setId($usuario->getId());
+            $user->setUsername($usuario->getUsername());
+            $user->setPassword($usuario->getPassword());
+            $user->setRolUsuario($usuario->getRolUsuario());
+            $user->setActivo($usuario->isActivo());
+
+            $listaUsuariosDTOs[] = $user;
+
+        }
+
+
+        return $this->json($listaUsuariosDTOs);
     }
 
     #[Route('/{id}', name: 'usuario_by_id', methods: ['GET'])]
@@ -53,7 +70,6 @@ class UsuarioController extends AbstractController
         $usuario->setUsername($data['username']);
         $usuario->setPassword($data['password']);
         $usuario->setRolUsuario($data['rol']);
-        $usuario->setActivo($data['activo']);
 
         $entityManager->flush();
 
