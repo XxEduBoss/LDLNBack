@@ -50,7 +50,7 @@ class UsuarioController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if($entityManager->getRepository(Usuario::class)->findBy(["username"=>$data['username']]) != null){
+        if(empty($entityManager->getRepository(Usuario::class)->findBy(["username"=>$data['username']]))){
 
             $usuario = new Usuario();
             $usuario->setUsername($data['username']);
