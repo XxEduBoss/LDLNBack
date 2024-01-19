@@ -16,8 +16,6 @@ class CanalDTO
     private ?\DateTimeInterface $fecha_creacion = null;
     private ?int $etiquetas = null;
     private ?Usuario $usuario = null;
-    private Collection $videos;
-    private Collection $suscripciones;
     private ?bool $activo = null;
 
     /**
@@ -162,38 +160,6 @@ class CanalDTO
     public function setUsuario(?Usuario $usuario): void
     {
         $this->usuario = $usuario;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getVideos(): Collection
-    {
-        return $this->videos;
-    }
-
-    /**
-     * @param Collection $videos
-     */
-    public function setVideos(Collection $videos): void
-    {
-        $this->videos = $videos;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getSuscripciones(): Collection
-    {
-        return $this->suscripciones;
-    }
-
-    /**
-     * @param Collection $suscripciones
-     */
-    public function setSuscripciones(Collection $suscripciones): void
-    {
-        $this->suscripciones = $suscripciones;
     }
 
     /**
