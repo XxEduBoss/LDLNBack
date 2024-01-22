@@ -58,7 +58,7 @@ class MensajeController extends AbstractController
         $nuevoMensaje = new Mensaje();
         $nuevoMensaje -> setTexto($json["texto"]);
         $nuevoMensaje -> setFechaEnvio($json(date_create(now())));
-        $nuevoMensaje-> setActivo(false);
+        $nuevoMensaje-> setActivo(true);
 
         $emisor = $entityManager->getRepository(Usuario::class)->findBy(["id"=> $json["id_usuario_emisor"]]);
         $nuevoMensaje->setUsuarioEmisor($emisor[0]);
