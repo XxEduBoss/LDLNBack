@@ -24,7 +24,7 @@ class RegistroController extends AbstractController
         $user = new Usuario();
         $user->setUsername($data['username']);
         $user->setPassword($passwordHasher->hashPassword($user, $data['password']));
-        $user->setRolUsuario($data['rol']);
+        $user->setRolUsuario($data['id_rol']);
 
 
         $entityManager->persist($user);
