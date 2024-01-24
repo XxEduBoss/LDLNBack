@@ -24,11 +24,17 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'password', length: 1000)]
     private ?string $password = null;
 
-    #[ORM\Column(name: 'rol_usuario')]
+    #[ORM\Column(name: 'id_rol_usuario')]
     private ?int $rol_usuario = null;
 
     #[ORM\Column(name: 'activo')]
     private ?bool $activo = true;
+
+    #[ORM\ManyToMany(targetEntity: Etiquetas::class)]
+    #[ORM\JoinTable(name: "etiquetas_usuario", schema: "apollo")]
+    #[ORM\JoinColumn(name: "id_usuario", referencedColumnName: "id")]
+    #[ORM\InverseJoinColumn(name: "id_etiqueta", referencedColumnName: "id")]
+    private Collection $etiquetas;
 
     #[ORM\OneToOne(mappedBy: 'usuario')]
     private ?Canal $canal = null;
@@ -139,6 +145,30 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
         }
 
         $this->canal = $canal;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Etiquetas>
+     */
+    public function getEtiqueta(): Collection
+    {
+        return $this->etiquetas;
+    }
+
+    public function addEtiqueta(Etiquetas $etiqueta): static
+    {
+        if (!$this->etiquetas->contains($etiqueta)) {
+            $this->etiquetas->add($etiqueta);
+        }
+
+        return $this;
+    }
+
+    public function removeEtiqueta(Etiquetas $etiqueta): static
+    {
+        $this->etiquetas->removeElement($etiqueta);
 
         return $this;
     }

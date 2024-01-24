@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Dto\VideoDTO;
 use App\Entity\Canal;
+use App\Entity\TipoVideo;
 use App\Entity\Video;
 use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -61,11 +62,14 @@ class VideoController extends AbstractController
 
         $nuevoVideo-> setTitulo($json["titulo"]);
         $nuevoVideo-> setDescripcion($json["descripcion"]);
-        $nuevoVideo->setEtiquetas($json["etiquetas"]);
+        $nuevoVideo->setUrl($json["url"]);
+
+        $tipo_video = $entityManager->getRepository(TipoVideo::class)->findBy(["id"=>$json["tipo"]]);
+        $nuevoVideo->setTipoVideo($tipo_video[0]);
+
         $nuevoVideo->setFechaCreacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
         $fechaPublicacionDateTime = \DateTime::createFromFormat('d/m/Y H:i:s', $json["fecha_publicacion"]);
         $nuevoVideo->setFechaPublicacion(new \DateTime($fechaPublicacionDateTime));
-        $nuevoVideo->setUrl($json["url"]);
 
         $canal = $entityManager->getRepository(Canal::class)->findBy(["id"=>$json["canal"]]);
         $nuevoVideo->setCanal($canal[0]);
@@ -89,8 +93,9 @@ class VideoController extends AbstractController
         $video-> setTitulo($json["titulo"]);
         $video-> setDescripcion($json["descripcion"]);
         $video->setEtiquetas($json["etiquetas"]);
-        $video-> setFechaCreacion($json["fecha_creacion"]);
-        $video->setFechaPublicacion($json["fecha_publicaion"]);
+        $video->setFechaCreacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
+        $fechaPublicacionDateTime = \DateTime::createFromFormat('d/m/Y H:i:s', $json["fecha_publicacion"]);
+        $video->setFechaPublicacion(new \DateTime($fechaPublicacionDateTime));
         $video->setUrl($json["url"]);
 
         $canal = $entityManager->getRepository(Canal::class)->find($json["id_canal"]);
