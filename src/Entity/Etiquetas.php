@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EtiquetasRepository::class)]
+#[ORM\Table(name: 'etiquetas',schema: 'apollo')]
 class Etiquetas
 {
     #[ORM\Id]
@@ -18,8 +19,8 @@ class Etiquetas
     #[ORM\Column(length: 1000)]
     private ?string $descripcion = null;
 
-    #[ORM\ManyToMany(targetEntity: Canal::class, mappedBy: 'id_etiqueta')]
-    private Collection $canales;
+//    #[ORM\ManyToMany(targetEntity: Canal::class, mappedBy: 'id_etiqueta')]
+//    private Collection $canales;
 
     public function __construct()
     {
@@ -43,30 +44,30 @@ class Etiquetas
         return $this;
     }
 
-    /**
-     * @return Collection<int, Canal>
-     */
-    public function getCanales(): Collection
-    {
-        return $this->canales;
-    }
-
-    public function addCanale(Canal $canale): static
-    {
-        if (!$this->canales->contains($canale)) {
-            $this->canales->add($canale);
-            $canale->addIdEtiquetum($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCanale(Canal $canale): static
-    {
-        if ($this->canales->removeElement($canale)) {
-            $canale->removeIdEtiquetum($this);
-        }
-
-        return $this;
-    }
+//    /**
+//     * @return Collection<int, Canal>
+//     */
+//    public function getCanales(): Collection
+//    {
+//        return $this->canales;
+//    }
+//
+//    public function addCanale(Canal $canale): static
+//    {
+//        if (!$this->canales->contains($canale)) {
+//            $this->canales->add($canale);
+//            $canale->addIdEtiquetum($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeCanale(Canal $canale): static
+//    {
+//        if ($this->canales->removeElement($canale)) {
+//            $canale->removeIdEtiquetum($this);
+//        }
+//
+//        return $this;
+//    }
 }

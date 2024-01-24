@@ -37,7 +37,9 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/video, roles: PUBLIC_ACCESS }
         - { path: ^/api/registro,       roles: PUBLIC_ACCESS }
+        - { path: ^/api/tipos,       roles: PUBLIC_ACCESS }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
 
 

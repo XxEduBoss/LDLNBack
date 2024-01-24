@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TipoVideoRepository::class)]
+#[ORM\Table(name: 'tipo_video',schema: 'apollo')]
 class TipoVideo
 {
     #[ORM\Id]
