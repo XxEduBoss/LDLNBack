@@ -44,33 +44,33 @@ class TipoVideo
         return $this;
     }
 
-    /**
-     * @return Collection<int, Video>
-     */
-    public function getVideos(): Collection
-    {
-        return $this->videos;
-    }
-
-    public function addVideo(Video $video): static
-    {
-        if (!$this->videos->contains($video)) {
-            $this->videos->add($video);
-            $video->setTipoVideo($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVideo(Video $video): static
-    {
-        if ($this->videos->removeElement($video)) {
-            // set the owning side to null (unless already changed)
-            if ($video->getTipoVideo() === $this) {
-                $video->setTipoVideo(null);
-            }
-        }
-
-        return $this;
-    }
+//    /**
+//     * @return Collection<int, Video>
+//     */
+//    public function getVideos(): Collection
+//    {
+//        return $this->videos;
+//    }
+//
+//    public function addVideo(Video $video): static
+//    {
+//        if (!$this->videos->contains($video)) {
+//            $this->videos->add($video);
+//            $video->setTipoVideo($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeVideo(Video $video): static
+//    {
+//        if ($this->videos->removeElement($video)) {
+//            // set the owning side to null (unless already changed)
+//            if ($video->getTipoVideo() === $this) {
+//                $video->setTipoVideo(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
 }

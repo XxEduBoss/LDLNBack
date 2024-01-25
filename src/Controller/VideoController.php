@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Dto\VideoDTO;
 use App\Entity\Canal;
+use App\Entity\Etiquetas;
+use App\Entity\EtiquetasVideo;
 use App\Entity\TipoVideo;
 use App\Entity\Video;
 use App\Repository\VideoRepository;
@@ -64,10 +66,11 @@ class VideoController extends AbstractController
         $nuevoVideo-> setDescripcion($json["descripcion"]);
         $nuevoVideo->setUrl($json["url"]);
 
-        $tipo_video = $entityManager->getRepository(TipoVideo::class)->findBy(["id"=>$json["tipo"]]);
+        $tipo_video = $entityManager->getRepository(TipoVideo::class)->findBy(["descripcion"=>$json["tipo"]]);
         $nuevoVideo->setTipoVideo($tipo_video[0]);
 
         $nuevoVideo->setFechaCreacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
+
         $fechaPublicacionDateTime = \DateTime::createFromFormat('d/m/Y H:i:s', $json["fecha_publicacion"]);
         $nuevoVideo->setFechaPublicacion(new \DateTime($fechaPublicacionDateTime));
 
@@ -78,6 +81,22 @@ class VideoController extends AbstractController
 
         $entityManager->persist($nuevoVideo);
         $entityManager->flush();
+
+        $videoCreado = $entityManager->getRepository(Video::class)->findBy(["titulo"=>$json["titulo"]]);
+
+        foreach ($json['etiquetas'] as $etiqueta){
+
+            $nuevoEtiquetasVideo = new EtiquetasVideo();
+
+            $nuevaEtiqueta = $entityManager->getRepository(Etiquetas::class)->findBy(["descripcion"=>$etiqueta]);
+
+            $nuevoEtiquetasVideo->setEtiqueta($nuevaEtiqueta[0]);
+            $nuevoEtiquetasVideo->setVideo($videoCreado[0]);
+
+            $entityManager->persist($nuevoEtiquetasVideo);
+            $entityManager->flush();
+
+        }
 
         return $this->json(['message' => 'Video creado'], Response::HTTP_CREATED);
 

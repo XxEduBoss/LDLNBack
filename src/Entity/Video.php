@@ -54,12 +54,15 @@ class Video
     #[ORM\OneToMany(mappedBy: 'id_video', targetEntity: ValoracionNegativa::class, orphanRemoval: true)]
     private Collection $valoracionesNegativas;
 
-    #[ORM\Column]
+    #[ORM\Column(name: 'activo')]
     private ?bool $Activo = null;
 
     #[ORM\ManyToOne(inversedBy: 'videos')]
     #[ORM\JoinColumn(name:'id_tipo_video', nullable: false)]
     private ?TipoVideo $tipo_video = null;
+
+    #[ORM\OneToMany(mappedBy: 'video', targetEntity: EtiquetasVideo::class, orphanRemoval: true)]
+    private Collection $etiquetasVideos;
 
     public function __construct()
     {
@@ -67,6 +70,7 @@ class Video
         $this->comentarios = new ArrayCollection();
         $this->valoracionesPositivas = new ArrayCollection();
         $this->valoracionesNegativas = new ArrayCollection();
+        $this->etiquetasVideos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -322,6 +326,36 @@ class Video
     public function setTipoVideo(?TipoVideo $tipo_video): static
     {
         $this->tipo_video = $tipo_video;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EtiquetasVideo>
+     */
+    public function getEtiquetasVideos(): Collection
+    {
+        return $this->etiquetasVideos;
+    }
+
+    public function addEtiquetasVideo(EtiquetasVideo $etiquetasVideo): static
+    {
+        if (!$this->etiquetasVideos->contains($etiquetasVideo)) {
+            $this->etiquetasVideos->add($etiquetasVideo);
+            $etiquetasVideo->setVideo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEtiquetasVideo(EtiquetasVideo $etiquetasVideo): static
+    {
+        if ($this->etiquetasVideos->removeElement($etiquetasVideo)) {
+            // set the owning side to null (unless already changed)
+            if ($etiquetasVideo->getVideo() === $this) {
+                $etiquetasVideo->setVideo(null);
+            }
+        }
 
         return $this;
     }
