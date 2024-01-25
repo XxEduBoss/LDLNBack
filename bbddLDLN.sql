@@ -242,3 +242,6 @@ insert into etiquetas(descripcion) values ('PROGRAMACIÓN'),
                                           ('MODA'),
                                           ('NOTICIAS'),
                                           ('ANIMALES');
+
+
+ALTER TABLE usuario ADD UNIQUE (email);

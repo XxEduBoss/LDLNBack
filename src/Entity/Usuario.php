@@ -30,6 +30,9 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'activo')]
     private ?bool $activo = true;
 
+    #[ORM\Column(name: 'email')]
+    private ?string $email = null;
+
     #[ORM\ManyToMany(targetEntity: Etiquetas::class)]
     #[ORM\JoinTable(name: "etiquetas_usuario", schema: "apollo")]
     #[ORM\JoinColumn(name: "id_usuario", referencedColumnName: "id")]
@@ -116,6 +119,18 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
     public function setRolUsuario(int $rol_usuario): static
     {
         $this->rol_usuario = $rol_usuario;
+
+        return $this;
+    }
+
+    public function getEmail(): ?int
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email= $email;
 
         return $this;
     }
