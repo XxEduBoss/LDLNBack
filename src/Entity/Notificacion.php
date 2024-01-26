@@ -6,8 +6,7 @@ use App\Repository\NotificacionRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Integer;
-use TipoNotificacion;
+use App\Entity\TipoNotificacion;
 
 #[ORM\Entity(repositoryClass: NotificacionRepository::class)]
 #[ORM\Table(name: 'notificacion',schema: 'apollo')]
@@ -21,9 +20,6 @@ class Notificacion
     #[ORM\Column(name:'texto', length: 10000)]
     private ?string $texto = null;
 
-    #[ORM\Column(name:'tipo', type: Types::INTEGER)]
-    private ?int $tipo = null;
-
     #[ORM\Column(name:'fecha_notificacion', type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $fecha_notificacion = null;
 
@@ -33,6 +29,10 @@ class Notificacion
 
     #[ORM\Column]
     private ?bool $activo = null;
+
+    #[ORM\ManyToOne(inversedBy: 'notificaciones')]
+    #[ORM\JoinColumn(name:'id_tipo_notificacion', nullable: false)]
+    private ?TipoNotificacion $tipo_notificacion = null;
 
     public function getId(): ?int
     {
@@ -47,18 +47,6 @@ class Notificacion
     public function setTexto(string $texto): static
     {
         $this->texto = $texto;
-
-        return $this;
-    }
-
-    public function getTipo(): ?int
-    {
-        return $this->tipo;
-    }
-
-    public function setTipo(int $tipo): static
-    {
-        $this->tipo = $tipo;
 
         return $this;
     }
@@ -95,6 +83,18 @@ class Notificacion
     public function setActivo(bool $activo): static
     {
         $this->activo = $activo;
+
+        return $this;
+    }
+
+    public function getTipoNotificacion(): ?TipoNotificacion
+    {
+        return $this->tipo_notificacion;
+    }
+
+    public function setTipoNotificacion(?TipoNotificacion $tipo_notificacion): static
+    {
+        $this->tipo_notificacion = $tipo_notificacion;
 
         return $this;
     }

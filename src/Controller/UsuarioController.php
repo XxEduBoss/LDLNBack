@@ -45,27 +45,24 @@ class UsuarioController extends AbstractController
         return $this->json($usuario);
     }
 
-    #[Route('/crear', name: 'crear_usuario', methods: ['POST'])]
+    #[Route('/crear', name: 'crear_usuario', methods: ['POST', 'OPTIONS'])]
     public function crear(EntityManagerInterface $entityManager, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
         if(empty($entityManager->getRepository(Usuario::class)->findBy(["username"=>$data['username']]))){
-
             $usuario = new Usuario();
             $usuario->setUsername($data['username']);
             $usuario->setPassword($data['password']);
-            $usuario->setRolUsuario($data['rol']);
+            $usuario->setRolUsuario($data['id_rol']);
             $usuario->setActivo(true);
-
             $entityManager->persist($usuario);
             $entityManager->flush();
-
             return $this->json(['message' => 'Usuario creado'], Response::HTTP_CREATED);
 
         }else{
 
-            return $this->json(['message' => 'Ya existe un usuario con ese username'], Response::HTTP_NOT_IMPLEMENTED);
+            return $this->json(['message' => 'Ya existe un usuario con ese username']);
 
         }
 
@@ -78,7 +75,7 @@ class UsuarioController extends AbstractController
 
         $usuario->setUsername($data['username']);
         $usuario->setPassword($data['password']);
-        $usuario->setRolUsuario($data['rol']);
+        $usuario->setRolUsuario($data['id_rol']);
 
         $entityManager->flush();
 

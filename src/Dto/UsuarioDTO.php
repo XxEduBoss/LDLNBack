@@ -8,6 +8,7 @@ class UsuarioDTO
     private ?int $id = null;
     private ?string $username = null;
     private ?string $password = null;
+    private ?string $email = null;
     private ?int $rol_usuario = null;
     private ?int $activo = null;
 
@@ -59,6 +60,17 @@ class UsuarioDTO
     public function setActivo(?int $activo): void
     {
         $this->activo = $activo;
+    }
+    public function getEmail(): ?int
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email= $email;
+
+        return $this;
     }
 
 }
