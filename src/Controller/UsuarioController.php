@@ -42,7 +42,15 @@ class UsuarioController extends AbstractController
     #[Route('/{id}', name: 'usuario_by_id', methods: ['GET'])]
     public function buscarPorId(Usuario $usuario): JsonResponse
     {
-        return $this->json($usuario);
+
+        $user = new UsuarioDTO();
+        $user->setId($usuario->getId());
+        $user->setUsername($usuario->getUsername());
+        $user->setPassword($usuario->getPassword());
+        $user->setRolUsuario($usuario->getRolUsuario());
+        $user->setActivo($usuario->isActivo());
+
+        return $this->json($user);
     }
 
     #[Route('/crear', name: 'crear_usuario', methods: ['POST', 'OPTIONS'])]

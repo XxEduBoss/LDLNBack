@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Dto\CanalDTO;
+use App\Dto\UsuarioDTO;
 use App\Dto\VideoDTO;
 use App\Entity\Canal;
 use App\Entity\Etiquetas;
@@ -33,11 +35,31 @@ class VideoController extends AbstractController
            $video->setId($v->getId());
            $video->setTitulo($v->getTitulo());
            $video->setDescripcion($v->getDescripcion());
-           $video->setEtiquetas($v->getEtiquetas());
+           $video->setUrl($v->getUrl());
+           $video->setTipoVideo($v->getTipoVideo());
            $video->setFechaCreacion($v->getFechaCreacion());
            $video->setFechaPublicacion($v->getFechaPublicacion());
-           $video->setUrl($v->getUrl());
-           $video->setCanal($v->getCanal());
+
+           $canal = new CanalDTO();
+           $canal->setId($v->getCanal()->getId());
+           $canal->setNombre($v->getCanal()->getNombre());
+           $canal->setApellidos($v->getCanal()->getApellidos());
+           $canal->setNombreCanal($v->getCanal()->getNombreCanal());
+           $canal->setTelefono($v->getCanal()->getTelefono());
+           $canal->setFechaNacimiento($v->getCanal()->getFechaNacimiento());
+           $canal->setFechaCreacion($v->getCanal()->getFechaCreacion());
+
+           $user = new UsuarioDTO();
+           $user->setId($v->getCanal()->getUsuario()->getId());
+           $user->setUsername($v->getCanal()->getUsuario()->getUsername());
+           $user->setPassword($v->getCanal()->getUsuario()->getPassword());
+           $user->setRolUsuario($v->getCanal()->getUsuario()->getRolUsuario());
+           $user->setActivo($v->getCanal()->getUsuario()->isActivo());
+
+           $canal->setUsuario($user);
+           $canal->setActivo($v->getCanal()->isActivo());
+
+           $video->setCanal($canal);
            $video->setActivo($v->isActivo());
 
            $listaVideosDTOs = $video;
@@ -79,24 +101,17 @@ class VideoController extends AbstractController
 
         $nuevoVideo->setActivo(true);
 
+        if (isset($json['etiquetas']) && is_array($json['etiquetas'])) {
+            foreach ($json['etiquetas'] as $etiquetaId) {
+                $etiquetaVideo = $entityManager->getRepository(Etiquetas::class)->findOneBy(["descripcion"=>$etiquetaId] );
+                if ($etiquetaVideo instanceof Etiquetas) {
+                    $nuevoVideo->addEtiqueta($etiquetaVideo);
+                }
+            }
+        }
+
         $entityManager->persist($nuevoVideo);
         $entityManager->flush();
-
-        $videoCreado = $entityManager->getRepository(Video::class)->findBy(["titulo"=>$json["titulo"]]);
-
-        foreach ($json['etiquetas'] as $etiqueta){
-
-            $nuevoEtiquetasVideo = new EtiquetasVideo();
-
-            $nuevaEtiqueta = $entityManager->getRepository(Etiquetas::class)->findBy(["descripcion"=>$etiqueta]);
-
-            $nuevoEtiquetasVideo->setEtiqueta($nuevaEtiqueta[0]);
-            $nuevoEtiquetasVideo->setVideo($videoCreado[0]);
-
-            $entityManager->persist($nuevoEtiquetasVideo);
-            $entityManager->flush();
-
-        }
 
         return $this->json(['message' => 'Video creado'], Response::HTTP_CREATED);
 
