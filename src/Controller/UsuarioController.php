@@ -54,7 +54,7 @@ class UsuarioController extends AbstractController
             $usuario = new Usuario();
             $usuario->setUsername($data['username']);
             $usuario->setPassword($data['password']);
-            $usuario->setRolUsuario($data['rol']);
+            $usuario->setRolUsuario($data['id_rol']);
             $usuario->setActivo(true);
             $entityManager->persist($usuario);
             $entityManager->flush();
@@ -75,7 +75,7 @@ class UsuarioController extends AbstractController
 
         $usuario->setUsername($data['username']);
         $usuario->setPassword($data['password']);
-        $usuario->setRolUsuario($data['rol']);
+        $usuario->setRolUsuario($data['id_rol']);
 
         $entityManager->flush();
 
