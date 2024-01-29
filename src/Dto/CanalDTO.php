@@ -14,8 +14,7 @@ class CanalDTO
     private ?string $telefono = null;
     private ?\DateTimeInterface $fecha_nacimiento = null;
     private ?\DateTimeInterface $fecha_creacion = null;
-    private ?int $etiquetas = null;
-    private ?Usuario $usuario = null;
+    private ?UsuarioDTO $usuario = null;
     private ?bool $activo = null;
 
     /**
@@ -131,33 +130,17 @@ class CanalDTO
     }
 
     /**
-     * @return int|null
+     * @return UsuarioDTO|null
      */
-    public function getEtiquetas(): ?int
-    {
-        return $this->etiquetas;
-    }
-
-    /**
-     * @param int|null $etiquetas
-     */
-    public function setEtiquetas(?int $etiquetas): void
-    {
-        $this->etiquetas = $etiquetas;
-    }
-
-    /**
-     * @return Usuario|null
-     */
-    public function getUsuario(): ?Usuario
+    public function getUsuario(): ?UsuarioDTO
     {
         return $this->usuario;
     }
 
     /**
-     * @param Usuario|null $usuario
+     * @param UsuarioDTO|null $usuario
      */
-    public function setUsuario(?Usuario $usuario): void
+    public function setUsuario(?UsuarioDTO $usuario): void
     {
         $this->usuario = $usuario;
     }

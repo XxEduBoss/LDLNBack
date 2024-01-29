@@ -36,8 +36,15 @@ class CanalController extends AbstractController
             $canal->setTelefono($c->getTelefono());
             $canal->setFechaNacimiento($c->getFechaNacimiento());
             $canal->setFechaCreacion($c->getFechaCreacion());
-            $canal->setEtiquetas($c->getEtiquetas());
-            $canal->setUsuario($c->getUsuario());
+
+            $user = new UsuarioDTO();
+            $user->setId($c->getUsuario()->getId());
+            $user->setUsername($c->getUsuario()->getUsername());
+            $user->setPassword($c->getUsuario()->getPassword());
+            $user->setRolUsuario($c->getUsuario()->getRolUsuario());
+            $user->setActivo($c->getUsuario()->isActivo());
+
+            $canal->setUsuario($user);
             $canal->setActivo($c->isActivo());
 
             $listaCanalesDTOs[] = $canal;
@@ -53,7 +60,27 @@ class CanalController extends AbstractController
     #[Route('/{id}', name: "canal_by_id", methods: ["GETS"])]
     public function getById(Canal $canal):JsonResponse
     {
-        return $this->json($canal);
+
+        $canalDTO = new CanalDTO();
+        $canalDTO->setId($canal->getId());
+        $canalDTO->setNombre($canal->getNombre());
+        $canalDTO->setApellidos($canal->getApellidos());
+        $canalDTO->setNombreCanal($canal->getNombreCanal());
+        $canalDTO->setTelefono($canal->getTelefono());
+        $canalDTO->setFechaNacimiento($canal->getFechaNacimiento());
+        $canalDTO->setFechaCreacion($canal->getFechaCreacion());
+
+        $user = new UsuarioDTO();
+        $user->setId($canal->getUsuario()->getId());
+        $user->setUsername($canal->getUsuario()->getUsername());
+        $user->setPassword($canal->getUsuario()->getPassword());
+        $user->setRolUsuario($canal->getUsuario()->getRolUsuario());
+        $user->setActivo($canal->getUsuario()->isActivo());
+
+        $canalDTO->setUsuario($user);
+        $canalDTO->setActivo($canal->isActivo());
+
+        return $this->json($canalDTO);
     }
 
     //Crear un canal

@@ -26,17 +26,24 @@ class Video
     #[ORM\Column(name:'url', length: 10000)]
     private ?string $url = null;
 
-    #[ORM\ManyToMany(targetEntity: Etiquetas::class)]
-    #[ORM\JoinTable(name: "etiquetas_video", schema: "apollo")]
-    #[ORM\JoinColumn(name: "id_video", referencedColumnName: "id")]
-    #[ORM\InverseJoinColumn(name: "id_etiqueta", referencedColumnName: "id")]
-    private Collection $etiquetas;
+    #[ORM\ManyToOne(inversedBy: 'videos')]
+    #[ORM\JoinColumn(name:'id_tipo_video', nullable: false)]
+    private ?TipoVideo $tipo_video = null;
 
     #[ORM\Column(name:'fecha_publicacion', type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_publicacion = null;
 
     #[ORM\Column(name:'fecha_creacion', type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_creacion = null;
+
+    #[ORM\ManyToMany(targetEntity: Etiquetas::class)]
+    #[ORM\JoinTable(name: "etiquetas_video", schema: "apollo")]
+    #[ORM\JoinColumn(name: "id_video", referencedColumnName: "id")]
+    #[ORM\InverseJoinColumn(name: "id_etiqueta", referencedColumnName: "id")]
+    private Collection $etiquetas;
+
+    #[ORM\Column(name: 'activo')]
+    private ?bool $Activo = null;
 
     #[ORM\ManyToOne(targetEntity: Canal::class,inversedBy: "videos")]
     #[ORM\JoinColumn(name:'id_canal', nullable: false)]
@@ -54,15 +61,9 @@ class Video
     #[ORM\OneToMany(mappedBy: 'id_video', targetEntity: ValoracionNegativa::class, orphanRemoval: true)]
     private Collection $valoracionesNegativas;
 
-    #[ORM\Column]
-    private ?bool $Activo = null;
-
-    #[ORM\ManyToOne(inversedBy: 'videos')]
-    #[ORM\JoinColumn(name:'id_tipo_video', nullable: false)]
-    private ?TipoVideo $tipo_video = null;
-
     public function __construct()
     {
+        $this->etiquetas = new ArrayCollection();
         $this->visitas = new ArrayCollection();
         $this->comentarios = new ArrayCollection();
         $this->valoracionesPositivas = new ArrayCollection();
@@ -106,18 +107,6 @@ class Video
     public function setUrl(string $url): static
     {
         $this->url = $url;
-
-        return $this;
-    }
-
-    public function getEtiquetas(): ?int
-    {
-        return $this->etiquetas;
-    }
-
-    public function setEtiquetas(int $etiquetas): static
-    {
-        $this->etiquetas = $etiquetas;
 
         return $this;
     }
@@ -325,4 +314,5 @@ class Video
 
         return $this;
     }
+
 }

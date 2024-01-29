@@ -41,7 +41,15 @@ class UsuarioController extends AbstractController
     #[Route('/{id}', name: 'usuario_by_id', methods: ['GET'])]
     public function buscarPorId(Usuario $usuario): JsonResponse
     {
-        return $this->json($usuario);
+
+        $user = new UsuarioDTO();
+        $user->setId($usuario->getId());
+        $user->setUsername($usuario->getUsername());
+        $user->setPassword($usuario->getPassword());
+        $user->setRolUsuario($usuario->getRolUsuario());
+        $user->setActivo($usuario->isActivo());
+
+        return $this->json($user);
     }
 
     #[Route('/crear', name: 'crear_usuario', methods: ['POST', 'OPTIONS'])]
@@ -53,7 +61,7 @@ class UsuarioController extends AbstractController
             $usuario = new Usuario();
             $usuario->setUsername($data['username']);
             $usuario->setPassword($data['password']);
-            $usuario->setRolUsuario($data['rol']);
+            $usuario->setRolUsuario($data['id_rol']);
             $usuario->setActivo(true);
             $entityManager->persist($usuario);
             $entityManager->flush();
@@ -74,7 +82,7 @@ class UsuarioController extends AbstractController
 
         $usuario->setUsername($data['username']);
         $usuario->setPassword($data['password']);
-        $usuario->setRolUsuario($data['rol']);
+        $usuario->setRolUsuario($data['id_rol']);
 
         $entityManager->flush();
 
