@@ -26,14 +26,24 @@ class Video
     #[ORM\Column(name:'url', length: 10000)]
     private ?string $url = null;
 
-    #[ORM\Column(name:'etiquetas')]
-    private ?int $etiquetas = null;
+    #[ORM\ManyToOne(inversedBy: 'videos')]
+    #[ORM\JoinColumn(name:'id_tipo_video', nullable: false)]
+    private ?TipoVideo $tipo_video = null;
 
     #[ORM\Column(name:'fecha_publicacion', type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_publicacion = null;
 
     #[ORM\Column(name:'fecha_creacion', type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_creacion = null;
+
+    #[ORM\ManyToMany(targetEntity: Etiquetas::class)]
+    #[ORM\JoinTable(name: "etiquetas_video", schema: "apollo")]
+    #[ORM\JoinColumn(name: "id_video", referencedColumnName: "id")]
+    #[ORM\InverseJoinColumn(name: "id_etiqueta", referencedColumnName: "id")]
+    private Collection $etiquetas;
+
+    #[ORM\Column(name: 'activo')]
+    private ?bool $Activo = null;
 
     #[ORM\ManyToOne(targetEntity: Canal::class,inversedBy: "videos")]
     #[ORM\JoinColumn(name:'id_canal', nullable: false)]
@@ -51,11 +61,9 @@ class Video
     #[ORM\OneToMany(mappedBy: 'id_video', targetEntity: ValoracionNegativa::class, orphanRemoval: true)]
     private Collection $valoracionesNegativas;
 
-    #[ORM\Column]
-    private ?bool $Activo = null;
-
     public function __construct()
     {
+        $this->etiquetas = new ArrayCollection();
         $this->visitas = new ArrayCollection();
         $this->comentarios = new ArrayCollection();
         $this->valoracionesPositivas = new ArrayCollection();
@@ -103,18 +111,6 @@ class Video
         return $this;
     }
 
-    public function getEtiquetas(): ?int
-    {
-        return $this->etiquetas;
-    }
-
-    public function setEtiquetas(int $etiquetas): static
-    {
-        $this->etiquetas = $etiquetas;
-
-        return $this;
-    }
-
     public function getFechaPublicacion(): ?string
     {
         return $this->fecha_publicacion->format('d/m/Y H:i:s');
@@ -147,6 +143,30 @@ class Video
     public function setCanal(?Canal $canal): static
     {
         $this->canal = $canal;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Etiquetas>
+     */
+    public function getEtiqueta(): Collection
+    {
+        return $this->etiquetas;
+    }
+
+    public function addEtiqueta(Etiquetas $etiqueta): static
+    {
+        if (!$this->etiquetas->contains($etiqueta)) {
+            $this->etiquetas->add($etiqueta);
+        }
+
+        return $this;
+    }
+
+    public function removeEtiqueta(Etiquetas $etiqueta): static
+    {
+        $this->etiquetas->removeElement($etiqueta);
 
         return $this;
     }
@@ -282,4 +302,17 @@ class Video
 
         return $this;
     }
+
+    public function getTipoVideo(): ?TipoVideo
+    {
+        return $this->tipo_video;
+    }
+
+    public function setTipoVideo(?TipoVideo $tipo_video): static
+    {
+        $this->tipo_video = $tipo_video;
+
+        return $this;
+    }
+
 }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CanalRepository;
+use App\Repository\EtiquetasRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -35,9 +36,6 @@ class Canal
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_creacion = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $etiquetas = null;
-
     #[ORM\OneToOne]
     #[ORM\JoinColumn(name:"id_usuario", nullable: false)]
     private ?Usuario $usuario = null;
@@ -51,9 +49,16 @@ class Canal
     #[ORM\Column]
     private ?bool $activo = null;
 
+    #[ORM\ManyToMany(targetEntity: Etiquetas::class)]
+    #[ORM\JoinTable(name: "etiquetas_canal", schema: "apollo")]
+    #[ORM\JoinColumn(name: "id_canal", referencedColumnName: "id")]
+    #[ORM\InverseJoinColumn(name: "id_etiqueta", referencedColumnName: "id")]
+    private Collection $etiquetas;
+
     public function __construct()
     {
         $this->videos = new ArrayCollection();
+        $this->etiquetas = new ArrayCollection();
         $this->suscripciones = new ArrayCollection();
     }
 
@@ -134,18 +139,6 @@ class Canal
         return $this;
     }
 
-    public function getEtiquetas(): ?int
-    {
-        return $this->etiquetas;
-    }
-
-    public function setEtiquetas(?int $etiquetas): static
-    {
-        $this->etiquetas = $etiquetas;
-
-        return $this;
-    }
-
     public function getUsuario(): ?Usuario
     {
         return $this->usuario;
@@ -154,6 +147,30 @@ class Canal
     public function setUsuario(Usuario $usuario): static
     {
         $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Etiquetas>
+     */
+    public function getEtiqueta(): Collection
+    {
+        return $this->etiquetas;
+    }
+
+    public function addEtiqueta(Etiquetas $etiqueta): static
+    {
+        if (!$this->etiquetas->contains($etiqueta)) {
+            $this->etiquetas->add($etiqueta);
+        }
+
+        return $this;
+    }
+
+    public function removeEtiqueta(Etiquetas $etiqueta): static
+    {
+        $this->etiquetas->removeElement($etiqueta);
 
         return $this;
     }
