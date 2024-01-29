@@ -67,5 +67,17 @@ class VideoRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+    //Los videos de tu canal
+    public function getVideosPorCanal(array $canal): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idcanal = $canal["id"];
+        $sql = 'select v.* from apollo.canal c
+                    join apollo.video v on c.id = v.id_canal
+                    where v.id_canal = :idcanal';
+
+        $resultSet = $conn->executeQuery($sql, ['idcanal' => $idcanal]);
+        return $resultSet->fetchAllAssociative();
+    }
 
 }

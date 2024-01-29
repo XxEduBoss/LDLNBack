@@ -185,5 +185,15 @@ class VideoController extends AbstractController
         return $this->json(['Videos por sus etiquetas y de las del usuario' => $listaVideos], Response::HTTP_OK);
     }
 
+    //Los videos de tu canal
+    #[Route('/porcanal', name: "get_videos_por_canal", methods: ["POST"])]
+    public function VideosPorCAnal(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaVideos = $entityManager->getRepository(Video::class)->getVideosPorCanal(["id"=>$data['id_canal']]);
+
+        return $this->json(['Videos por su canal' => $listaVideos], Response::HTTP_OK);
+    }
+
 
 }
