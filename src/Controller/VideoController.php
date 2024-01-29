@@ -120,5 +120,35 @@ class VideoController extends AbstractController
 
     }
 
+    //Los videos de tus canales suscritos
+    #[Route('/canalessuscritos', name: "get_videos_canales_suscritos", methods: ["POST"])]
+    public function getVideosSuscritosController(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaVideos = $entityManager->getRepository(Video::class)->getVideosSuscritos(["id"=> $data["id"]]);
+
+        return $this->json(['Videos de tus canales suscritos' => $listaVideos], Response::HTTP_OK);
+    }
+
+    //Los videos de tus canales suscritos
+    #[Route('/poretiquetas', name: "get_videos_por_etiquetas", methods: ["POST"])]
+    public function getVideosEtiquetasController(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaVideos = $entityManager->getRepository(Video::class)->getVideosEtiquetas(["etiqueta"=> $data["etiqueta"]]);
+
+        return $this->json(['Videos por etiquetas' => $listaVideos], Response::HTTP_OK);
+    }
+
+    //Los videos en funcion de las etiquetas del video y del usuario
+    #[Route('/poretiquetausuario', name: "get_videos_usuario_etiquetas", methods: ["POST"])]
+    public function getVideosEtiquetasUsuarioController(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaVideos = $entityManager->getRepository(Video::class)->getVideosEtiquetasUsuarios(["id"=> $data["id"]]);
+
+        return $this->json(['Videos por sus etiquetas y de las del usuario' => $listaVideos], Response::HTTP_OK);
+    }
+
 
 }

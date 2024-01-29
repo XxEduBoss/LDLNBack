@@ -21,28 +21,52 @@ class VideoRepository extends ServiceEntityRepository
         parent::__construct($registry, Video::class);
     }
 
-//    /**
-//     * @return Video[] Returns an array of Video objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('v')
-//            ->andWhere('v.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('v.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //Los videos de tus canales suscritos
+    public function getVideosSuscritos(array $id): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idTipoCategoria = $id["id"];
+        $sql = 'select v.* from apollo.suscripcion s
+                    join apollo.canal c on s.id_canal = c.id
+                    join apollo.video v on c.id = v.id_canal
+                    where s.id_usuario = :id group by v.id';
 
-//    public function findOneBySomeField($value): ?Video
-//    {
-//        return $this->createQueryBuilder('v')
-//            ->andWhere('v.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $resultSet = $conn->executeQuery($sql, ['id' => $idTipoCategoria]);
+        return $resultSet->fetchAllAssociative();
+    }
+
+    //Los videos en funcion de tus etiquetas
+    public function getVideosEtiquetas(array $etiqueta): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $etiqueta = $etiqueta["etiqueta"];
+        $sql = 'select v.* from apollo.video v
+                    join apollo.etiquetas_video ev on v.id = ev.id_video
+                    join apollo.etiquetas e on ev.id_etiqueta = e.id
+                    where e.descripcion = :etiqueta group by v.id';
+
+        $resultSet = $conn->executeQuery($sql, ['etiqueta' => $etiqueta]);
+        return $resultSet->fetchAllAssociative();
+    }
+
+    //Los videos en funcion de las etiquetas del video y del usuario
+    public function getVideosEtiquetasUsuarios(array $id): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idTipoCategoria = $id["id"];
+        $sql = 'select v.titulo from apollo.usuario u
+                    join apollo.canal c on u.id = c.id_usuario
+                    join apollo.video v on c.id = v.id_canal
+                    join apollo.etiquetas_video ev on v.id = ev.id_video
+                    join apollo.etiquetas e on ev.id_etiqueta = e.id
+                    join apollo.etiquetas_usuario eu on u.id = eu.id_usuario
+                    where u.id = :id and ev.id_etiqueta = eu.id_etiqueta 
+                    group by v.id';
+
+        $resultSet = $conn->executeQuery($sql, ['id' => $idTipoCategoria]);
+        return $resultSet->fetchAllAssociative();
+    }
+
+
+
 }

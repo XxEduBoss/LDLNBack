@@ -35,7 +35,6 @@ class UsuarioController extends AbstractController
 
         }
 
-
         return $this->json($listaUsuariosDTOs);
     }
 

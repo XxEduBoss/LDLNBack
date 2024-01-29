@@ -37,6 +37,7 @@ create table usuario (
                          constraint fk_usuario_rol foreign key (id_rol_usuario) references rol_usuario(id)
 );
 
+
 create table canal(
                       id serial,
                       nombre varchar(100) not null,
@@ -242,3 +243,5 @@ insert into etiquetas(descripcion) values ('PROGRAMACIÓN'),
                                           ('MODA'),
                                           ('NOTICIAS'),
                                           ('ANIMALES');
+
+
