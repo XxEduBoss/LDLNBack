@@ -62,7 +62,7 @@ class VideoController extends AbstractController
            $video->setCanal($canal);
            $video->setActivo($v->isActivo());
 
-           $listaVideosDTOs = $video;
+           $listaVideosDTOs[] = $video;
 
        }
 
@@ -70,8 +70,41 @@ class VideoController extends AbstractController
     }
 
     #[Route('/{id}', name: "video_by_id", methods: ["GET"])]
-    public function getById(Video $video):JsonResponse
+    public function getById(Video $v):JsonResponse
     {
+
+        $video = new VideoDTO();
+
+        $video->setId($v->getId());
+        $video->setTitulo($v->getTitulo());
+        $video->setDescripcion($v->getDescripcion());
+        $video->setUrl($v->getUrl());
+        $video->setTipoVideo($v->getTipoVideo());
+        $video->setFechaCreacion($v->getFechaCreacion());
+        $video->setFechaPublicacion($v->getFechaPublicacion());
+
+        $canal = new CanalDTO();
+        $canal->setId($v->getCanal()->getId());
+        $canal->setNombre($v->getCanal()->getNombre());
+        $canal->setApellidos($v->getCanal()->getApellidos());
+        $canal->setNombreCanal($v->getCanal()->getNombreCanal());
+        $canal->setTelefono($v->getCanal()->getTelefono());
+        $canal->setFechaNacimiento($v->getCanal()->getFechaNacimiento());
+        $canal->setFechaCreacion($v->getCanal()->getFechaCreacion());
+
+        $user = new UsuarioDTO();
+        $user->setId($v->getCanal()->getUsuario()->getId());
+        $user->setUsername($v->getCanal()->getUsuario()->getUsername());
+        $user->setPassword($v->getCanal()->getUsuario()->getPassword());
+        $user->setRolUsuario($v->getCanal()->getUsuario()->getRolUsuario());
+        $user->setActivo($v->getCanal()->getUsuario()->isActivo());
+
+        $canal->setUsuario($user);
+        $canal->setActivo($v->getCanal()->isActivo());
+
+        $video->setCanal($canal);
+        $video->setActivo($v->isActivo());
+
         return $this->json($video);
 
     }
