@@ -93,8 +93,9 @@ class VideoController extends AbstractController
 
         $nuevoVideo->setFechaCreacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
 
-        $fechaPublicacionDateTime = \DateTime::createFromFormat('d/m/Y H:i:s', $json["fecha_publicacion"]);
-        $nuevoVideo->setFechaPublicacion(new \DateTime($fechaPublicacionDateTime));
+        $fechaRecibida = \DateTimeImmutable::createFromFormat('Y-m-d\TH:i', $json["fecha_publicacion"]);
+
+        $nuevoVideo->setFechaPublicacion($fechaRecibida);
 
         $canal = $entityManager->getRepository(Canal::class)->findBy(["id"=>$json["canal"]]);
         $nuevoVideo->setCanal($canal[0]);
@@ -169,7 +170,7 @@ class VideoController extends AbstractController
     public function getVideosEtiquetasController(EntityManagerInterface $entityManager, Request $request):JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $listaVideos = $entityManager->getRepository(Video::class)->getVideosEtiquetas(["etiqueta"=> $data["etiqueta"]]);
+        $listaVideos = $entityManager->getRepository(Video::class)->getVideosPorEtiqueta(["etiqueta"=> $data["etiqueta"]]);
 
         return $this->json(['Videos por etiquetas' => $listaVideos], Response::HTTP_OK);
     }

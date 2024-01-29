@@ -123,7 +123,7 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getEmail(): ?int
+    public function getEmail(): ?string
     {
         return $this->email;
     }

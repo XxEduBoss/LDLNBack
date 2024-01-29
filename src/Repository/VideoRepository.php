@@ -35,8 +35,8 @@ class VideoRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    //Los videos en funcion de tus etiquetas
-    public function getVideosEtiquetas(array $etiqueta): array
+    //Los videos en funcion de la etiqueta que tu quieras
+    public function getVideosPorEtiqueta(array $etiqueta): array
     {
         $conn = $this->getEntityManager()->getConnection();
         $etiqueta = $etiqueta["etiqueta"];
@@ -66,7 +66,6 @@ class VideoRepository extends ServiceEntityRepository
         $resultSet = $conn->executeQuery($sql, ['id' => $idTipoCategoria]);
         return $resultSet->fetchAllAssociative();
     }
-
 
 
 }

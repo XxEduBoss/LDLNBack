@@ -6,6 +6,7 @@ use App\Dto\CanalDTO;
 use App\Dto\UsuarioDTO;
 use App\Entity\Canal;
 use App\Entity\Usuario;
+use App\Entity\Video;
 use App\Repository\CanalRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -141,6 +142,45 @@ class CanalController extends AbstractController
         $entityManager->flush();
 
         return $this->json(['message' => 'Canal eliminado'], Response::HTTP_OK);
+    }
+
+    //Busqueda de canal por su nombre
+    #[Route('/busquedanombre', name: "busqueda_nombre", methods: ["POST"])]
+    public function getCanalPorNombre(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaCanales = $entityManager->getRepository(Canal::class)->getCanalesPorNombre($data["nombre_canal"]);
+
+        $listaCanalesDTOs = [];
+
+        foreach ($listaCanales as $c){
+
+            $canal = new CanalDTO();
+            $canal->setId($c->getId());
+            $canal->setNombre($c->getNombre());
+            $canal->setApellidos($c->getApellidos());
+            $canal->setNombreCanal($c->getNombreCanal());
+            $canal->setTelefono($c->getTelefono());
+            $canal->setFechaNacimiento($c->getFechaNacimiento());
+            $canal->setFechaCreacion($c->getFechaCreacion());
+
+            $user = new UsuarioDTO();
+            $user->setId($c->getUsuario()->getId());
+            $user->setUsername($c->getUsuario()->getUsername());
+            $user->setPassword($c->getUsuario()->getPassword());
+            $user->setEmail($c->getUsuario()->getEmail());
+            $user->setRolUsuario($c->getUsuario()->getRolUsuario());
+            $user->setActivo($c->getUsuario()->isActivo());
+
+            $canal->setUsuario($user);
+            $canal->setActivo($c->isActivo());
+
+            $listaCanalesDTOs[] = $canal;
+
+        }
+
+        return $this->json(['Canales por nombre' => $listaCanalesDTOs], Response::HTTP_OK);
+
     }
 
 }
