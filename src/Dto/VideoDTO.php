@@ -17,6 +17,9 @@ class VideoDTO
     private ?string $fecha_publicacion = null;
     private ?string $fecha_creacion = null;
     private ?CanalDTO $canal = null;
+    private ?array $etiquetas = [];
+
+    private ?bool $activo = null;
 
     public function getId(): ?int
     {
@@ -107,6 +110,16 @@ class VideoDTO
     {
         $this->activo = $activo;
     }
-    private ?bool $activo = null;
+
+    public function getEtiquetas(): ?array
+    {
+        return $this->etiquetas;
+    }
+
+    public function setEtiquetas(?array $etiquetas): void
+    {
+        $this->etiquetas = $etiquetas;
+    }
+
 
 }

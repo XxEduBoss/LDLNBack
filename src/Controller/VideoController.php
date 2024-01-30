@@ -10,6 +10,7 @@ use App\Entity\Etiquetas;
 use App\Entity\EtiquetasVideo;
 use App\Entity\TipoVideo;
 use App\Entity\Video;
+use App\Repository\EtiquetasRepository;
 use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,7 +71,7 @@ class VideoController extends AbstractController
     }
 
     #[Route('/{id}', name: "video_by_id", methods: ["GET"])]
-    public function getById(Video $v):JsonResponse
+    public function getById(EtiquetasRepository $etiquetasRepository, Video $v):JsonResponse
     {
 
         $video = new VideoDTO();
@@ -83,6 +84,11 @@ class VideoController extends AbstractController
         $video->setFechaCreacion($v->getFechaCreacion());
         $video->setFechaPublicacion($v->getFechaPublicacion());
 
+        $etiquetas = $etiquetasRepository->getEtiquetasPorVideo(["id"=>$v->getId()]);
+
+        $video->setEtiquetas($etiquetas);
+        $video->setActivo($v->isActivo());
+
         $canal = new CanalDTO();
         $canal->setId($v->getCanal()->getId());
         $canal->setNombre($v->getCanal()->getNombre());
@@ -91,6 +97,9 @@ class VideoController extends AbstractController
         $canal->setTelefono($v->getCanal()->getTelefono());
         $canal->setFechaNacimiento($v->getCanal()->getFechaNacimiento());
         $canal->setFechaCreacion($v->getCanal()->getFechaCreacion());
+        $canal->setActivo($v->getCanal()->isActivo());
+
+        $video->setCanal($canal);
 
         $user = new UsuarioDTO();
         $user->setId($v->getCanal()->getUsuario()->getId());
@@ -100,10 +109,6 @@ class VideoController extends AbstractController
         $user->setActivo($v->getCanal()->getUsuario()->isActivo());
 
         $canal->setUsuario($user);
-        $canal->setActivo($v->getCanal()->isActivo());
-
-        $video->setCanal($canal);
-        $video->setActivo($v->isActivo());
 
         return $this->json($video);
 
@@ -160,7 +165,16 @@ class VideoController extends AbstractController
 
         $video-> setTitulo($json["titulo"]);
         $video-> setDescripcion($json["descripcion"]);
-        $video->setEtiquetas($json["etiquetas"]);
+
+        if (isset($json['etiquetas']) && is_array($json['etiquetas'])) {
+            foreach ($json['etiquetas'] as $etiquetaId) {
+                $etiquetaVideo = $entityManager->getRepository(Etiquetas::class)->findOneBy(["descripcion"=>$etiquetaId] );
+                if ($etiquetaVideo instanceof Etiquetas) {
+                    $video->addEtiqueta($etiquetaVideo);
+                }
+            }
+        }
+
         $video->setFechaCreacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
         $fechaPublicacionDateTime = \DateTime::createFromFormat('d/m/Y H:i:s', $json["fecha_publicacion"]);
         $video->setFechaPublicacion(new \DateTime($fechaPublicacionDateTime));

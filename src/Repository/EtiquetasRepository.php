@@ -21,28 +21,17 @@ class EtiquetasRepository extends ServiceEntityRepository
         parent::__construct($registry, Etiquetas::class);
     }
 
-//    /**
-//     * @return Etiquetas[] Returns an array of Etiquetas objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('e.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //Las Etiquetas por Video
+    public function getEtiquetasPorVideo(array $video): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idvideo = $video["id"];
+        $sql = 'select e.* from apollo.etiquetas e
+                    join apollo.etiquetas_video ev on ev.id_etiqueta = e.id
+                    where ev.id_video = :idvideo';
 
-//    public function findOneBySomeField($value): ?Etiquetas
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $resultSet = $conn->executeQuery($sql, ['idvideo' => $idvideo]);
+        return $resultSet->fetchAllAssociative();
+    }
+
 }
