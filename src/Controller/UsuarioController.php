@@ -99,4 +99,27 @@ class UsuarioController extends AbstractController
         return $this->json(['message' => 'Usuario eliminado']);
     }
 
+    #[Route('/buscar', name: 'find_usuario', methods: ['POST', 'OPTIONS'])]
+    public function findUserByUsername(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $usuario = $entityManager->getRepository(Usuario::class)->findOneBy(["username" => $data['username']]);
+
+        // Verificar si el usuario fue encontrado
+        if (!$usuario) {
+            // Manejar el caso en que el usuario no fue encontrado
+            return new JsonResponse(['error' => 'Usuario no encontrado'], 404);
+        }
+
+        // Devolver los datos del usuario en formato JSON
+        $userData = [
+            'id' => $usuario->getId(),
+            'username' => $usuario->getUsername(),
+            'email' => $usuario->getEmail()
+        ];
+
+        return new JsonResponse($userData);
+    }
+
 }

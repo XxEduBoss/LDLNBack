@@ -97,11 +97,11 @@ class CanalController extends AbstractController
         $nuevoCanal->setTelefono($json["telefono"]);
 
         $fechaNacimientoString = $json["fecha_nacimiento"];
-        $fechaNacimientoDateTime = \DateTime::createFromFormat('d/m/Y', $fechaNacimientoString);
+        $fechaNacimientoDateTime = \DateTimeImmutable::createFromFormat('Y-m-d\TH:i', $fechaNacimientoString);
 
-        $nuevoCanal->setFechaNacimiento(new \DateTime($fechaNacimientoDateTime, '00:00:00.000000'));
+
+        $nuevoCanal->setFechaNacimiento($fechaNacimientoDateTime);
         $nuevoCanal->setFechaCreacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
-
 
         $usuario = $entityManager->getRepository(Usuario::class)->findBy(["id"=>$json["usuario"]]);
         $nuevoCanal->setUsuario($usuario[0]);
