@@ -54,7 +54,7 @@ class VideoRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $idTipoCategoria = $id["id"];
-        $sql = 'select v.titulo from apollo.usuario u
+        $sql = 'select v.* from apollo.usuario u
                     join apollo.canal c on u.id = c.id_usuario
                     join apollo.video v on c.id = v.id_canal
                     join apollo.etiquetas_video ev on v.id = ev.id_video

@@ -62,7 +62,7 @@ create table tipo_video(
 create table video(
                       id serial,
                       titulo varchar(100) not null,
-                      descripcion varchar(500),
+                      descripcion varchar(5000),
                       url varchar(10000),
                       id_tipo_video int not null,
                       fecha_publicacion timestamp(6) not null,
@@ -242,6 +242,3 @@ insert into etiquetas(descripcion) values ('PROGRAMACIÓN'),
                                           ('MODA'),
                                           ('NOTICIAS'),
                                           ('ANIMALES');
-
-
-ALTER TABLE usuario ADD UNIQUE (email);
