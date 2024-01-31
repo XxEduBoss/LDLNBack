@@ -161,7 +161,7 @@ class VideoController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $listaVideos = $entityManager->getRepository(Video::class)->getVideosSuscritos(["id"=> $data["id"]]);
 
-        return $this->json(['Videos de tus canales suscritos' => $listaVideos], Response::HTTP_OK);
+        return $this->json($listaVideos, Response::HTTP_OK);
     }
 
     //Los videos de tus canales suscritos
@@ -171,7 +171,7 @@ class VideoController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $listaVideos = $entityManager->getRepository(Video::class)->getVideosEtiquetas(["etiqueta"=> $data["etiqueta"]]);
 
-        return $this->json(['Videos por etiquetas' => $listaVideos], Response::HTTP_OK);
+        return $this->json($listaVideos, Response::HTTP_OK);
     }
 
     //Los videos en funcion de las etiquetas del video y del usuario
@@ -181,7 +181,7 @@ class VideoController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $listaVideos = $entityManager->getRepository(Video::class)->getVideosEtiquetasUsuarios(["id"=> $data["id"]]);
 
-        return $this->json(['Videos por sus etiquetas y de las del usuario' => $listaVideos], Response::HTTP_OK);
+        return $this->json($listaVideos, Response::HTTP_OK);
     }
 
 
