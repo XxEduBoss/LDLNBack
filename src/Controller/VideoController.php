@@ -137,7 +137,7 @@ class VideoController extends AbstractController
 
         $nuevoVideo->setFechaPublicacion($fechaRecibida);
 
-        $canal = $entityManager->getRepository(Canal::class)->findBy(["id"=>$json["canal"]]);
+        $canal = $entityManager->getRepository(Canal::class)->findBy(["id"=>$json["id_canal"]]);
         $nuevoVideo->setCanal($canal[0]);
 
         $nuevoVideo->setMiniatura($json['miniatura']);
