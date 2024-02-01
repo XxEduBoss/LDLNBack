@@ -6,6 +6,7 @@ use App\Dto\CanalDTO;
 use App\Dto\UsuarioDTO;
 use App\Entity\Canal;
 use App\Entity\Usuario;
+use App\Entity\Video;
 use App\Repository\CanalRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,8 +37,15 @@ class CanalController extends AbstractController
             $canal->setTelefono($c->getTelefono());
             $canal->setFechaNacimiento($c->getFechaNacimiento());
             $canal->setFechaCreacion($c->getFechaCreacion());
-            $canal->setEtiquetas($c->getEtiquetas());
-            $canal->setUsuario($c->getUsuario());
+
+            $user = new UsuarioDTO();
+            $user->setId($c->getUsuario()->getId());
+            $user->setUsername($c->getUsuario()->getUsername());
+            $user->setPassword($c->getUsuario()->getPassword());
+            $user->setRolUsuario($c->getUsuario()->getRolUsuario());
+            $user->setActivo($c->getUsuario()->isActivo());
+
+            $canal->setUsuario($user);
             $canal->setActivo($c->isActivo());
 
             $listaCanalesDTOs[] = $canal;
@@ -53,7 +61,27 @@ class CanalController extends AbstractController
     #[Route('/{id}', name: "canal_by_id", methods: ["GETS"])]
     public function getById(Canal $canal):JsonResponse
     {
-        return $this->json($canal);
+
+        $canalDTO = new CanalDTO();
+        $canalDTO->setId($canal->getId());
+        $canalDTO->setNombre($canal->getNombre());
+        $canalDTO->setApellidos($canal->getApellidos());
+        $canalDTO->setNombreCanal($canal->getNombreCanal());
+        $canalDTO->setTelefono($canal->getTelefono());
+        $canalDTO->setFechaNacimiento($canal->getFechaNacimiento());
+        $canalDTO->setFechaCreacion($canal->getFechaCreacion());
+
+        $user = new UsuarioDTO();
+        $user->setId($canal->getUsuario()->getId());
+        $user->setUsername($canal->getUsuario()->getUsername());
+        $user->setPassword($canal->getUsuario()->getPassword());
+        $user->setRolUsuario($canal->getUsuario()->getRolUsuario());
+        $user->setActivo($canal->getUsuario()->isActivo());
+
+        $canalDTO->setUsuario($user);
+        $canalDTO->setActivo($canal->isActivo());
+
+        return $this->json($canalDTO);
     }
 
     //Crear un canal
@@ -69,11 +97,11 @@ class CanalController extends AbstractController
         $nuevoCanal->setTelefono($json["telefono"]);
 
         $fechaNacimientoString = $json["fecha_nacimiento"];
-        $fechaNacimientoDateTime = \DateTime::createFromFormat('d/m/Y', $fechaNacimientoString);
+        $fechaNacimientoDateTime = \DateTimeImmutable::createFromFormat('Y-m-d\TH:i', $fechaNacimientoString);
 
-        $nuevoCanal->setFechaNacimiento(new \DateTime($fechaNacimientoDateTime, '00:00:00.000000'));
+
+        $nuevoCanal->setFechaNacimiento($fechaNacimientoDateTime);
         $nuevoCanal->setFechaCreacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
-
 
         $usuario = $entityManager->getRepository(Usuario::class)->findBy(["id"=>$json["usuario"]]);
         $nuevoCanal->setUsuario($usuario[0]);
@@ -114,6 +142,45 @@ class CanalController extends AbstractController
         $entityManager->flush();
 
         return $this->json(['message' => 'Canal eliminado'], Response::HTTP_OK);
+    }
+
+    //Busqueda de canal por su nombre
+    #[Route('/busquedanombre', name: "busqueda_nombre", methods: ["POST"])]
+    public function getCanalPorNombre(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaCanales = $entityManager->getRepository(Canal::class)->getCanalesPorNombre($data["nombre_canal"]);
+
+        $listaCanalesDTOs = [];
+
+        foreach ($listaCanales as $c){
+
+            $canal = new CanalDTO();
+            $canal->setId($c->getId());
+            $canal->setNombre($c->getNombre());
+            $canal->setApellidos($c->getApellidos());
+            $canal->setNombreCanal($c->getNombreCanal());
+            $canal->setTelefono($c->getTelefono());
+            $canal->setFechaNacimiento($c->getFechaNacimiento());
+            $canal->setFechaCreacion($c->getFechaCreacion());
+
+            $user = new UsuarioDTO();
+            $user->setId($c->getUsuario()->getId());
+            $user->setUsername($c->getUsuario()->getUsername());
+            $user->setPassword($c->getUsuario()->getPassword());
+            $user->setEmail($c->getUsuario()->getEmail());
+            $user->setRolUsuario($c->getUsuario()->getRolUsuario());
+            $user->setActivo($c->getUsuario()->isActivo());
+
+            $canal->setUsuario($user);
+            $canal->setActivo($c->isActivo());
+
+            $listaCanalesDTOs[] = $canal;
+
+        }
+
+        return $this->json(['Canales por nombre' => $listaCanalesDTOs], Response::HTTP_OK);
+
     }
 
 }

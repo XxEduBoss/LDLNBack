@@ -19,12 +19,22 @@ class Etiquetas
     #[ORM\Column(length: 1000)]
     private ?string $descripcion = null;
 
-//    #[ORM\ManyToMany(targetEntity: Canal::class, mappedBy: 'id_etiqueta')]
-//    private Collection $canales;
+    #[ORM\ManyToMany(targetEntity: Canal::class)]
+    #[ORM\JoinTable(name: "etiquetas_canal", schema: "apollo")]
+    #[ORM\JoinColumn(name: "id_etiqueta", referencedColumnName: "id")]
+    #[ORM\InverseJoinColumn(name: "id_canal", referencedColumnName: "id")]
+    private Collection $canales;
+
+    #[ORM\ManyToMany(targetEntity: Video::class)]
+    #[ORM\JoinTable(name: "etiquetas_video", schema: "apollo")]
+    #[ORM\JoinColumn(name: "id_etiqueta", referencedColumnName: "id")]
+    #[ORM\InverseJoinColumn(name: "id_video", referencedColumnName: "id")]
+    private Collection $videos;
 
     public function __construct()
     {
         $this->canales = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -44,30 +54,58 @@ class Etiquetas
         return $this;
     }
 
-//    /**
-//     * @return Collection<int, Canal>
-//     */
-//    public function getCanales(): Collection
-//    {
-//        return $this->canales;
-//    }
-//
-//    public function addCanale(Canal $canale): static
-//    {
-//        if (!$this->canales->contains($canale)) {
-//            $this->canales->add($canale);
-//            $canale->addIdEtiquetum($this);
-//        }
-//
-//        return $this;
-//    }
-//
-//    public function removeCanale(Canal $canale): static
-//    {
-//        if ($this->canales->removeElement($canale)) {
-//            $canale->removeIdEtiquetum($this);
-//        }
-//
-//        return $this;
-//    }
+    /**
+     * @return Collection<int, Canal>
+     */
+    public function getCanales(): Collection
+    {
+        return $this->canales;
+    }
+
+    public function addCanal(Canal $canal): static
+    {
+        if (!$this->canales->contains($canal)) {
+            $this->canales->add($canal);
+            $canal->addEtiqueta($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCanal(Canal $canal): static
+    {
+        if ($this->canales->removeElement($canal)) {
+            $canal->removeEtiqueta($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Video>
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): static
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos->add($video);
+            $video->addEtiqueta($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): static
+    {
+        if ($this->videos->removeElement($video)) {
+            $video->removeEtiqueta($this);
+        }
+
+        return $this;
+    }
+
 }

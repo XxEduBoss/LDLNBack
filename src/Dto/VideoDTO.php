@@ -3,6 +3,7 @@
 namespace App\Dto;
 
 use App\Entity\Canal;
+use App\Entity\TipoVideo;
 use phpDocumentor\Reflection\Types\Boolean;
 
 class VideoDTO
@@ -12,10 +13,10 @@ class VideoDTO
     private ?string $titulo = null;
     private ?string $descripcion = null;
     private ?string $url = null;
-    private ?int $etiquetas = null;
-    private ?\DateTimeInterface $fecha_publicacion = null;
-    private ?\DateTimeInterface $fecha_creacion = null;
-    private ?Canal $canal = null;
+    private ?TipoVideo $tipo_video = null;
+    private ?string $fecha_publicacion = null;
+    private ?string $fecha_creacion = null;
+    private ?CanalDTO $canal = null;
 
     public function getId(): ?int
     {
@@ -57,42 +58,42 @@ class VideoDTO
         $this->url = $url;
     }
 
-    public function getEtiquetas(): ?int
+    public function getTipoVideo(): ?TipoVideo
     {
-        return $this->etiquetas;
+        return $this->tipo_video;
     }
 
-    public function setEtiquetas(?int $etiquetas): void
+    public function setTipoVideo(?TipoVideo $tipo_video): void
     {
-        $this->etiquetas = $etiquetas;
+        $this->tipo_video = $tipo_video;
     }
 
-    public function getFechaPublicacion(): ?\DateTimeInterface
+    public function getFechaPublicacion(): ?string
     {
         return $this->fecha_publicacion;
     }
 
-    public function setFechaPublicacion(?\DateTimeInterface $fecha_publicacion): void
+    public function setFechaPublicacion(?string $fecha_publicacion): void
     {
         $this->fecha_publicacion = $fecha_publicacion;
     }
 
-    public function getFechaCreacion(): ?\DateTimeInterface
+    public function getFechaCreacion(): ?string
     {
         return $this->fecha_creacion;
     }
 
-    public function setFechaCreacion(?\DateTimeInterface $fecha_creacion): void
+    public function setFechaCreacion(?string $fecha_creacion): void
     {
         $this->fecha_creacion = $fecha_creacion;
     }
 
-    public function getCanal(): ?Canal
+    public function getCanal(): ?CanalDTO
     {
         return $this->canal;
     }
 
-    public function setCanal(?Canal $canal): void
+    public function setCanal(?CanalDTO $canal): void
     {
         $this->canal = $canal;
     }

@@ -21,28 +21,16 @@ class CanalRepository extends ServiceEntityRepository
         parent::__construct($registry, Canal::class);
     }
 
-//    /**
-//     * @return Canal[] Returns an array of Canal objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //Los canales en funcion de su nombre
+    public function getCanalesPorNombre($canal) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('c')
+            ->from($this->getEntityName(), 'c')
+            ->where("UPPER(c.nombre_canal) LIKE '%$canal%'")
+            ->orWhere("LOWER(c.nombre_canal) LIKE '%$canal%'");
 
-//    public function findOneBySomeField($value): ?Canal
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $qb->getQuery()->getResult();
+
+    }
+
 }

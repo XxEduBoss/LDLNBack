@@ -2,8 +2,12 @@
 
 namespace App\Controller;
 
+use App\Dto\CanalDTO;
+use App\Dto\UsuarioDTO;
 use App\Dto\VideoDTO;
 use App\Entity\Canal;
+use App\Entity\Etiquetas;
+use App\Entity\EtiquetasVideo;
 use App\Entity\TipoVideo;
 use App\Entity\Video;
 use App\Repository\VideoRepository;
@@ -31,11 +35,31 @@ class VideoController extends AbstractController
            $video->setId($v->getId());
            $video->setTitulo($v->getTitulo());
            $video->setDescripcion($v->getDescripcion());
-           $video->setEtiquetas($v->getEtiquetas());
+           $video->setUrl($v->getUrl());
+           $video->setTipoVideo($v->getTipoVideo());
            $video->setFechaCreacion($v->getFechaCreacion());
            $video->setFechaPublicacion($v->getFechaPublicacion());
-           $video->setUrl($v->getUrl());
-           $video->setCanal($v->getCanal());
+
+           $canal = new CanalDTO();
+           $canal->setId($v->getCanal()->getId());
+           $canal->setNombre($v->getCanal()->getNombre());
+           $canal->setApellidos($v->getCanal()->getApellidos());
+           $canal->setNombreCanal($v->getCanal()->getNombreCanal());
+           $canal->setTelefono($v->getCanal()->getTelefono());
+           $canal->setFechaNacimiento($v->getCanal()->getFechaNacimiento());
+           $canal->setFechaCreacion($v->getCanal()->getFechaCreacion());
+
+           $user = new UsuarioDTO();
+           $user->setId($v->getCanal()->getUsuario()->getId());
+           $user->setUsername($v->getCanal()->getUsuario()->getUsername());
+           $user->setPassword($v->getCanal()->getUsuario()->getPassword());
+           $user->setRolUsuario($v->getCanal()->getUsuario()->getRolUsuario());
+           $user->setActivo($v->getCanal()->getUsuario()->isActivo());
+
+           $canal->setUsuario($user);
+           $canal->setActivo($v->getCanal()->isActivo());
+
+           $video->setCanal($canal);
            $video->setActivo($v->isActivo());
 
            $listaVideosDTOs = $video;
@@ -64,17 +88,28 @@ class VideoController extends AbstractController
         $nuevoVideo-> setDescripcion($json["descripcion"]);
         $nuevoVideo->setUrl($json["url"]);
 
-        $tipo_video = $entityManager->getRepository(TipoVideo::class)->findBy(["id"=>$json["tipo"]]);
+        $tipo_video = $entityManager->getRepository(TipoVideo::class)->findBy(["descripcion"=>$json["tipo"]]);
         $nuevoVideo->setTipoVideo($tipo_video[0]);
 
         $nuevoVideo->setFechaCreacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
-        $fechaPublicacionDateTime = \DateTime::createFromFormat('d/m/Y H:i:s', $json["fecha_publicacion"]);
-        $nuevoVideo->setFechaPublicacion(new \DateTime($fechaPublicacionDateTime));
+
+        $fechaRecibida = \DateTimeImmutable::createFromFormat('Y-m-d\TH:i', $json["fecha_publicacion"]);
+
+        $nuevoVideo->setFechaPublicacion($fechaRecibida);
 
         $canal = $entityManager->getRepository(Canal::class)->findBy(["id"=>$json["canal"]]);
         $nuevoVideo->setCanal($canal[0]);
 
         $nuevoVideo->setActivo(true);
+
+        if (isset($json['etiquetas']) && is_array($json['etiquetas'])) {
+            foreach ($json['etiquetas'] as $etiquetaId) {
+                $etiquetaVideo = $entityManager->getRepository(Etiquetas::class)->findOneBy(["descripcion"=>$etiquetaId] );
+                if ($etiquetaVideo instanceof Etiquetas) {
+                    $nuevoVideo->addEtiqueta($etiquetaVideo);
+                }
+            }
+        }
 
         $entityManager->persist($nuevoVideo);
         $entityManager->flush();
@@ -118,6 +153,36 @@ class VideoController extends AbstractController
 
         return $this->json(['message' => 'Video eliminado'], Response::HTTP_OK);
 
+    }
+
+    //Los videos de tus canales suscritos
+    #[Route('/canalessuscritos', name: "get_videos_canales_suscritos", methods: ["POST"])]
+    public function getVideosSuscritosController(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaVideos = $entityManager->getRepository(Video::class)->getVideosSuscritos(["id"=> $data["id"]]);
+
+        return $this->json(['Videos de tus canales suscritos' => $listaVideos], Response::HTTP_OK);
+    }
+
+    //Los videos de tus canales suscritos
+    #[Route('/poretiquetas', name: "get_videos_por_etiquetas", methods: ["POST"])]
+    public function getVideosEtiquetasController(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaVideos = $entityManager->getRepository(Video::class)->getVideosPorEtiqueta(["etiqueta"=> $data["etiqueta"]]);
+
+        return $this->json(['Videos por etiquetas' => $listaVideos], Response::HTTP_OK);
+    }
+
+    //Los videos en funcion de las etiquetas del video y del usuario
+    #[Route('/poretiquetausuario', name: "get_videos_usuario_etiquetas", methods: ["POST"])]
+    public function getVideosEtiquetasUsuarioController(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaVideos = $entityManager->getRepository(Video::class)->getVideosEtiquetasUsuarios(["id"=> $data["id"]]);
+
+        return $this->json(['Videos por sus etiquetas y de las del usuario' => $listaVideos], Response::HTTP_OK);
     }
 
 

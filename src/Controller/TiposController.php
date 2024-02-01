@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Dto\EtiquetasDTO;
 use App\Repository\EtiquetasRepository;
 use App\Repository\TipoNotificacionRepository;
 use App\Repository\TipoVideoRepository;
@@ -31,9 +32,23 @@ class TiposController extends AbstractController
     #[Route('/etiquetas', name: 'etiquetas', methods: ['GET'])]
     public function etiquetas(EtiquetasRepository $etiquetasRepository): JsonResponse
     {
-        $etiquetas = $etiquetasRepository->findAll();
+        $listaEtiquetas = $etiquetasRepository->findAll();
 
-        return $this->json($etiquetas);
+        $listaEtiquetasDTOs = [];
+
+        foreach ($listaEtiquetas as $e){
+
+            $etiqueta = new EtiquetasDTO();
+
+            $etiqueta->setId($e->getId());
+            $etiqueta->setDescripcion($e->getDescripcion());
+
+            $listaEtiquetasDTOs[] = $etiqueta;
+
+        }
+
+        return $this->json($listaEtiquetasDTOs);
+
     }
 
 }

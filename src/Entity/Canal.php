@@ -58,6 +58,7 @@ class Canal
     public function __construct()
     {
         $this->videos = new ArrayCollection();
+        $this->etiquetas = new ArrayCollection();
         $this->suscripciones = new ArrayCollection();
     }
 

@@ -61,7 +61,7 @@ class UsuarioDTO
     {
         $this->activo = $activo;
     }
-    public function getEmail(): ?int
+    public function getEmail(): ?string
     {
         return $this->email;
     }
