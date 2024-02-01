@@ -57,7 +57,7 @@ class CanalController extends AbstractController
     }
 
     //Buscar canales por id
-    #[Route('/{id}', name: "canal_by_id", methods: ["GETS"])]
+    #[Route('/{id}', name: "canal_by_id", methods: ["GET"])]
     public function getById(Canal $canal):JsonResponse
     {
 
