@@ -68,6 +68,7 @@ create table video(
                       fecha_publicacion timestamp(6) not null,
                       fecha_creacion timestamp(6) not null,
                       activo bool default true not null,
+                      miniatura varchar(10000) not null,
                       id_canal int not null,
 
                       primary key (id),

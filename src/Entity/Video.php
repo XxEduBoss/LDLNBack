@@ -61,6 +61,9 @@ class Video
     #[ORM\OneToMany(mappedBy: 'id_video', targetEntity: ValoracionNegativa::class, orphanRemoval: true)]
     private Collection $valoracionesNegativas;
 
+    #[ORM\Column(length: 10000)]
+    private ?string $miniatura = null;
+
     public function __construct()
     {
         $this->etiquetas = new ArrayCollection();
@@ -311,6 +314,18 @@ class Video
     public function setTipoVideo(?TipoVideo $tipo_video): static
     {
         $this->tipo_video = $tipo_video;
+
+        return $this;
+    }
+
+    public function getMiniatura(): ?string
+    {
+        return $this->miniatura;
+    }
+
+    public function setMiniatura(string $miniatura): static
+    {
+        $this->miniatura = $miniatura;
 
         return $this;
     }

@@ -17,9 +17,20 @@ class VideoDTO
     private ?string $fecha_publicacion = null;
     private ?string $fecha_creacion = null;
     private ?CanalDTO $canal = null;
+    private ?string $miniatura = null;
     private ?array $etiquetas = [];
 
     private ?bool $activo = null;
+
+    public function getMiniatura(): ?string
+    {
+        return $this->miniatura;
+    }
+
+    public function setMiniatura(?string $miniatura): void
+    {
+        $this->miniatura = $miniatura;
+    }
 
     public function getId(): ?int
     {
