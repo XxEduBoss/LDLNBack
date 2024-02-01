@@ -219,7 +219,7 @@ class VideoController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $listaVideos = $entityManager->getRepository(Video::class)->getVideosPorEtiqueta(["etiqueta"=> $data["etiqueta"]]);
 
-        return $this->json(['Videos por etiquetas' => $listaVideos], Response::HTTP_OK);
+        return $this->json($listaVideos, Response::HTTP_OK);
     }
 
     //Los videos en funcion de las etiquetas del video y del usuario
