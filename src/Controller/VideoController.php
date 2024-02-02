@@ -123,7 +123,6 @@ class VideoController extends AbstractController
         $json = json_decode($request->getContent(), true );
 
         $nuevoVideo = new Video();
-
         $nuevoVideo-> setTitulo($json["titulo"]);
         $nuevoVideo-> setDescripcion($json["descripcion"]);
         $nuevoVideo->setUrl($json["url"]);
@@ -216,7 +215,7 @@ class VideoController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $listaVideos = $entityManager->getRepository(Video::class)->getVideosSuscritos(["id"=> $data["id"]]);
 
-        return $this->json(['Videos de tus canales suscritos' => $listaVideos], Response::HTTP_OK);
+        return $this->json([$listaVideos], Response::HTTP_OK);
     }
 
     //Los videos de tus canales suscritos
