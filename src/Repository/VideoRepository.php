@@ -44,7 +44,7 @@ class VideoRepository extends ServiceEntityRepository
                       join apollo.etiquetas_video ev on v.id = ev.id_video
                       join apollo.etiquetas e on ev.id_etiqueta = e.id
                       join apollo.canal c on v.id_canal = c.id
-                                     where e.descripcion = :etiqueta group by v.id limit 4';
+                                     where e.descripcion = :etiqueta group by v.id';
 
         $resultSet = $conn->executeQuery($sql, ['etiqueta' => $etiqueta]);
         return $resultSet->fetchAllAssociative();
