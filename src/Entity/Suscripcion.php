@@ -39,9 +39,9 @@ class Suscripcion
         return $this->fecha_suscripcion->format('d/m/Y H:i:s');
     }
 
-    public function setFechaSuscripcion(String $fecha_suscripcion): static
+    public function setFechaSuscripcion(\DateTimeInterface $fecha_suscripcion): static
     {
-        $this->fecha_suscripcion = \DateTime::createFromFormat('d/m/Y H:i:s' , $fecha_suscripcion);
+        $this->fecha_suscripcion = $fecha_suscripcion;
 
         return $this;
     }

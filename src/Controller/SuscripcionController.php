@@ -62,7 +62,7 @@ class SuscripcionController extends AbstractController
         $nuevaSuscripcion->setFechaSuscripcion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
 
         $canal = $entityManager->getRepository(Canal::class)->findBy(["id"=>$json["canal"]]);
-        $nuevaSuscripcion->setUsuario($canal[0]);
+        $nuevaSuscripcion->setCanal($canal[0]);
 
         $usuario = $entityManager->getRepository(Usuario::class)->findBy(["id"=>$json["usuario"]]);
         $nuevaSuscripcion->setUsuario($usuario[0]);
@@ -85,6 +85,31 @@ class SuscripcionController extends AbstractController
 
         return $this->json(['message' => 'Suscripcion desactivada'], Response::HTTP_OK);
     }
+
+    // Buscar Suscripcion por id usuario.
+    #[Route('/buscar', name: 'find_usuario', methods: ['POST', 'OPTIONS'])]
+    public function findSuscripcionByIdUsuario(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $suscripcion = $entityManager->getRepository(Suscripcion::class)->findOneBy(["id_usuario" => $data['usuario']]);
+
+        // Verificar si la Suscripcion fue encontrado
+        if (!$suscripcion) {
+            // Manejar el caso en que la Suscripcion no fue encontrado
+            return new JsonResponse(['error' => 'Usuario no encontrado'], 404);
+        }
+
+        // Devolver los datos de Suscripcion en formato JSON
+        $userData = [
+            'id' => $suscripcion->getId(),
+            'usuario' => $suscripcion->getUsuario(),
+            'canal' => $suscripcion->getCanal()
+        ];
+
+        return new JsonResponse($userData);
+    }
+
 
 
 }
