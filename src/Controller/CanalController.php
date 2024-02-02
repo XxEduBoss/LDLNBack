@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Dto\CanalDTO;
 use App\Dto\UsuarioDTO;
 use App\Entity\Canal;
+use App\Entity\Etiquetas;
 use App\Entity\Usuario;
 use App\Entity\Video;
 use App\Repository\CanalRepository;
@@ -107,6 +108,15 @@ class CanalController extends AbstractController
         $nuevoCanal->setUsuario($usuario[0]);
         $nuevoCanal->setActivo(true);
 
+        if (isset($json['etiquetas']) && is_array($json['etiquetas'])) {
+            foreach ($json['etiquetas'] as $etiquetaId) {
+                $etiquetaVideo = $entityManager->getRepository(Etiquetas::class)->findOneBy(["descripcion"=>$etiquetaId] );
+                if ($etiquetaVideo instanceof Etiquetas) {
+                    $nuevoCanal->addEtiqueta($etiquetaVideo);
+                }
+            }
+        }
+
         $entityManager->persist($nuevoCanal);
         $entityManager->flush();
 
@@ -131,7 +141,7 @@ class CanalController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->json(['message' => 'Canal modificada'], Response::HTTP_OK);
+        return $this->json(['message' => 'Canal modificado'], Response::HTTP_OK);
     }
 
     //Desactivar canal
@@ -181,6 +191,42 @@ class CanalController extends AbstractController
 
         return $this->json(['Canales por nombre' => $listaCanalesDTOs], Response::HTTP_OK);
 
+    }
+
+    #[Route('/numsuscriptoresporcanal', name: "get_num_suscriptores_por_canal", methods: ["POST"])]
+    public function NumSuscriptoresPorCanal(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $numeroSucriptores = $entityManager->getRepository(Canal::class)->getNumSuscriptoresPorCanal(["id"=>$data['id']]);
+
+        return $this->json($numeroSucriptores[0], Response::HTTP_OK);
+    }
+
+    #[Route('/etiquetasporcanal', name: "get_etiquetas_por_canal", methods: ["POST"])]
+    public function EtiquetassPorCanal(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $etiquetasCanal = $entityManager->getRepository(Canal::class)->getEtiquetasPorCanal(["id"=>$data['id']]);
+
+        return $this->json($etiquetasCanal, Response::HTTP_OK);
+    }
+
+    #[Route('/sucriptoresporcanal', name: "get_sucriptores_por_canal", methods: ["POST"])]
+    public function SucriptoresPorCanal(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $suscriptoresCanal = $entityManager->getRepository(Canal::class)->getSuscriptoresPorCanal(["id"=>$data['id']]);
+
+        return $this->json($suscriptoresCanal, Response::HTTP_OK);
+    }
+
+    #[Route('/videosporcanal', name: "get_videos_por_canal", methods: ["POST"])]
+    public function VideosPorCanalController(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $videosCanal = $entityManager->getRepository(Canal::class)->getVideosPorCanal(["id"=>$data['id']]);
+
+        return $this->json($videosCanal, Response::HTTP_OK);
     }
 
 }
