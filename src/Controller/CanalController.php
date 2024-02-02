@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Dto\CanalDTO;
 use App\Dto\UsuarioDTO;
 use App\Entity\Canal;
+use App\Entity\Etiquetas;
 use App\Entity\Usuario;
 use App\Entity\Video;
 use App\Repository\CanalRepository;
@@ -107,6 +108,15 @@ class CanalController extends AbstractController
         $nuevoCanal->setUsuario($usuario[0]);
         $nuevoCanal->setActivo(true);
 
+        if (isset($json['etiquetas']) && is_array($json['etiquetas'])) {
+            foreach ($json['etiquetas'] as $etiquetaId) {
+                $etiquetaVideo = $entityManager->getRepository(Etiquetas::class)->findOneBy(["descripcion"=>$etiquetaId] );
+                if ($etiquetaVideo instanceof Etiquetas) {
+                    $nuevoCanal->addEtiqueta($etiquetaVideo);
+                }
+            }
+        }
+
         $entityManager->persist($nuevoCanal);
         $entityManager->flush();
 
@@ -131,7 +141,7 @@ class CanalController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->json(['message' => 'Canal modificada'], Response::HTTP_OK);
+        return $this->json(['message' => 'Canal modificado'], Response::HTTP_OK);
     }
 
     //Desactivar canal
