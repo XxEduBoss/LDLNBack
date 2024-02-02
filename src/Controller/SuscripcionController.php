@@ -62,13 +62,12 @@ class SuscripcionController extends AbstractController
         $nuevaSuscripcion->setFechaSuscripcion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
 
         $canal = $entityManager->getRepository(Canal::class)->findBy(["id"=>$json["canal"]]);
-        $nuevaSuscripcion->setUsuario($canal[0]);
+        $nuevaSuscripcion->setCanal($canal[0]);
 
         $usuario = $entityManager->getRepository(Usuario::class)->findBy(["id"=>$json["usuario"]]);
         $nuevaSuscripcion->setUsuario($usuario[0]);
 
         $nuevaSuscripcion->setActivo(true);
-
 
         $entityManager->persist($nuevaSuscripcion);
         $entityManager->flush();
