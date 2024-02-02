@@ -83,6 +83,8 @@ class VideoController extends AbstractController
         $video->setTipoVideo($v->getTipoVideo());
         $video->setFechaCreacion($v->getFechaCreacion());
         $video->setFechaPublicacion($v->getFechaPublicacion());
+        $video->setMiniatura($v->getMiniatura());
+
 
         $etiquetas = $etiquetasRepository->getEtiquetasPorVideo(["id"=>$v->getId()]);
 
@@ -135,8 +137,10 @@ class VideoController extends AbstractController
 
         $nuevoVideo->setFechaPublicacion($fechaRecibida);
 
-        $canal = $entityManager->getRepository(Canal::class)->findBy(["id"=>$json["canal"]]);
+        $canal = $entityManager->getRepository(Canal::class)->findBy(["id"=>$json["id_canal"]]);
         $nuevoVideo->setCanal($canal[0]);
+
+        $nuevoVideo->setMiniatura($json['miniatura']);
 
         $nuevoVideo->setActivo(true);
 
@@ -182,6 +186,9 @@ class VideoController extends AbstractController
 
         $canal = $entityManager->getRepository(Canal::class)->find($json["id_canal"]);
         $video->setCanal($canal[0]);
+
+        $video->setMiniatura($json['miniatura']);
+
 
 
         $entityManager->flush();
@@ -229,7 +236,7 @@ class VideoController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $listaVideos = $entityManager->getRepository(Video::class)->getVideosEtiquetasUsuarios(["id"=> $data["id"]]);
 
-        return $this->json(['Videos por sus etiquetas y de las del usuario' => $listaVideos], Response::HTTP_OK);
+        return $this->json($listaVideos, Response::HTTP_OK);
     }
 
     //Los videos de tu canal
