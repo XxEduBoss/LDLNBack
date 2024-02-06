@@ -30,7 +30,6 @@ class UsuarioController extends AbstractController
             $user->setPassword($usuario->getPassword());
             $user->setEmail($usuario->getEmail());
             $user->setRolUsuario($usuario->getRolUsuario());
-            $user->setComunidadAutonoma($usuario->getComunidadAutonoma());
             $user->setActivo($usuario->isActivo());
 
             $listaUsuariosDTOs[] = $user;
@@ -49,7 +48,6 @@ class UsuarioController extends AbstractController
         $user->setUsername($usuario->getUsername());
         $user->setPassword($usuario->getPassword());
         $user->setRolUsuario($usuario->getRolUsuario());
-        $user->setComunidadAutonoma($usuario->getComunidadAutonoma());
         $user->setActivo($usuario->isActivo());
 
         return $this->json($user);
@@ -66,7 +64,6 @@ class UsuarioController extends AbstractController
             $usuario->setPassword($data['password']);
             $usuario->setRolUsuario($data['id_rol']);
             $usuario->setEmail($data['email']);
-            $usuario->setComunidadAutonoma($data['comunidad_autonoma']);
             $usuario->setActivo(true);
             $entityManager->persist($usuario);
             $entityManager->flush();
@@ -87,7 +84,6 @@ class UsuarioController extends AbstractController
 
         $usuario->setUsername($data['username']);
         $usuario->setPassword($data['password']);
-        $usuario->setComunidadAutonoma($data['comunidad_autonoma']);
         $usuario->setRolUsuario($data['id_rol']);
 
         $entityManager->flush();
@@ -121,8 +117,7 @@ class UsuarioController extends AbstractController
         $userData = [
             'id' => $usuario->getId(),
             'username' => $usuario->getUsername(),
-            'email' => $usuario->getEmail(),
-            'comunidad_autonoma' => $usuario->getComunidadAutonoma()
+            'email' => $usuario->getEmail()
         ];
 
         return new JsonResponse($userData);
