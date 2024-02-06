@@ -10,6 +10,7 @@ class UsuarioDTO
     private ?string $password = null;
     private ?string $email = null;
     private ?int $rol_usuario = null;
+    private ?int $comunidad_autonoma = null;
     private ?int $activo = null;
 
     public function getId(): ?int
@@ -71,6 +72,16 @@ class UsuarioDTO
         $this->email= $email;
 
         return $this;
+    }
+
+    public function getComunidadAutonoma(): ?string
+    {
+        return $this->comunidad_autonoma;
+    }
+
+    public function setComunidadAutonoma(?string $comunidad_autonoma): void
+    {
+        $this->comunidad_autonoma = $comunidad_autonoma;
     }
 
 }
