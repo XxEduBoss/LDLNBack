@@ -56,14 +56,14 @@ class VideoRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $idTipoCategoria = $id["id"];
-        $sql = 'select v.* from apollo.usuario u
+        $sql = 'select v.* ,c.nombre_canal from apollo.usuario u
                     join apollo.canal c on u.id = c.id_usuario
                     join apollo.video v on c.id = v.id_canal
                     join apollo.etiquetas_video ev on v.id = ev.id_video
                     join apollo.etiquetas e on ev.id_etiqueta = e.id
                     join apollo.etiquetas_usuario eu on u.id = eu.id_usuario
                     where u.id = :id and ev.id_etiqueta = eu.id_etiqueta 
-                    group by v.id';
+                    group by v.id,c.id';
 
         $resultSet = $conn->executeQuery($sql, ['id' => $idTipoCategoria]);
         return $resultSet->fetchAllAssociative();

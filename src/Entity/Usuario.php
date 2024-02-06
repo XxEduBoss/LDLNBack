@@ -27,6 +27,9 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'id_rol_usuario')]
     private ?int $rol_usuario = null;
 
+    #[ORM\Column(name: 'comunidad_autonoma')]
+    private ?string $comunidad_autonoma = null;
+
     #[ORM\Column(name: 'activo')]
     private ?bool $activo = true;
 
@@ -107,6 +110,18 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getComunidadAutonoma(): ?string
+    {
+        return $this->comunidad_autonoma;
+    }
+
+    public function setComunidadAutonoma(string $comunidad_autonoma): static
+    {
+        $this->comunidad_autonoma = $comunidad_autonoma;
 
         return $this;
     }
