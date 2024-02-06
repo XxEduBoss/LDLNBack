@@ -218,7 +218,7 @@ class VideoController extends AbstractController
         return $this->json([$listaVideos], Response::HTTP_OK);
     }
 
-    //Los videos de tus canales suscritos
+    //Los videos de por etiquetas
     #[Route('/poretiquetas', name: "get_videos_por_etiquetas", methods: ["POST"])]
     public function getVideosEtiquetasController(EntityManagerInterface $entityManager, Request $request):JsonResponse
     {
