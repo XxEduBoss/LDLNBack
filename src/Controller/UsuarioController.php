@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Dto\UsuarioDTO;
+use App\Entity\Etiquetas;
 use App\Entity\Usuario;
 use App\Repository\UsuarioRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,7 +31,6 @@ class UsuarioController extends AbstractController
             $user->setPassword($usuario->getPassword());
             $user->setEmail($usuario->getEmail());
             $user->setRolUsuario($usuario->getRolUsuario());
-            $user->setComunidadAutonoma($usuario->getComunidadAutonoma());
             $user->setActivo($usuario->isActivo());
 
             $listaUsuariosDTOs[] = $user;
@@ -66,8 +66,16 @@ class UsuarioController extends AbstractController
             $usuario->setPassword($data['password']);
             $usuario->setRolUsuario($data['id_rol']);
             $usuario->setEmail($data['email']);
-            $usuario->setComunidadAutonoma($data['comunidad_autonoma']);
             $usuario->setActivo(true);
+
+            if (isset($json['etiquetas']) && is_array($json['etiquetas'])) {
+                foreach ($json['etiquetas'] as $etiquetaId) {
+                    $etiquetaUsuario = $entityManager->getRepository(Etiquetas::class)->findOneBy(["descripcion"=>$etiquetaId] );
+                    if ($etiquetaUsuario instanceof Etiquetas) {
+                        $usuario->addEtiqueta($etiquetaUsuario);
+                    }
+                }
+            }
             $entityManager->persist($usuario);
             $entityManager->flush();
             return $this->json(['message' => 'Usuario creado'], Response::HTTP_CREATED);
@@ -87,7 +95,6 @@ class UsuarioController extends AbstractController
 
         $usuario->setUsername($data['username']);
         $usuario->setPassword($data['password']);
-        $usuario->setComunidadAutonoma($data['comunidad_autonoma']);
         $usuario->setRolUsuario($data['id_rol']);
 
         $entityManager->flush();
