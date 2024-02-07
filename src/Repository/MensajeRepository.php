@@ -45,4 +45,17 @@ class MensajeRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function getIdmensajePorUsuario(array $id): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idUsuario = $id["id"];
+        $sql = 'select m.texto from apollo.mensaje m
+                join apollo.usuario u on m.id_usuario_receptor = u.id
+                    where m.id_usuario_receptor = :id or m.id_usuario_emisor = :id
+                    order by m.fecha_envio asc';
+
+        $resultSet = $conn->executeQuery($sql, ['id' => $idUsuario]);
+        return $resultSet->fetchAllAssociative();
+    }
 }
