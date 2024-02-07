@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Suscripcion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * @extends ServiceEntityRepository<Suscripcion>
@@ -19,6 +20,15 @@ class SuscripcionRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Suscripcion::class);
+    }
+    public function getSuscripcionByIdUsuarioRepository(array $params): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT s.id, s.id_usuario, s.id_canal, s.activo FROM apollo.suscripcion s WHERE s.id_usuario = :id_usuario AND s.id_canal = :id_canal';
+
+        $resultSet = $conn->executeQuery($sql, $params);
+        return $resultSet->fetchAllAssociative();
     }
 
 
