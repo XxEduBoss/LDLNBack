@@ -74,6 +74,7 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
+        $this->etiquetas = new ArrayCollection();
         $this->suscripciones = new ArrayCollection();
         $this->mensajes_emisor = new ArrayCollection();
         $this->mensajes_receptor = new ArrayCollection();

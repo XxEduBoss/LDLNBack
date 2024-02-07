@@ -68,8 +68,8 @@ class UsuarioController extends AbstractController
             $usuario->setEmail($data['email']);
             $usuario->setActivo(true);
 
-            if (isset($json['etiquetas']) && is_array($json['etiquetas'])) {
-                foreach ($json['etiquetas'] as $etiquetaId) {
+            if (isset($data['etiquetas']) && is_array($data['etiquetas'])) {
+                foreach ($data['etiquetas'] as $etiquetaId) {
                     $etiquetaUsuario = $entityManager->getRepository(Etiquetas::class)->findOneBy(["descripcion"=>$etiquetaId] );
                     if ($etiquetaUsuario instanceof Etiquetas) {
                         $usuario->addEtiqueta($etiquetaUsuario);
