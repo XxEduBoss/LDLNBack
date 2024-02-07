@@ -9,6 +9,8 @@ class MensajeDTO
 
     private ?int $id = null;
     private ?string $texto = null;
+
+    private ?bool $leido = null;
     private ?\DateTimeInterface $fecha_envio = null;
     private ?Usuario $usuario_emisor = null;
     private ?Usuario $usuario_receptor = null;
@@ -32,6 +34,18 @@ class MensajeDTO
     public function setTexto(?string $texto): void
     {
         $this->texto = $texto;
+
+    }
+
+    public function getLeido(): ?bool
+    {
+        return $this->leido;
+    }
+
+    public function setLeido(bool $leido): void
+    {
+        $this->leido = $leido;
+
     }
 
     public function getFechaEnvio(): ?\DateTimeInterface

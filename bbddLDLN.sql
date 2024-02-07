@@ -97,6 +97,7 @@ create table mensaje(
                         texto varchar(10000) not null,
                         fecha_envio timestamp(6) not null,
                         activo bool default true not null,
+                        leido bool default false not null ,
                         id_usuario_emisor int not null,
                         id_usuario_receptor int not null,
 
@@ -244,3 +245,4 @@ insert into etiquetas(descripcion) values ('PROGRAMACIÓN'),
                                           ('MODA'),
                                           ('NOTICIAS'),
                                           ('ANIMALES');
+
