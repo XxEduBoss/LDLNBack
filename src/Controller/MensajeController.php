@@ -32,6 +32,7 @@ class MensajeController extends AbstractController
             $mensaje->setId($m->getId());
             $mensaje->setTexto($m->getTexto());
             $mensaje->setFechaEnvio($m->getFechaEnvio());
+            $mensaje->setLeido($m->getLeido());
             $mensaje->setUsuarioEmisor($m->getUsuarioEmisor());
             $mensaje->setUsuarioReceptor($m->getUsuarioReceptor());
 
@@ -44,8 +45,6 @@ class MensajeController extends AbstractController
     #[Route('/{:id}', name: "mensaje_by_id", methods: ["GET"])]
     public function getById(Mensaje $mensaje):JsonResponse
     {
-
-
         return $this->json($mensaje);
     }
 
@@ -58,6 +57,7 @@ class MensajeController extends AbstractController
         $nuevoMensaje = new Mensaje();
         $nuevoMensaje -> setTexto($json["texto"]);
         $nuevoMensaje -> setFechaEnvio($json(date_create(now())));
+        $nuevoMensaje-> setLeido(false);
         $nuevoMensaje-> setActivo(true);
 
         $emisor = $entityManager->getRepository(Usuario::class)->findBy(["id"=> $json["id_usuario_emisor"]]);

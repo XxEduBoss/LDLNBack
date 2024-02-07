@@ -107,6 +107,7 @@ class VideoController extends AbstractController
         $user->setId($v->getCanal()->getUsuario()->getId());
         $user->setUsername($v->getCanal()->getUsuario()->getUsername());
         $user->setPassword($v->getCanal()->getUsuario()->getPassword());
+        $user->setComunidadAutonoma($v->getCanal()->getUsuario()->getComunidadAutonoma());
         $user->setRolUsuario($v->getCanal()->getUsuario()->getRolUsuario());
         $user->setActivo($v->getCanal()->getUsuario()->isActivo());
 
@@ -123,7 +124,6 @@ class VideoController extends AbstractController
         $json = json_decode($request->getContent(), true );
 
         $nuevoVideo = new Video();
-
         $nuevoVideo-> setTitulo($json["titulo"]);
         $nuevoVideo-> setDescripcion($json["descripcion"]);
         $nuevoVideo->setUrl($json["url"]);
@@ -137,7 +137,7 @@ class VideoController extends AbstractController
 
         $nuevoVideo->setFechaPublicacion($fechaRecibida);
 
-        $canal = $entityManager->getRepository(Canal::class)->findBy(["id"=>$json["canal"]]);
+        $canal = $entityManager->getRepository(Canal::class)->findBy(["id"=>$json["id_canal"]]);
         $nuevoVideo->setCanal($canal[0]);
 
         $nuevoVideo->setMiniatura($json['miniatura']);
@@ -216,10 +216,10 @@ class VideoController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $listaVideos = $entityManager->getRepository(Video::class)->getVideosSuscritos(["id"=> $data["id"]]);
 
-        return $this->json(['Videos de tus canales suscritos' => $listaVideos], Response::HTTP_OK);
+        return $this->json([$listaVideos], Response::HTTP_OK);
     }
 
-    //Los videos de tus canales suscritos
+    //Los videos de por etiquetas
     #[Route('/poretiquetas', name: "get_videos_por_etiquetas", methods: ["POST"])]
     public function getVideosEtiquetasController(EntityManagerInterface $entityManager, Request $request):JsonResponse
     {

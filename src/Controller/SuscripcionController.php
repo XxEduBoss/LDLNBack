@@ -69,7 +69,6 @@ class SuscripcionController extends AbstractController
 
         $nuevaSuscripcion->setActivo(true);
 
-
         $entityManager->persist($nuevaSuscripcion);
         $entityManager->flush();
 

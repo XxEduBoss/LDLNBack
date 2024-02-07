@@ -30,7 +30,72 @@ class CanalRepository extends ServiceEntityRepository
             ->orWhere("LOWER(c.nombre_canal) LIKE '%$canal%'");
 
         return $qb->getQuery()->getResult();
-
     }
+
+
+    //Número de suscriptores por canal
+    public function getNumSuscriptoresPorCanal(array $id): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idTipoCategoria = $id["id"];
+        $sql = 'select count(s.id_usuario) as suscriptores from apollo.suscripcion s where s.id_canal = :id';
+
+        $resultSet = $conn->executeQuery($sql, ['id' => $idTipoCategoria]);
+        return $resultSet->fetchAllAssociative();
+    }
+
+    //Etiquetas de cada canal
+    public function getEtiquetasPorCanal(array $id): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idTipoCategoria = $id["id"];
+        $sql = 'select e.descripcion from apollo.canal c
+                join apollo.etiquetas_canal ec on c.id = ec.id_canal
+                join apollo.etiquetas e on ec.id_etiqueta = e.id
+                     where c.id = :id';
+
+        $resultSet = $conn->executeQuery($sql, ['id' => $idTipoCategoria]);
+        return $resultSet->fetchAllAssociative();
+    }
+
+    //Videos por canal
+    public function getVideosPorCanal(array $id): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idTipoCategoria = $id["id"];
+        $sql = 'select v.* from apollo.video v
+                join apollo.canal c on v.id_canal = c.id
+                    where c.id = :id
+                    group by v.id';
+
+        $resultSet = $conn->executeQuery($sql, ['id' => $idTipoCategoria]);
+        return $resultSet->fetchAllAssociative();
+    }
+
+    //Sucriptores por canal
+    public function getSuscriptoresPorCanal(array $id): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idTipoCategoria = $id["id"];
+        $sql = 'select u.username as Usuario from apollo.usuario u
+                join apollo.suscripcion s on u.id = s.id_usuario
+                join apollo.canal c on s.id_canal = c.id
+                    where c.id = :id';
+
+        $resultSet = $conn->executeQuery($sql, ['id' => $idTipoCategoria]);
+        return $resultSet->fetchAllAssociative();
+    }
+    public function getIdcanalPorUsuario(array $id): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idUsuario = $id["id"];
+        $sql = 'select c.id from apollo.canal c
+                join apollo.usuario u on c.id_usuario = u.id
+                    where c.id_usuario = :id';
+
+        $resultSet = $conn->executeQuery($sql, ['id' => $idUsuario]);
+        return $resultSet->fetchAllAssociative();
+    }
+
 
 }
