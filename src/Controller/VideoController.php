@@ -107,6 +107,7 @@ class VideoController extends AbstractController
         $user->setId($v->getCanal()->getUsuario()->getId());
         $user->setUsername($v->getCanal()->getUsuario()->getUsername());
         $user->setPassword($v->getCanal()->getUsuario()->getPassword());
+        $user->setComunidadAutonoma($v->getCanal()->getUsuario()->getComunidadAutonoma());
         $user->setRolUsuario($v->getCanal()->getUsuario()->getRolUsuario());
         $user->setActivo($v->getCanal()->getUsuario()->isActivo());
 
