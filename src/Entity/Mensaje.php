@@ -22,6 +22,9 @@ class Mensaje
     #[ORM\Column(name:'fecha_envio', type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fecha_envio = null;
 
+    #[ORM\Column(name:'leido')]
+    private ?bool $leido = null;
+
     #[ORM\ManyToOne(inversedBy: '$mensajes_emisor')]
     #[ORM\JoinColumn(name:'id_usuario_emisor', nullable: false)]
     private ?Usuario $usuario_emisor = null;
@@ -33,6 +36,8 @@ class Mensaje
     #[ORM\Column]
     private ?bool $activo = null;
 
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -41,6 +46,18 @@ class Mensaje
     public function getTexto(): ?string
     {
         return $this->texto;
+    }
+
+    public function getLeido(): ?bool
+    {
+        return $this->leido;
+    }
+
+    public function setLeido(bool $leido): static
+    {
+        $this->leido = $leido;
+
+        return $this;
     }
 
     public function setTexto(string $texto): static

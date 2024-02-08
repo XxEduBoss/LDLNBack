@@ -41,7 +41,7 @@ class Suscripcion
 
     public function setFechaSuscripcion(\DateTimeInterface $fecha_suscripcion): static
     {
-        $this->fecha_suscripcion =  $fecha_suscripcion;
+        $this->fecha_suscripcion = $fecha_suscripcion;
 
         return $this;
     }

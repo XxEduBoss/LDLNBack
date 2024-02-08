@@ -85,5 +85,53 @@ class SuscripcionController extends AbstractController
         return $this->json(['message' => 'Suscripcion desactivada'], Response::HTTP_OK);
     }
 
+    //Activar suscripcion
+    #[Route('/activar/{id}', name: "suscripcion_activar", methods: ["PUT"])]
+    public function activarById(EntityManagerInterface $entityManager, Suscripcion $suscripcion):JsonResponse
+    {
+        $suscripcion-> setActivo(true);
+        $entityManager->flush();
+
+        return $this->json(['message' => 'Suscripcion activada'], Response::HTTP_OK);
+    }
+
+
+    // Buscar suscripciones por id_canal
+    #[Route('/buscar', name: 'find_suscripcion', methods: ['POST', 'OPTIONS'])]
+    public function getSuscripcionByIdUsuario(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        // Verifica si los datos necesarios están presentes en la solicitud
+        if (!isset($data['usuario']) || !isset($data['canal'])) {
+            return $this->json(['error' => 'Datos incompletos'], 400);
+        }
+
+        $id_usuario = $data['usuario'];
+        $canal = $data['canal'];
+        $id_canal = $canal['id'];
+
+        $suscripcion = $entityManager->getRepository(Suscripcion::class)->getSuscripcionByIdUsuarioRepository([
+            "id_usuario" => $id_usuario,
+            "id_canal" => $id_canal
+        ]);
+
+        // Verificar si la Suscripcion fue encontrada
+        if (!$suscripcion) {
+            // Reportar false en caso que la Suscripcion no fue encontrada
+            return $this->json(['exists' => false]);
+        } else {
+            // Reportar la información de la Suscripcion en caso que fue encontrada
+            return $this->json([
+                'exists' => true,
+                'id' => $suscripcion[0]['id'],
+                'id_usuario' => $suscripcion[0]['id_usuario'],
+                'id_canal' => $suscripcion[0]['id_canal'],
+                'activo' => $suscripcion[0]['activo'],
+            ]);
+        }
+    }
+
+
 
 }
