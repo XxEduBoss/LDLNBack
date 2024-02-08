@@ -169,6 +169,19 @@ class VideoController extends AbstractController
 
         $video-> setTitulo($json["titulo"]);
         $video-> setDescripcion($json["descripcion"]);
+        $tipo_video = $entityManager->getRepository(TipoVideo::class)->findBy(["descripcion"=>$json["tipo"]]);
+        $video->setTipoVideo($tipo_video[0]);
+
+        $etiquetasVideo = $entityManager->getRepository(Etiquetas::class)->getEtiquetasPorVideo(["id"=>$video->getId()]);
+
+        if (isset($etiquetasVideo) && is_array($etiquetasVideo)) {
+            foreach ($etiquetasVideo as $etiquetaId) {
+                $etiquetaVideo = $entityManager->getRepository(Etiquetas::class)->findOneBy(["descripcion"=>$etiquetaId] );
+                if ($etiquetaVideo instanceof Etiquetas) {
+                    $video->removeEtiqueta($etiquetaVideo);
+                }
+            }
+        }
 
         if (isset($json['etiquetas']) && is_array($json['etiquetas'])) {
             foreach ($json['etiquetas'] as $etiquetaId) {
@@ -180,16 +193,8 @@ class VideoController extends AbstractController
         }
 
         $video->setFechaCreacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
-        $fechaPublicacionDateTime = \DateTime::createFromFormat('d/m/Y H:i:s', $json["fecha_publicacion"]);
-        $video->setFechaPublicacion(new \DateTime($fechaPublicacionDateTime));
-        $video->setUrl($json["url"]);
-
-        $canal = $entityManager->getRepository(Canal::class)->find($json["id_canal"]);
-        $video->setCanal($canal[0]);
 
         $video->setMiniatura($json['miniatura']);
-
-
 
         $entityManager->flush();
 
@@ -199,10 +204,10 @@ class VideoController extends AbstractController
     }
 
     #[Route('/borrar/{id}', name: "delete_by_id", methods: ["PUT"])]
-    public function deleteById(EntityManagerInterface $entityManager, Canal $canal):JsonResponse
+    public function deleteById(EntityManagerInterface $entityManager, Video $video):JsonResponse
     {
 
-        $canal->setActivo(false);
+        $video->setActivo(false);
         $entityManager->flush();
 
         return $this->json(['message' => 'Video eliminado'], Response::HTTP_OK);
