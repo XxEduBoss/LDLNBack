@@ -240,13 +240,24 @@ class VideoController extends AbstractController
 
     //Los videos de tu canal
     #[Route('/porcanal', name: "get_videos_por_canal", methods: ["POST"])]
-    public function VideosPorCAnal(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    public function VideosPorCanal(EntityManagerInterface $entityManager, Request $request):JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $listaVideos = $entityManager->getRepository(Video::class)->getVideosPorCanal(["id"=>$data['id_canal']]);
+        $listaVideos = $entityManager->getRepository(Video::class)->getVideosPorCanal(["id_canal"=> $data["id_canal"]]);
 
-        return $this->json(['Videos por su canal' => $listaVideos], Response::HTTP_OK);
+        return $this->json($listaVideos, Response::HTTP_OK);
     }
+
+    //Los videos en funcion de las etiquetas del video y del id del canal
+    #[Route('/poretiquetacanal', name: "get_videos_canal_etiquetas", methods: ["POST"])]
+    public function getVideosPorCanalEtiquetasController(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaVideos = $entityManager->getRepository(Video::class)->getVideosTematicaCanal(["idCanal"=> $data["id"], "etiqueta"=>$data["etiqueta"]]);
+
+        return $this->json($listaVideos, Response::HTTP_OK);
+    }
+
 
 
 }
