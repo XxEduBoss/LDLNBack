@@ -96,4 +96,14 @@ class ComentarioController extends AbstractController
         return $this->json(['message' => 'Comentario eliminado']);
     }
 
+    #[Route('/video', name: 'comentario_by_id_video', methods: ['POST'])]
+    public function ComentariosPorVideo(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    {
+
+        $listaComentarios = $entityManager->getRepository(Comentario::class)->findBy(["id_video"=>$request["id"]]);
+
+
+        return $this->json($listaComentarios);
+    }
+
 }
