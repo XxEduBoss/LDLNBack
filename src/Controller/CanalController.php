@@ -133,11 +133,12 @@ class CanalController extends AbstractController
         $canal->setApellidos($json["apellidos"]);
         $canal->setNombreCanal($json["nombre_canal"]);
         $canal->setTelefono($json["telefono"]);
-        $canal->setFechaNacimiento($json["fecha_nacimiento"]);
-        $canal->setFechaCreacion($json["fecha_creacion"]);
 
-        $usuario = $entityManager->getRepository(Usuario::class)->findBy(["id"=>$json["usuario"]]);
-        $canal->setUsuario($usuario[0]);
+        $fechaNacimientoString = $json["fecha_nacimiento"];
+        $fechaNacimientoDateTime = \DateTimeImmutable::createFromFormat('Y-m-d\TH:i', $fechaNacimientoString);
+
+        $canal->setFechaNacimiento($fechaNacimientoDateTime);
+
 
         $entityManager->flush();
 
@@ -231,11 +232,20 @@ class CanalController extends AbstractController
     }
 
 
-    #[Route('/idcanalporusuario', name: "get_canal_por_usuario", methods: ["POST"])]
+    #[Route('/idcanalporusuario', name: "get_idcanal_por_usuario", methods: ["POST"])]
     public function IdCanalPorUsuarioController(EntityManagerInterface $entityManager, Request $request):JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         $usuarioCanal = $entityManager->getRepository(Canal::class)->getIdcanalPorUsuario(["id"=>$data['id']]);
+
+        return $this->json($usuarioCanal, Response::HTTP_OK);
+    }
+
+    #[Route('/canalporusuario', name: "get_canal_por_usuario", methods: ["POST"])]
+    public function CanalPorUsuario(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $usuarioCanal = $entityManager->getRepository(Canal::class)->getCanalPorUsuario(["id"=>$data['id']]);
 
         return $this->json($usuarioCanal, Response::HTTP_OK);
     }

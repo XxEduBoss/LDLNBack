@@ -10,7 +10,7 @@ class UsuarioDTO
     private ?string $password = null;
     private ?string $email = null;
     private ?int $rol_usuario = null;
-    private ?int $comunidad_autonoma = null;
+    private ?string $comunidad_autonoma = null;
     private ?int $activo = null;
 
     public function getId(): ?int
