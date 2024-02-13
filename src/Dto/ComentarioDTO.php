@@ -35,7 +35,7 @@ class ComentarioDTO
         $this->texto = $texto;
     }
 
-    public function getFechaPublicacion(): ?\DateTimeInterface
+    public function getFechaPublicacion(): ?string
     {
         return $this->fecha_publicacion;
     }
