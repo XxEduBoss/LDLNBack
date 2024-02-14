@@ -76,23 +76,6 @@ class ValoracionNegativaDTO
         $this->usuario = $usuario;
     }
 
-    /**
-     * @return bool|null
-     */
-    public function getActivo(): ?bool
-    {
-        return $this->activo;
-    }
-
-    /**
-     * @param bool|null $activo
-     */
-    public function setActivo(?bool $activo): void
-    {
-        $this->activo = $activo;
-    }
-    private ?bool $activo = null;
-
 
 
 

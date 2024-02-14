@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\ValoracionNegativa;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -45,4 +46,17 @@ class ValoracionNegativaRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    /**
+     * @throws Exception
+     */
+    public function getValoracionNegativaByIdUsuarioRepository(array $params): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT v.id, v.id_usuario, v.id_video FROM apollo.valoracion_negativa v WHERE v.id_usuario = :id_usuario AND v.id_video = :id_video';
+
+        $resultSet = $conn->executeQuery($sql, $params);
+        return $resultSet->fetchAllAssociative();
+    }
 }

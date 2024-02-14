@@ -46,6 +46,8 @@ security:
         - { path: ^/api/notificacion,       roles: PUBLIC_ACCESS }
         - { path: ^/api/visita,       roles: PUBLIC_ACCESS }
         - { path: ^/api,       roles: PUBLIC_ACCESS }
+        - { path: ^/api/valoracion_positiva,       roles: PUBLIC_ACCESS }
+        - { path: ^/api/valoracion_negativa,       roles: PUBLIC_ACCESS }
 
 
 when@test:

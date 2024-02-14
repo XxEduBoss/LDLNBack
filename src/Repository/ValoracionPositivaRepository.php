@@ -45,4 +45,14 @@ class ValoracionPositivaRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function getValoracionPositivaByIdUsuarioRepository(array $params): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT v.id, v.id_usuario, v.id_video FROM apollo.valoracion_positiva v WHERE v.id_usuario = :id_usuario AND v.id_video = :id_video';
+
+        $resultSet = $conn->executeQuery($sql, $params);
+        return $resultSet->fetchAllAssociative();
+    }
 }

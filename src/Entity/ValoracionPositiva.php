@@ -25,8 +25,6 @@ class ValoracionPositiva
     #[ORM\JoinColumn(name:'id_usuario', nullable: false)]
     private ?Usuario $usuario = null;
 
-    #[ORM\Column]
-    private ?bool $activo = null;
 
     public function getId(): ?int
     {
@@ -69,15 +67,4 @@ class ValoracionPositiva
         return $this;
     }
 
-    public function isActivo(): ?bool
-    {
-        return $this->Activo;
-    }
-
-    public function setActivo(bool $activo): static
-    {
-        $this->Activo = $activo;
-
-        return $this;
-    }
 }
