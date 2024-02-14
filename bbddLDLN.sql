@@ -98,12 +98,12 @@ create table mensaje(
                         fecha_envio timestamp(6) not null,
                         activo bool default true not null,
                         leido bool default false not null ,
-                        id_usuario_emisor int not null,
-                        id_usuario_receptor int not null,
+                        id_canal_emisor int not null,
+                        id_canal_receptor int not null,
 
                         primary key (id),
-                        constraint fk_mensaje_emisor foreign key (id_usuario_emisor) references usuario(id),
-                        constraint fk_mensaje_receptor foreign key (id_usuario_receptor) references usuario (id)
+                        constraint id_canal_emisor foreign key (id_canal_emisor) references canal(id),
+                        constraint id_canal_receptor foreign key (id_canal_receptor) references canal (id)
 
 );
 
@@ -246,3 +246,4 @@ insert into etiquetas(descripcion) values ('PROGRAMACIÓN'),
                                           ('NOTICIAS'),
                                           ('ANIMALES');
 
+drop table apollo.mensaje;

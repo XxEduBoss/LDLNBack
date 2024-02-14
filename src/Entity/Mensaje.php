@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\MensajeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use PhpCsFixer\Tokenizer\Analyzer\Analysis\CaseAnalysis;
 
 #[ORM\Entity(repositoryClass: MensajeRepository::class)]
 #[ORM\Table(name: 'mensaje',schema: 'apollo')]
@@ -26,12 +27,12 @@ class Mensaje
     private ?bool $leido = null;
 
     #[ORM\ManyToOne(inversedBy: '$mensajes_emisor')]
-    #[ORM\JoinColumn(name:'id_usuario_emisor', nullable: false)]
-    private ?Usuario $usuario_emisor = null;
+    #[ORM\JoinColumn(name:'id_canal_emisor', nullable: false)]
+    private ?Canal $canal_emisor = null;
 
     #[ORM\ManyToOne(inversedBy: 'mensajes_receptor')]
-    #[ORM\JoinColumn(name:'id_usuario_receptor', nullable: false)]
-    private ?Usuario $usuario_receptor = null;
+    #[ORM\JoinColumn(name:'id_canal_receptor', nullable: false)]
+    private ?Canal $canal_receptor = null;
 
     #[ORM\Column]
     private ?bool $activo = null;
@@ -79,26 +80,26 @@ class Mensaje
         return $this;
     }
 
-    public function getUsuarioEmisor(): ?Usuario
+    public function getCanalEmisor(): ?Canal
     {
-        return $this->usuario_emisor;
+        return $this->canal_emisor;
     }
 
-    public function setUsuarioEmisor(?Usuario $usuario_emisor): static
+    public function setCanalEmisor(?Canal $canal_emisor): static
     {
-        $this->usuario_emisor = $usuario_emisor;
+        $this->canal_emisor = $canal_emisor;
 
         return $this;
     }
 
-    public function getUsuarioReceptor(): ?Usuario
+    public function getCanalReceptor(): ?Canal
     {
-        return $this->usuario_receptor;
+        return $this->canal_receptor;
     }
 
-    public function setUsuarioReceptor(?Usuario $usuario_receptor): static
+    public function setCanalReceptor(?Canal $canal_receptor): static
     {
-        $this->usuario_receptor = $usuario_receptor;
+        $this->canal_receptor = $canal_receptor;
 
         return $this;
     }
