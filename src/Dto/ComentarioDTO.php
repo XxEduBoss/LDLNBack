@@ -10,9 +10,9 @@ class ComentarioDTO
 
     private ?int $id = null;
     private ?string $texto = null;
-    private ?\DateTimeInterface $fecha_publicacion = null;
-    private ?Video $video = null;
-    private ?Usuario $usuario = null;
+    private ?string $fecha_publicacion = null;
+    private ?VideoDTO $video = null;
+    private ?UsuarioDTO $usuario = null;
     private ?bool $activo = null;
 
     public function getId(): ?int
@@ -35,32 +35,32 @@ class ComentarioDTO
         $this->texto = $texto;
     }
 
-    public function getFechaPublicacion(): ?\DateTimeInterface
+    public function getFechaPublicacion(): ?string
     {
         return $this->fecha_publicacion;
     }
 
-    public function setFechaPublicacion(?\DateTimeInterface $fecha_publicacion): void
+    public function setFechaPublicacion(?string $fecha_publicacion): void
     {
         $this->fecha_publicacion = $fecha_publicacion;
     }
 
-    public function getVideo(): ?Video
+    public function getVideo(): ?VideoDTO
     {
         return $this->video;
     }
 
-    public function setVideo(?Video $video): void
+    public function setVideo(?VideoDTO $video): void
     {
         $this->video = $video;
     }
 
-    public function getUsuario(): ?Usuario
+    public function getUsuario(): ?UsuarioDTO
     {
         return $this->usuario;
     }
 
-    public function setUsuario(?Usuario $usuario): void
+    public function setUsuario(?UsuarioDTO $usuario): void
     {
         $this->usuario = $usuario;
     }

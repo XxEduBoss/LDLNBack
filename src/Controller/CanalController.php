@@ -7,7 +7,6 @@ use App\Dto\UsuarioDTO;
 use App\Entity\Canal;
 use App\Entity\Etiquetas;
 use App\Entity\Usuario;
-use App\Entity\Video;
 use App\Repository\CanalRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;

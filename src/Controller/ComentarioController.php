@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Dto\ComentarioDTO;
+use App\Dto\UsuarioDTO;
+use App\Dto\VideoDTO;
 use App\Entity\Comentario;
 use App\Entity\Usuario;
 use App\Entity\Video;
@@ -30,8 +32,26 @@ class ComentarioController extends AbstractController
             $comentario->setId($c->getId());
             $comentario->setTexto($c->getTexto());
             $comentario->setFechaPublicacion($c->getFechaPublicacion());
-            $comentario->setVideo($c->getVideo());
-            $comentario->setUsuario($c->getUsuario());
+
+            $video = new VideoDTO();
+
+            $video->setId($c->getVideo()->getId());
+            $video->setTitulo($c->getVideo()->getTitulo());
+            $video->setDescripcion($c->getVideo()->getDescripcion());
+            $video->setUrl($c->getVideo()->getUrl());
+            $video->setTipoVideo($c->getVideo()->getTipoVideo());
+            $video->setFechaCreacion($c->getVideo()->getFechaCreacion());
+            $video->setFechaPublicacion($c->getVideo()->getFechaPublicacion());
+            $comentario->setVideo($video);
+
+            $user = new UsuarioDTO();
+            $user->setId($c->getUsuario()->getId());
+            $user->setUsername($c->getUsuario()->getUsername());
+            $user->setPassword($c->getUsuario()->getPassword());
+            $user->setRolUsuario($c->getUsuario()->getRolUsuario());
+            $user->setActivo($c->getUsuario()->isActivo());
+
+            $comentario->setUsuario($user);
             $comentario->setActivo($c->isActivo());
 
             $listaComentariosDTOs[] = $comentario;
@@ -94,6 +114,59 @@ class ComentarioController extends AbstractController
         $entityManager->flush();
 
         return $this->json(['message' => 'Comentario eliminado']);
+    }
+
+    #[Route('/video', name: 'comentario_by_id_video', methods: ['POST'])]
+    public function ComentariosPorVideo(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    {
+
+        $data = json_decode($request->getContent(), true);
+
+//        $video = $entityManager->getRepository(Video::class)->findOneBy(["id"=>$data['id']]);
+
+        $listaComentarios = $entityManager->getRepository(Comentario::class)->getComentariosPorVideo(["id"=>$data['id']]);
+
+        $listaComentariosDTOs = [];
+
+        foreach ($listaComentarios as $c){
+
+            $video1 = $entityManager->getRepository(Video::class)->findOneBy(["id"=>$c['id_video']]);
+            $usuario1 = $entityManager->getRepository(Usuario::class)->findOneBy(["id"=>$c['id_usuario']]);
+
+            $comentario = new ComentarioDTO();
+            $comentario->setId($c['id']);
+            $comentario->setTexto($c['texto']);
+            $comentario->setFechaPublicacion($c['fecha_publicacion']);
+
+            $video = new VideoDTO();
+
+            $video->setId($video1->getId());
+            $video->setTitulo($video1->getTitulo());
+            $video->setDescripcion($video1->getDescripcion());
+            $video->setUrl($video1->getUrl());
+            $video->setTipoVideo($video1->getTipoVideo());
+            $video->setFechaCreacion($video1->getFechaCreacion());
+            $video->setFechaPublicacion($video1->getFechaPublicacion());
+
+            $comentario->setVideo($video);
+
+            $user = new UsuarioDTO();
+            $user->setId($usuario1->getId());
+            $user->setUsername($usuario1->getUsername());
+            $user->setPassword($usuario1->getPassword());
+            $user->setRolUsuario($usuario1->getRolUsuario());
+            $user->setActivo($usuario1->isActivo());
+
+            $comentario->setUsuario($user);
+            $comentario->setActivo($c['activo']);
+
+            $listaComentariosDTOs[] = $comentario;
+
+        }
+
+
+        return $this->json($listaComentariosDTOs);
+
     }
 
 }

@@ -43,6 +43,7 @@ security:
         - { path: ^/api/tipos,       roles: PUBLIC_ACCESS }
         - { path: ^/api/usuario,       roles: PUBLIC_ACCESS }
         - { path: ^/api/canal,       roles: PUBLIC_ACCESS }
+        - { path: ^/api/comentario,       roles: PUBLIC_ACCESS }
         - { path: ^/api/notificacion,       roles: PUBLIC_ACCESS }
         - { path: ^/api/visita,       roles: PUBLIC_ACCESS }
         - { path: ^/api,       roles: PUBLIC_ACCESS }
