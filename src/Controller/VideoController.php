@@ -169,7 +169,7 @@ class VideoController extends AbstractController
 
         $video-> setTitulo($json["titulo"]);
         $video-> setDescripcion($json["descripcion"]);
-        $tipo_video = $entityManager->getRepository(TipoVideo::class)->findBy(["descripcion"=>$json["tipo"]]);
+        $tipo_video = $entityManager->getRepository(TipoVideo::class)->findBy(["descripcion"=>$json['tipoVideo']['descripcion']]);
         $video->setTipoVideo($tipo_video[0]);
 
         $etiquetasVideo = $entityManager->getRepository(Etiquetas::class)->getEtiquetasPorVideo(["id"=>$video->getId()]);

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Etiquetas;
 use App\Entity\Usuario;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -20,6 +21,12 @@ class RegistroController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
+        if($data['username'] == ''){
+
+            return $this->json(['message' => 'Necesita un mínimo de 3 carácteres']);
+
+        }
+
         if (empty($entityManager->getRepository(Usuario::class)->findBy(["username" => $data['username'] and ["email" => $data['email']]]))) {
             $user = new Usuario();
             $user->setUsername($data['username']);
@@ -28,15 +35,24 @@ class RegistroController extends AbstractController
             $user->setRolUsuario($data['id_rol_usuario']);
             $user->setComunidadAutonoma($data['comunidad_autonoma']);
 
+            if (isset($data['etiquetas']) && is_array($data['etiquetas'])) {
+                foreach ($data['etiquetas'] as $etiquetaId) {
+                    $etiquetaUsuario = $entityManager->getRepository(Etiquetas::class)->findOneBy(["descripcion"=>$etiquetaId] );
+                    if ($etiquetaUsuario instanceof Etiquetas) {
+                        $user->addEtiqueta($etiquetaUsuario);
+                    }
+                }
+            }
 
             $entityManager->persist($user);
             $entityManager->flush();
 
-
             return new JsonResponse(['message' => 'Usuario registrado con éxito'], 201);
-        } else {
+
+        }else {
 
             return $this->json(['message' => 'Ya existe un usuario con ese username']);
         }
     }
+
 }

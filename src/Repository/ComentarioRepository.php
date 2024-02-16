@@ -21,28 +21,17 @@ class ComentarioRepository extends ServiceEntityRepository
         parent::__construct($registry, Comentario::class);
     }
 
-//    /**
-//     * @return Comentario[] Returns an array of Comentario objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //Los comentarios por video
+    public function getComentariosPorVideo(array $id): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idVideo = $id["id"];
+        $sql = 'select c.* from apollo.comentario c
+                    where c.id_video = :id 
+                    order by c.fecha_publicacion desc';
 
-//    public function findOneBySomeField($value): ?Comentario
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $resultSet = $conn->executeQuery($sql, ['id' => $idVideo]);
+        return $resultSet->fetchAllAssociative();
+    }
+
 }

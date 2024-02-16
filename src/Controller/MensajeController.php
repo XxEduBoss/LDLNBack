@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Dto\MensajeDTO;
+use App\Entity\Canal;
 use App\Entity\Mensaje;
 use App\Entity\Usuario;
 use App\Repository\MensajeRepository;
@@ -28,8 +29,7 @@ class MensajeController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-
-        $lista_mensaje = $entityManager->getRepository(Mensaje::class)->getIdmensajePorUsuario(['id' => $data["id"]]);
+        $lista_mensaje = $entityManager->getRepository(Mensaje::class)->getMensajesEntreUsuarios(["id_canal1" => $data["id_canal1"], "id_canal2"=>$data["id_canal2"]]);
 
         return $this->json($lista_mensaje);
     }
@@ -77,11 +77,11 @@ class MensajeController extends AbstractController
         $nuevoMensaje-> setLeido(false);
         $nuevoMensaje-> setActivo(true);
 
-        $emisor = $entityManager->getRepository(Usuario::class)->findBy(["id"=> $json["id_usuario_emisor"]]);
-        $nuevoMensaje->setUsuarioEmisor($emisor[0]);
+        $emisor = $entityManager->getRepository(Canal::class)->findBy(["id"=> $json["id_canal_emisor"]]);
+        $nuevoMensaje->setCanalEmisor($emisor[0]);
 
-        $receptor = $entityManager->getRepository(Usuario::class)->findBy(["id"=> $json["id_usuario_receptor"]]);
-        $nuevoMensaje->setUsuarioReceptor($receptor[0]);
+        $receptor = $entityManager->getRepository(Canal::class)->findBy(["id"=> $json["id_canal_receptor"]]);
+        $nuevoMensaje->setCanalReceptor($receptor[0]);
 
 
 
