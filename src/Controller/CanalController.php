@@ -230,23 +230,13 @@ class CanalController extends AbstractController
         return $this->json($videosCanal, Response::HTTP_OK);
     }
 
-
-    #[Route('/idcanalporusuario', name: "get_idcanal_por_usuario", methods: ["POST"])]
-    public function IdCanalPorUsuarioController(EntityManagerInterface $entityManager, Request $request):JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-        $usuarioCanal = $entityManager->getRepository(Canal::class)->getIdcanalPorUsuario(["id"=>$data['id']]);
-
-        return $this->json($usuarioCanal, Response::HTTP_OK);
-    }
-
     #[Route('/canalporusuario', name: "get_canal_por_usuario", methods: ["POST"])]
     public function CanalPorUsuario(EntityManagerInterface $entityManager, Request $request):JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $usuarioCanal = $entityManager->getRepository(Canal::class)->getCanalPorUsuario(["id"=>$data['id']]);
+        $usuarioCanal = $entityManager->getRepository(Canal::class)->getCanalPorUsuario(["id"=>$data["id"]]);
 
-        return $this->json($usuarioCanal, Response::HTTP_OK);
+        return $this->json($usuarioCanal[0], Response::HTTP_OK);
     }
 
 }
