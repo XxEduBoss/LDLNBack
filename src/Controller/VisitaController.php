@@ -103,4 +103,16 @@ class VisitaController extends AbstractController
         return $this->json(['message' => 'Visita eliminada']);
     }
 
+    #[Route('/porvideo', name: 'visita_por_video', methods: ['POST'])]
+    public function porVideo(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    {
+
+        $data = json_decode($request->getContent(), true);
+
+        $listaVisitas = $entityManager->getRepository(Visita::class)->getVisitasPorVideo(["id"=>$data["id_video"]]);
+
+        return $this->json($listaVisitas);
+
+    }
+
 }

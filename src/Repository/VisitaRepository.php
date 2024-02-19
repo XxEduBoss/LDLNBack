@@ -21,28 +21,17 @@ class VisitaRepository extends ServiceEntityRepository
         parent::__construct($registry, Visita::class);
     }
 
-//    /**
-//     * @return Visita[] Returns an array of Visita objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('v')
-//            ->andWhere('v.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('v.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //Las visitas de un video
+    public function getVisitasPorVideo(array $id): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $id_video = $id["id"];
+        $sql = 'select v.* from apollo.visita v
+                    join apollo.video v2 on v2.id = v.id_video
+                    where v2.id = :id';
 
-//    public function findOneBySomeField($value): ?Visita
-//    {
-//        return $this->createQueryBuilder('v')
-//            ->andWhere('v.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $resultSet = $conn->executeQuery($sql, ['id' => $id_video]);
+        return $resultSet->fetchAllAssociative();
+    }
+
 }

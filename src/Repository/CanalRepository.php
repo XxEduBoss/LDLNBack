@@ -96,6 +96,15 @@ class CanalRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+    public function getCanalPorUsername(array $username): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'select c.* from apollo.canal c
+                join apollo.usuario u on u.id = c.id_usuario
+                    where u.username = :username';
 
+        $resultSet = $conn->executeQuery($sql, $username);
+        return $resultSet->fetchAllAssociative();
+    }
 
 }
