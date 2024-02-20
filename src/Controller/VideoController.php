@@ -9,9 +9,12 @@ use App\Entity\Canal;
 use App\Entity\Etiquetas;
 use App\Entity\EtiquetasVideo;
 use App\Entity\TipoVideo;
+use App\Entity\Usuario;
 use App\Entity\Video;
+use App\Controller\NotificacionController;
 use App\Repository\EtiquetasRepository;
 use App\Repository\VideoRepository;
+use App\Service\NotificacionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -118,7 +121,7 @@ class VideoController extends AbstractController
     }
 
     #[Route('/crear', name:"video_crear" , methods : ["POST"])]
-    public function crearVideo(EntityManagerInterface $entityManager , Request $request) :JsonResponse
+    public function crearVideo(EntityManagerInterface $entityManager , Request $request, NotificacionService $notificacionService) :JsonResponse
     {
 
         $json = json_decode($request->getContent(), true );
@@ -137,8 +140,8 @@ class VideoController extends AbstractController
 
         $nuevoVideo->setFechaPublicacion($fechaRecibida);
 
-        $canal = $entityManager->getRepository(Canal::class)->findBy(["id"=>$json["id_canal"]]);
-        $nuevoVideo->setCanal($canal[0]);
+        $canal = $entityManager->getRepository(Canal::class)->findOneBy(["id"=>$json["id_canal"]]);
+        $nuevoVideo->setCanal($canal);
 
         $nuevoVideo->setMiniatura($json['miniatura']);
 
@@ -151,6 +154,14 @@ class VideoController extends AbstractController
                     $nuevoVideo->addEtiqueta($etiquetaVideo);
                 }
             }
+        }
+
+        $listaSuscriptores = $entityManager->getRepository(Canal::class)->getSubcriptoresCanal(["id_canal"=>$json["id_canal"]]);
+
+        foreach ($listaSuscriptores as $usuario){
+
+            $notificacionService->crearNotificacionVideo($entityManager, $canal, $usuario['id_usuario']);
+
         }
 
         $entityManager->persist($nuevoVideo);

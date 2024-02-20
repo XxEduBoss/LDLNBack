@@ -2,7 +2,9 @@
 
 namespace App\Dto;
 
+use App\Entity\TipoNotificacion;
 use App\Entity\Usuario;
+use DateTimeInterface;
 
 class NotificacionDTO
 {
@@ -10,7 +12,7 @@ class NotificacionDTO
 
     private ?string $texto = null;
 
-    private ?int $tipo = null;
+    private TipoNotificacion $tipoNotificacion;
 
     private ?DateTimeInterface $fecha_notificacion = null;
 
@@ -38,12 +40,12 @@ class NotificacionDTO
         $this->texto = $texto;
     }
 
-    public function getTipo(): ?int
+    public function getTipoNotificacion(): TipoNotificacion
     {
         return $this->tipo;
     }
 
-    public function setTipo(?int $tipo): void
+    public function setTipoNotificacion(TipoNotificacion $tipo): void
     {
         $this->tipo = $tipo;
     }

@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Dto\NotificacionDTO;
 use App\Entity\Canal;
 use App\Entity\Notificacion;
+use App\Entity\TipoNotificacion;
 use App\Entity\Usuario;
 use App\Entity\Video;
 use App\Repository\NotificacionRepository;
+use App\Repository\TipoNotificacionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Util\Json;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -61,14 +63,12 @@ class NotificacionController extends AbstractController
         $nuevaNotificacion = new Notificacion();
 
         $nuevaNotificacion -> setTexto($json["texto"]);
-        $nuevaNotificacion -> setTipo($json["tipo"]);
+        $nuevaNotificacion -> setTipoNotificacion($json["tipo"]);
         $nuevaNotificacion ->setFechaNotificacion($json["fecha_notificacion"]);
 
         $usuario = $entityManager->getRepository(Usuario::class)->findBy(["id"=>$json["id_usuario"]]);
-        $nuevaNotificacion->setUsuario($usuario);
 
         $nuevaNotificacion->setUsuario($usuario[0]);
-
 
         $nuevaNotificacion->setActivo(true);
 
@@ -106,4 +106,17 @@ class NotificacionController extends AbstractController
         return $this->json(['message' => 'notificacion eliminado'], Response::HTTP_OK);
 
     }
+
+    #[Route('/porusuario', name: "notificaciones_por_usuario", methods: ["POST"])]
+    public function notificacionesPorUsuario(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+
+        $json = json_decode($request->getContent(), true );
+
+        $listaNotificaicones = $entityManager->getRepository(Notificacion::class)->getNotificacionesPorUsuario(["id_usuario"=>$json['id']]);
+
+        return $this->json($listaNotificaicones, Response::HTTP_OK);
+
+    }
+
 }
