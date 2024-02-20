@@ -68,6 +68,7 @@ class CanalController extends AbstractController
         $canalDTO->setApellidos($canal->getApellidos());
         $canalDTO->setNombreCanal($canal->getNombreCanal());
         $canalDTO->setTelefono($canal->getTelefono());
+        $canalDTO->setBanner($canal->getBanner());
         $canalDTO->setFechaNacimiento($canal->getFechaNacimiento());
         $canalDTO->setFechaCreacion($canal->getFechaCreacion());
 
@@ -75,6 +76,7 @@ class CanalController extends AbstractController
         $user->setId($canal->getUsuario()->getId());
         $user->setUsername($canal->getUsuario()->getUsername());
         $user->setPassword($canal->getUsuario()->getPassword());
+        $user->setComunidadAutonoma($canal->getUsuario()->getComunidadAutonoma());
         $user->setRolUsuario($canal->getUsuario()->getRolUsuario());
         $user->setActivo($canal->getUsuario()->isActivo());
 
@@ -95,6 +97,7 @@ class CanalController extends AbstractController
         $nuevoCanal->setApellidos($json["apellidos"]);
         $nuevoCanal->setNombreCanal($json["nombre_canal"]);
         $nuevoCanal->setTelefono($json["telefono"]);
+        $nuevoCanal->setBanner($json["banner"]);
 
         $fechaNacimientoString = $json["fecha_nacimiento"];
         $fechaNacimientoDateTime = \DateTimeImmutable::createFromFormat('Y-m-d\TH:i', $fechaNacimientoString);
@@ -132,6 +135,8 @@ class CanalController extends AbstractController
         $canal->setApellidos($json["apellidos"]);
         $canal->setNombreCanal($json["nombre_canal"]);
         $canal->setTelefono($json["telefono"]);
+        $canal->setBanner($json["banner"]);
+
 
         $fechaNacimientoString = $json["fecha_nacimiento"];
         $fechaNacimientoDateTime = \DateTimeImmutable::createFromFormat('Y-m-d\TH:i', $fechaNacimientoString);

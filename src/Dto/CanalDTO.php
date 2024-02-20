@@ -12,6 +12,8 @@ class CanalDTO
     private ?string $apellidos = null;
     private ?string $nombre_canal = null;
     private ?string $telefono = null;
+
+    private ?string $banner = null;
     private ?\DateTimeInterface $fecha_nacimiento = null;
     private ?\DateTimeInterface $fecha_creacion = null;
     private ?UsuarioDTO $usuario = null;
@@ -162,6 +164,18 @@ class CanalDTO
     }
 
 
+    public function getBanner(): ?string
+    {
+        return $this->banner;
+    }
+
+    /**
+     * @param string|null $banner
+     */
+    public function setBanner(?string $banner): void
+    {
+        $this->banner = $banner;
+    }
 
 
 

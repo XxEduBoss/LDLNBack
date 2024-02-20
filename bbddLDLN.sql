@@ -33,6 +33,7 @@ create table usuario (
                          password varchar(1000) not null,
                          id_rol_usuario int not null,
                          comunidad_autonoma varchar(50) not null ,
+                         foto varchar(10000) not null,
                          activo bool default true not null,
                          primary key (id),
                          constraint fk_usuario_rol foreign key (id_rol_usuario) references rol_usuario(id)
@@ -46,6 +47,7 @@ create table canal(
                       telefono varchar(10),
                       fecha_nacimiento timestamp(6) not null,
                       fecha_creacion timestamp(6) not null,
+                      banner varchar(10000) not null,
                       id_usuario int not null,
                       activo bool default true not null,
 
@@ -247,3 +249,11 @@ insert into etiquetas(descripcion) values ('PROGRAMACIÓN'),
                                           ('ANIMALES');
 
 drop table apollo.mensaje;
+
+ALTER TABLE canal
+    ALTER COLUMN banner SET NOT NULL;
+
+
+
+
+

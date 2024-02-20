@@ -30,6 +30,7 @@ class UsuarioController extends AbstractController
             $user->setUsername($usuario->getUsername());
             $user->setPassword($usuario->getPassword());
             $user->setEmail($usuario->getEmail());
+            $user->setFoto($usuario->getFoto());
             $user->setRolUsuario($usuario->getRolUsuario());
             $user->setActivo($usuario->isActivo());
 
@@ -50,6 +51,7 @@ class UsuarioController extends AbstractController
         $user->setPassword($usuario->getPassword());
         $user->setRolUsuario($usuario->getRolUsuario());
         $user->setComunidadAutonoma($usuario->getComunidadAutonoma());
+        $user->setFoto($usuario->getFoto());
         $user->setActivo($usuario->isActivo());
 
         return $this->json($user);
@@ -66,6 +68,7 @@ class UsuarioController extends AbstractController
             $usuario->setPassword($data['password']);
             $usuario->setRolUsuario($data['id_rol']);
             $usuario->setEmail($data['email']);
+            $usuario->setFoto($data['foto']);
             $usuario->setActivo(true);
 
             if (isset($data['etiquetas']) && is_array($data['etiquetas'])) {
@@ -94,8 +97,10 @@ class UsuarioController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         $usuario->setUsername($data['username']);
-        $usuario->setPassword($data['password']);
-        $usuario->setRolUsuario($data['id_rol']);
+        $usuario->setEmail($data['email']);
+        $usuario->setComunidadAutonoma($data['comunidad_autonoma']);
+        $usuario->setFoto($data['foto']);
+
 
         $entityManager->flush();
 
@@ -129,7 +134,8 @@ class UsuarioController extends AbstractController
             'id' => $usuario->getId(),
             'username' => $usuario->getUsername(),
             'email' => $usuario->getEmail(),
-            'comunidad_autonoma' => $usuario->getComunidadAutonoma()
+            'comunidad_autonoma' => $usuario->getComunidadAutonoma(),
+            'foto' => $usuario->getFoto()
         ];
 
         return new JsonResponse($userData);
