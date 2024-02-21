@@ -9,6 +9,7 @@ use App\Entity\Comentario;
 use App\Entity\Usuario;
 use App\Entity\Video;
 use App\Repository\ComentarioRepository;
+use App\Service\NotificacionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -69,7 +70,7 @@ class ComentarioController extends AbstractController
     }
 
     #[Route('/crear', name: 'crear_comentario', methods: ['POST'])]
-    public function crear(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    public function crear(EntityManagerInterface $entityManager, Request $request, NotificacionService $notificacionService): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -85,6 +86,14 @@ class ComentarioController extends AbstractController
         $comentario->setUsuario($usuario[0]);
 
         $comentario->setActivo(true);
+
+        $id_canal = $video[0]->getCanal()->getId();
+
+        $canal = $entityManager->getRepository(Video::class)
+            ->findOneBy(["id_canal" => $id_canal]);
+
+        $notificacionService->crearNotificacionComentario(
+            $entityManager, $canal, $usuario['id_usuario']);
 
         $entityManager->persist($comentario);
         $entityManager->flush();
