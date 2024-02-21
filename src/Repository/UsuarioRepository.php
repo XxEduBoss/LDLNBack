@@ -26,6 +26,7 @@ class UsuarioRepository extends ServiceEntityRepository
         return $this->findOneBy(['email' => $email]);
     }
 
+
     //Los videos de tu canal
     public function getUsuarioPorCanal(array $id_canal): array
     {
@@ -36,6 +37,19 @@ class UsuarioRepository extends ServiceEntityRepository
                     where c.id = :id_canal';
 
         $resultSet = $conn->executeQuery($sql, ['id_canal' => $idcanal]);
+        return $resultSet->fetchAllAssociative();
+    }
+
+
+    public function getEtiquetasPorUsuario(array $usuario): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idusuario = $usuario["id"];
+        $sql = 'select e.* from apollo.etiquetas e
+                    join apollo.etiquetas_usuario eu on eu.id_etiqueta = e.id
+                    where eu.id_usuario = :idusuario';
+
+        $resultSet = $conn->executeQuery($sql, ['idusuario' => $idusuario]);
         return $resultSet->fetchAllAssociative();
     }
 

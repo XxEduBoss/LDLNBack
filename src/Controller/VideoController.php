@@ -51,6 +51,7 @@ class VideoController extends AbstractController
            $canal->setNombreCanal($v->getCanal()->getNombreCanal());
            $canal->setTelefono($v->getCanal()->getTelefono());
            $canal->setFechaNacimiento($v->getCanal()->getFechaNacimiento());
+           $canal->setBanner($v->getCanal()->getBanner());
            $canal->setFechaCreacion($v->getCanal()->getFechaCreacion());
 
            $user = new UsuarioDTO();
@@ -58,6 +59,8 @@ class VideoController extends AbstractController
            $user->setUsername($v->getCanal()->getUsuario()->getUsername());
            $user->setPassword($v->getCanal()->getUsuario()->getPassword());
            $user->setRolUsuario($v->getCanal()->getUsuario()->getRolUsuario());
+           $user->setComunidadAutonoma($v->getCanal()->getUsuario()->getComunidadAutonoma());
+           $user->setFoto($v->getCanal()->getUsuario()->getFoto());
            $user->setActivo($v->getCanal()->getUsuario()->isActivo());
 
            $canal->setUsuario($user);
@@ -102,6 +105,7 @@ class VideoController extends AbstractController
         $canal->setTelefono($v->getCanal()->getTelefono());
         $canal->setFechaNacimiento($v->getCanal()->getFechaNacimiento());
         $canal->setFechaCreacion($v->getCanal()->getFechaCreacion());
+        $canal->setBanner($v->getCanal()->getBanner());
         $canal->setActivo($v->getCanal()->isActivo());
 
         $video->setCanal($canal);
@@ -111,6 +115,7 @@ class VideoController extends AbstractController
         $user->setUsername($v->getCanal()->getUsuario()->getUsername());
         $user->setPassword($v->getCanal()->getUsuario()->getPassword());
         $user->setComunidadAutonoma($v->getCanal()->getUsuario()->getComunidadAutonoma());
+        $user->setFoto($v->getCanal()->getUsuario()->getFoto());
         $user->setRolUsuario($v->getCanal()->getUsuario()->getRolUsuario());
         $user->setActivo($v->getCanal()->getUsuario()->isActivo());
 

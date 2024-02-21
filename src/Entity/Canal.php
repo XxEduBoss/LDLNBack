@@ -55,6 +55,9 @@ class Canal
     #[ORM\InverseJoinColumn(name: "id_etiqueta", referencedColumnName: "id")]
     private Collection $etiquetas;
 
+    #[ORM\Column(length: 10000)]
+    private ?string $banner = null;
+
     public function __construct()
     {
         $this->videos = new ArrayCollection();
@@ -240,6 +243,18 @@ class Canal
     public function setActivo(bool $activo): static
     {
         $this->activo = $activo;
+
+        return $this;
+    }
+
+    public function getBanner(): ?string
+    {
+        return $this->banner;
+    }
+
+    public function setBanner(string $banner): static
+    {
+        $this->banner = $banner;
 
         return $this;
     }
