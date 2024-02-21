@@ -100,6 +100,26 @@ class UsuarioController extends AbstractController
         $usuario->setEmail($data['email']);
         $usuario->setComunidadAutonoma($data['comunidad_autonoma']);
         $usuario->setFoto($data['foto']);
+        $etiquetasUsuario = $entityManager->getRepository(Usuario::class)->getEtiquetasPorUsuario(["id"=>$usuario->getId()]);
+
+
+        if (isset($etiquetasUsuario) && is_array($etiquetasUsuario)) {
+            foreach ($etiquetasUsuario as $etiquetaId) {
+                $etiquetasUsuario = $entityManager->getRepository(Etiquetas::class)->findOneBy(["descripcion"=>$etiquetaId] );
+                if ($etiquetasUsuario instanceof Etiquetas) {
+                    $usuario->removeEtiqueta($etiquetasUsuario);
+                }
+            }
+        }
+
+        if (isset($json['etiquetas']) && is_array($json['etiquetas'])) {
+            foreach ($json['etiquetas'] as $etiquetaId) {
+                $etiquetasUsuario = $entityManager->getRepository(Etiquetas::class)->findOneBy(["descripcion"=>$etiquetaId] );
+                if ($etiquetasUsuario instanceof Etiquetas) {
+                    $usuario->addEtiqueta($etiquetasUsuario);
+                }
+            }
+        }
 
 
         $entityManager->flush();

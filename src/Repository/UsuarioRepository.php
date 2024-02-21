@@ -26,6 +26,19 @@ class UsuarioRepository extends ServiceEntityRepository
         return $this->findOneBy(['email' => $email]);
     }
 
+    public function getEtiquetasPorUsuario(array $usuario): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idusuario = $usuario["id"];
+        $sql = 'select e.* from apollo.etiquetas e
+                    join apollo.etiquetas_usuario eu on eu.id_etiqueta = e.id
+                    where eu.id_usuario = :idusuario';
+
+        $resultSet = $conn->executeQuery($sql, ['idusuario' => $idusuario]);
+        return $resultSet->fetchAllAssociative();
+    }
+
+
 //    /**
 //     * @return Usuario[] Returns an array of Usuario objects
 //     */
