@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Dto\ComentarioDTO;
 use App\Dto\UsuarioDTO;
 use App\Dto\VideoDTO;
+use App\Entity\Canal;
 use App\Entity\Comentario;
 use App\Entity\Usuario;
 use App\Entity\Video;
@@ -89,11 +90,11 @@ class ComentarioController extends AbstractController
 
         $id_canal = $video[0]->getCanal()->getId();
 
-        $canal = $entityManager->getRepository(Video::class)
-            ->findOneBy(["id_canal" => $id_canal]);
+        $canal = $entityManager->getRepository(Canal::class)
+            ->findOneBy(["id" => $id_canal]);
 
         $notificacionService->crearNotificacionComentario(
-            $entityManager, $canal, $usuario['id_usuario']);
+            $entityManager, $canal, $usuario[0]);
 
         $entityManager->persist($comentario);
         $entityManager->flush();
