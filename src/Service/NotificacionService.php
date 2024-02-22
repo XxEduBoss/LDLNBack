@@ -76,4 +76,24 @@ class NotificacionService
 
     }
 
+    public function crearNotificacionSuscripcion(EntityManagerInterface $entityManager, Usuario $usuarioCanal, Usuario $usuario)
+    {
+
+        $nuevaNotificacion = new Notificacion();
+
+        $nombre_usuario = $usuario->getUsername();
+
+        $nuevaNotificacion -> setTexto("$nombre_usuario se ha suscrito a tu canal.");
+        $nuevaNotificacion -> setTipoNotificacion($entityManager->getRepository(TipoNotificacion::class)->findOneBy(["id"=>2]));
+        $nuevaNotificacion ->setFechaNotificacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
+
+        $nuevaNotificacion->setUsuario($usuarioCanal);
+
+        $nuevaNotificacion->setActivo(true);
+
+        $entityManager->persist($nuevaNotificacion);
+        $entityManager->flush();
+
+    }
+
 }

@@ -7,6 +7,7 @@ use App\Entity\Canal;
 use App\Entity\Suscripcion;
 use App\Entity\Usuario;
 use App\Repository\SuscripcionRepository;
+use App\Service\NotificacionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -54,20 +55,26 @@ class SuscripcionController extends AbstractController
 
     //Crear una suscripcion
     #[Route('/crear', name: "crear_suscripcion", methods: ["POST"])]
-    public function crearSuscripcion(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    public function crearSuscripcion(EntityManagerInterface $entityManager, Request $request, NotificacionService $notificacionService):JsonResponse
     {
         $json = json_decode($request->getContent(), true);
 
         $nuevaSuscripcion = new Suscripcion();
         $nuevaSuscripcion->setFechaSuscripcion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
 
-        $canal = $entityManager->getRepository(Canal::class)->findBy(["id"=>$json["canal"]]);
-        $nuevaSuscripcion->setCanal($canal[0]);
+        $canal = $entityManager->getRepository(Canal::class)->findOneBy(["id"=>$json["canal"]]);
+        $nuevaSuscripcion->setCanal($canal);
 
-        $usuario = $entityManager->getRepository(Usuario::class)->findBy(["id"=>$json["usuario"]]);
-        $nuevaSuscripcion->setUsuario($usuario[0]);
+        $usuario = $entityManager->getRepository(Usuario::class)->findOneBy(["id"=>$json["usuario"]]);
+        $nuevaSuscripcion->setUsuario($usuario);
 
         $nuevaSuscripcion->setActivo(true);
+
+        $usuarioReceptorArray = $entityManager->getRepository(Usuario::class)->getUsuarioPorCanal(["id_canal"=>$canal->getId()]);
+
+        $usuarioCanal = $entityManager->getRepository(Usuario::class)->findOneBy(["id" => $usuarioReceptorArray[0]['id']]);
+
+        $notificacionService->crearNotificacionSuscripcion($entityManager, $usuarioCanal, $usuario);
 
         $entityManager->persist($nuevaSuscripcion);
         $entityManager->flush();
