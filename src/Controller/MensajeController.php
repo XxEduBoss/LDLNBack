@@ -7,6 +7,7 @@ use App\Entity\Canal;
 use App\Entity\Mensaje;
 use App\Entity\Usuario;
 use App\Repository\MensajeRepository;
+use App\Service\NotificacionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,9 +20,6 @@ use function Symfony\Component\Clock\now;
 #[Route('/api/chat')]
 class MensajeController extends AbstractController
 {
-
-
-
 
     #[Route('', name: "mensaje_list", methods: ["POST"])]
     public function list(MensajeRepository $mensajeRepository, Request $request , EntityManagerInterface $entityManager): JsonResponse
@@ -67,7 +65,7 @@ class MensajeController extends AbstractController
 
     // Controller para enviar mensaje
     #[Route('/enviar', name: "enviar_mensaje", methods: ["POST"])]
-    public function enviarMensaje(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    public function enviarMensaje(EntityManagerInterface $entityManager, Request $request, NotificacionService $notificacionService):JsonResponse
     {
         $json = json_decode($request -> getContent(), true);
 
@@ -83,8 +81,11 @@ class MensajeController extends AbstractController
         $receptor = $entityManager->getRepository(Canal::class)->findBy(["id"=> $json["id_canal_receptor"]]);
         $nuevoMensaje->setCanalReceptor($receptor[0]);
 
+        $usuarioReceptorArray = $entityManager->getRepository(Usuario::class)->getUsuarioPorCanal(["id_canal"=>$receptor[0]->getId()]);
 
+        $usuarioReceptor = $entityManager->getRepository(Usuario::class)->findOneBy(["id" => $usuarioReceptorArray[0]['id']]);
 
+        $notificacionService->crearNotificacionMensaje($entityManager, $emisor[0], $usuarioReceptor);
 
         $entityManager->persist($nuevoMensaje);
         $entityManager->flush();

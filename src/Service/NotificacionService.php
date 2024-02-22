@@ -56,4 +56,24 @@ class NotificacionService
 
     }
 
+    public function crearNotificacionMensaje(EntityManagerInterface $entityManager, Canal $emisor, Usuario $receptor)
+    {
+
+        $nuevaNotificacion = new Notificacion();
+
+        $nombre_canal = $emisor->getNombreCanal();
+
+        $nuevaNotificacion -> setTexto("$nombre_canal te ha enviado un nuevo mensaje.");
+        $nuevaNotificacion -> setTipoNotificacion($entityManager->getRepository(TipoNotificacion::class)->findOneBy(["id"=>3]));
+        $nuevaNotificacion ->setFechaNotificacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
+
+        $nuevaNotificacion->setUsuario($receptor);
+
+        $nuevaNotificacion->setActivo(true);
+
+        $entityManager->persist($nuevaNotificacion);
+        $entityManager->flush();
+
+    }
+
 }
