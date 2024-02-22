@@ -6,6 +6,7 @@ use App\Entity\Canal;
 use App\Entity\Notificacion;
 use App\Entity\TipoNotificacion;
 use App\Entity\Usuario;
+use App\Entity\Video;
 use Doctrine\ORM\EntityManagerInterface;
 
 class NotificacionService
@@ -88,6 +89,36 @@ class NotificacionService
         $nuevaNotificacion ->setFechaNotificacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
 
         $nuevaNotificacion->setUsuario($usuarioCanal);
+
+        $nuevaNotificacion->setActivo(true);
+
+        $entityManager->persist($nuevaNotificacion);
+        $entityManager->flush();
+
+    }
+
+    public function crearNotificacionLike(EntityManagerInterface $entityManager, Video $video, Usuario $usuario)
+    {
+
+        $id_canal = $video->getCanal()->getId();
+
+        $canal = $entityManager->getRepository(Canal::class)
+            ->findOneBy(["id" => $id_canal]);
+
+        $nuevaNotificacion = new Notificacion();
+
+        $nombre_usuario = $usuario->getUsername();
+        $nombre_video = $video->getTitulo();
+
+        $nuevaNotificacion -> setTexto("$nombre_usuario le ha dado like a tu video $nombre_video.");
+        $nuevaNotificacion -> setTipoNotificacion($entityManager->getRepository(TipoNotificacion::class)->findOneBy(["id"=>2]));
+        $nuevaNotificacion ->setFechaNotificacion(new \DateTime('now', new \DateTimeZone('Europe/Madrid')));
+
+        $usuarioCanal = $entityManager->getRepository(Usuario::class)->getUsuarioPorCanal(["id_canal"=>$canal->getId()]);
+
+        $usuarioNuevo = $entityManager->getRepository(Usuario::class)->findOneBy(["id"=>$usuarioCanal['0']['id']]);
+
+        $nuevaNotificacion->setUsuario($usuarioNuevo);
 
         $nuevaNotificacion->setActivo(true);
 

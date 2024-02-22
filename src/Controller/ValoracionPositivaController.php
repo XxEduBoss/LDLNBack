@@ -3,11 +3,12 @@
 namespace App\Controller;
 
 use App\Dto\ValoracionPositivaDTO;
-use App\Entity\Suscripcion;
+use App\Entity\Canal;
 use App\Entity\Usuario;
 use App\Entity\ValoracionPositiva;
 use App\Entity\Video;
 use App\Repository\ValoracionPositivaRepository;
+use App\Service\NotificacionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -51,7 +52,7 @@ class ValoracionPositivaController extends AbstractController
 
     //Crear valoraciones positivas
     #[Route('/crear', name: "crear_valoracion_positiva", methods: ["POST"])]
-    public function crearCanal(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    public function crearCanal(EntityManagerInterface $entityManager, Request $request, NotificacionService $notificacionService):JsonResponse
     {
         $json = json_decode($request->getContent(), true);
 
@@ -64,6 +65,7 @@ class ValoracionPositivaController extends AbstractController
         $video = $entityManager->getRepository(Video::class)->findBy(["id"=>$json["video"]["id"]]);
         $nuevaValoracionPositiva->setVideo($video[0]);
 
+        $notificacionService->crearNotificacionLike($entityManager, $video[0], $usuario[0]);
 
         $entityManager->persist($nuevaValoracionPositiva);
         $entityManager->flush();
