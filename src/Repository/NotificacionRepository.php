@@ -33,4 +33,16 @@ class NotificacionRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+    public function getNotificacionesNuevas(array $id_usuario): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idUsuario = $id_usuario["id_usuario"];
+        $sql = 'select count(n.*) from apollo.notificacion n
+                    where n.id_usuario = :idUsuario 
+                    and activo = true';
+
+        $resultSet = $conn->executeQuery($sql, ['idUsuario' => $idUsuario]);
+        return $resultSet->fetchAllAssociative();
+    }
+
 }

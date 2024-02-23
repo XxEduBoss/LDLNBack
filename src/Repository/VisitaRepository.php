@@ -34,4 +34,19 @@ class VisitaRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+    public function getHistorialUsuario(array $id_usuario): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $id_usuario = $id_usuario["id_usuario"];
+        $sql = 'select v2.*, max(v.fecha_visita) as fecha_visita
+                        from apollo.visita v
+                        join apollo.video v2 on v2.id = v.id_video
+                        where v.id_usuario = :id_usuario
+                        group by v.id_video, v.id_usuario, v2.id 
+                        order by max(v.fecha_visita) desc';
+
+        $resultSet = $conn->executeQuery($sql, ['id_usuario' => $id_usuario]);
+        return $resultSet->fetchAllAssociative();
+    }
+
 }

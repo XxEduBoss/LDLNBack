@@ -14,6 +14,7 @@ drop table if exists suscripcion;
 drop table if exists video;
 drop table if exists tipo_video;
 drop table if exists canal;
+drop table if exists historial_busqueda;
 drop table if exists usuario;
 drop table if exists rol_usuario;
 
@@ -37,6 +38,16 @@ create table usuario (
                          activo bool default true not null,
                          primary key (id),
                          constraint fk_usuario_rol foreign key (id_rol_usuario) references rol_usuario(id)
+);
+
+create table historial_busqueda (
+                         id serial,
+                         texto varchar(100000) unique not null,
+                         fecha_busqueda timestamp(6) not null,
+                         id_usuario int not null,
+                         activo bool default true not null,
+                         primary key (id),
+                         constraint fk_usuario_busqueda foreign key (id_usuario) references usuario(id)
 );
 
 create table canal(
