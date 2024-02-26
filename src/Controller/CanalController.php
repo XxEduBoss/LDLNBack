@@ -236,7 +236,7 @@ class CanalController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $usuarioCanal = $entityManager->getRepository(Canal::class)->getCanalPorUsuario(["id"=>$data["id"]]);
 
-        return $this->json($usuarioCanal[0], Response::HTTP_OK);
+        return $this->json($usuarioCanal, Response::HTTP_OK);
     }
 
     #[Route('/porusername', name: "get_canal_por_username", methods: ["POST"])]
