@@ -31,6 +31,18 @@ class SuscripcionRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+    public function getSuscriptoresPorCanal(array $id): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idCanal = $id["id"];
+        $sql = 'select u.* from apollo.usuario u 
+                join apollo.suscripcion s on u.id = s.id_usuario
+                where s.id_canal = :id';
+
+        $resultSet = $conn->executeQuery($sql, ['id' => $idCanal]);
+        return $resultSet->fetchAllAssociative();
+    }
+
 
 
 }

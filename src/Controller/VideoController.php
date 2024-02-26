@@ -237,7 +237,7 @@ class VideoController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $listaVideos = $entityManager->getRepository(Video::class)->getVideosSuscritos(["id"=> $data["id"]]);
 
-        return $this->json([$listaVideos], Response::HTTP_OK);
+        return $this->json($listaVideos, Response::HTTP_OK);
     }
 
     //Los videos de por etiquetas
@@ -275,10 +275,21 @@ class VideoController extends AbstractController
     public function getVideosPorCanalEtiquetasController(EntityManagerInterface $entityManager, Request $request):JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $listaVideos = $entityManager->getRepository(Video::class)->getVideosTematicaCanal(["idCanal"=> $data["id"], "etiqueta"=>$data["etiqueta"]]);
+        $listaVideos = $entityManager->getRepository(Video::class)->getVideosTematicaCanal(["idCanal"=> $data["id"]]);
 
         return $this->json($listaVideos, Response::HTTP_OK);
     }
+
+    #[Route('/videobuscador', name: "get_videos_buscador", methods: ["POST"])]
+    public function VideoBuscadorController(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaVideos = $entityManager->getRepository(Video::class)->getVideosBuscador(["texto"=> $data["texto"]]);
+
+        return $this->json($listaVideos, Response::HTTP_OK);
+    }
+
+
 
 
 

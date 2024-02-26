@@ -88,14 +88,25 @@ class VideoRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $id_canal = $datos["idCanal"];
-        $etiquetaCanal = $datos["etiqueta"];
-        $sql = 'select v.* from apollo.canal c
+        $sql = 'select v.*, e.descripcion from apollo.canal c
                 join apollo.video v on c.id = v.id_canal
                 join apollo.etiquetas_video ev on v.id = ev.id_video
                 join apollo.etiquetas e on e.id = ev.id_etiqueta
-                    where v.id_canal = :id and e.descripcion = :etiquetaCanal;';
+                    where v.id_canal = :id';
 
-        $resultSet = $conn->executeQuery($sql, ['id' => $id_canal, 'etiquetaCanal' => $etiquetaCanal]);
+        $resultSet = $conn->executeQuery($sql, ['id' => $id_canal]);
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function getVideosBuscador(array $datos): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $text = '%'.$datos["texto"].'%';
+        $sql = 'select v.*from apollo.video v 
+                where v.titulo ilike :texto';
+
+
+        $resultSet = $conn->executeQuery($sql, ['texto' => $text]);
         return $resultSet->fetchAllAssociative();
     }
 

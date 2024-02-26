@@ -6,6 +6,7 @@ use App\Dto\CanalDTO;
 use App\Entity\Canal;
 use App\Entity\Suscripcion;
 use App\Entity\Usuario;
+use App\Entity\Video;
 use App\Repository\SuscripcionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -130,6 +131,16 @@ class SuscripcionController extends AbstractController
                 'activo' => $suscripcion[0]['activo'],
             ]);
         }
+    }
+
+    //Los videos de tus canales suscritos
+    #[Route('/suscriptoresporcanal', name: "suscriptores_por_canal", methods: ["POST"])]
+    public function SuscriptoresPorCanal(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaSuscriptores = $entityManager->getRepository(Suscripcion::class)->getSuscriptoresPorCanal(["id"=> $data["id"]]);
+
+        return $this->json($listaSuscriptores, Response::HTTP_OK);
     }
 
 

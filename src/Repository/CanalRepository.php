@@ -118,4 +118,15 @@ class CanalRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+    public function getCanalBuscador(array $datos): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $text = '%'.$datos["texto"].'%';
+        $sql = 'select c.*from apollo.canal c 
+                where c.nombre_canal ilike :texto group by c.id;';
+
+        $resultSet = $conn->executeQuery($sql, ['texto' => $text]);
+        return $resultSet->fetchAllAssociative();
+    }
+
 }

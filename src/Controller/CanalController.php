@@ -7,6 +7,7 @@ use App\Dto\UsuarioDTO;
 use App\Entity\Canal;
 use App\Entity\Etiquetas;
 use App\Entity\Usuario;
+use App\Entity\Video;
 use App\Repository\CanalRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -251,6 +252,15 @@ class CanalController extends AbstractController
         $canalUsername = $entityManager->getRepository(Canal::class)->getCanalPorUsername(["username"=>$data["username"]]);
 
         return $this->json($canalUsername[0], Response::HTTP_OK);
+    }
+
+    #[Route('/canalbuscador', name: "get_canal_buscador", methods: ["POST"])]
+    public function CanalBuscadorController(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaCanales = $entityManager->getRepository(Canal::class)->getCanalBuscador(["texto"=> $data["texto"]]);
+
+        return $this->json($listaCanales, Response::HTTP_OK);
     }
 
 
