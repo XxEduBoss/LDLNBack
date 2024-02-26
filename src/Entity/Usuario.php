@@ -73,6 +73,9 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'id_usuario', targetEntity: ValoracionNegativa::class, orphanRemoval: true)]
     private Collection $valoracionesNegativas;
 
+    #[ORM\OneToMany(mappedBy: 'id_usuario', targetEntity: HistorialBusqueda::class, orphanRemoval: true)]
+    private Collection $historialBusqueda;
+
     #[ORM\Column(length: 10000)]
     private ?string $foto = null;
 
@@ -88,6 +91,7 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
         $this->comentarios = new ArrayCollection();
         $this->valoracionesPositivas = new ArrayCollection();
         $this->valoracionesNegativas = new ArrayCollection();
+        $this->historialBusqueda = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -478,6 +482,37 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Usuario>
+     */
+    public function getHistorialBusqueda(): Collection
+    {
+        return $this->historialBusqueda;
+    }
+
+    public function addHistorialBusqueda(HistorialBusqueda $historialBusqueda): static
+    {
+        if (!$this->historialBusqueda->contains($historialBusqueda)) {
+            $this->historialBusqueda->add($historialBusqueda);
+            $historialBusqueda->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistorialBusqueda(HistorialBusqueda $historialBusqueda): static
+    {
+        if ($this->historialBusqueda->removeElement($historialBusqueda)) {
+            // set the owning side to null (unless already changed)
+            if ($historialBusqueda->getUsuario() === $this) {
+                $historialBusqueda->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getRoles(): array
     {
         $roles = [];

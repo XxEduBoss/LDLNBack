@@ -115,4 +115,16 @@ class VisitaController extends AbstractController
 
     }
 
+    #[Route('/historial', name: 'historial_por_usuario', methods: ['POST'])]
+    public function historialUsuario(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    {
+
+        $data = json_decode($request->getContent(), true);
+
+        $historial = $entityManager->getRepository(Visita::class)->getHistorialUsuario(["id_usuario"=>$data["id_usuario"]]);
+
+        return $this->json($historial);
+
+    }
+
 }

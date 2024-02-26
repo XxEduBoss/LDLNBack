@@ -87,7 +87,7 @@ class NotificacionController extends AbstractController
         $nuevaNotificacion = new Notificacion();
 
         $nuevaNotificacion -> setTexto($json["texto"]);
-        $nuevaNotificacion -> setTipo($json["tipo"]);
+        $nuevaNotificacion -> setTipoNotificacion($json["tipo"]);
         $nuevaNotificacion ->setFechaNotificacion($json["fecha_notificacion"]);
 
         $entityManager->flush();
@@ -113,9 +113,43 @@ class NotificacionController extends AbstractController
 
         $json = json_decode($request->getContent(), true );
 
-        $listaNotificaicones = $entityManager->getRepository(Notificacion::class)->getNotificacionesPorUsuario(["id_usuario"=>$json['id']]);
+        $listaNotificacicones = $entityManager->getRepository(Notificacion::class)->getNotificacionesPorUsuario(["id_usuario"=>$json['id']]);
 
-        return $this->json($listaNotificaicones, Response::HTTP_OK);
+        return $this->json($listaNotificacicones, Response::HTTP_OK);
+
+    }
+
+    #[Route('/nuevas', name: "notificaciones_nuevas", methods: ["POST"])]
+    public function notificacionesNuevas(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+
+        $json = json_decode($request->getContent(), true );
+
+        $notificacionesNuevas = $entityManager->getRepository(Notificacion::class)->getNotificacionesNuevas(["id_usuario"=>$json['id']]);
+
+        return $this->json($notificacionesNuevas, Response::HTTP_OK);
+
+    }
+
+    #[Route('/alerta', name: "notificaciones_quitar_alerta", methods: ["POST"])]
+    public function quitarAlerta(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+
+        $json = json_decode($request->getContent(), true );
+
+        $listaNotificacicones = $entityManager->getRepository(Notificacion::class)->getNotificacionesPorUsuario(["id_usuario"=>$json['id']]);
+
+        foreach ($listaNotificacicones as $noti){
+
+            $notificacion = $entityManager->getRepository(Notificacion::class)->findOneBy(["id"=>$noti['id']]);
+
+            $notificacion->setActivo(false);
+
+        }
+
+        $entityManager->flush();
+
+        return $this->json(['message' => 'Notificaciones vistas'], Response::HTTP_OK);
 
     }
 
