@@ -12,6 +12,8 @@ class UsuarioDTO
     private ?int $rol_usuario = null;
     private ?string $comunidad_autonoma = null;
     private ?int $activo = null;
+    private ?string $foto = null;
+
 
     public function getId(): ?int
     {
@@ -42,6 +44,7 @@ class UsuarioDTO
     {
         $this->password = $password;
     }
+
 
     public function getRolUsuario(): ?int
     {
@@ -82,6 +85,15 @@ class UsuarioDTO
     public function setComunidadAutonoma(?string $comunidad_autonoma): void
     {
         $this->comunidad_autonoma = $comunidad_autonoma;
+    }
+    public function getFoto(): ?string
+    {
+        return $this->foto;
+    }
+
+    public function setFoto(?string $foto): void
+    {
+        $this->foto = $foto;
     }
 
 }

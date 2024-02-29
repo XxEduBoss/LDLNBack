@@ -21,28 +21,16 @@ class NotificacionRepository extends ServiceEntityRepository
         parent::__construct($registry, Notificacion::class);
     }
 
-//    /**
-//     * @return Notificacion[] Returns an array of Notificacion objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('n')
-//            ->andWhere('n.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('n.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?Notificacion
-//    {
-//        return $this->createQueryBuilder('n')
-//            ->andWhere('n.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function getNotificacionesPorUsuario(array $id_usuario): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $idUsuario = $id_usuario["id_usuario"];
+        $sql = 'select n.* from apollo.notificacion n
+                    where n.id_usuario = :idUsuario';
+
+        $resultSet = $conn->executeQuery($sql, ['idUsuario' => $idUsuario]);
+        return $resultSet->fetchAllAssociative();
+    }
+
 }

@@ -51,14 +51,14 @@ class Notificacion
         return $this;
     }
 
-    public function getFechaNotificacion(): ?string
+    public function getFechaNotificacion(): ?DateTimeInterface
     {
-        return $this->fecha_notificacion->format('d/m/Y H:i:s');
+        return $this->fecha_notificacion;
     }
 
-    public function setFechaNotificacion(String $fecha_notificacion): static
+    public function setFechaNotificacion(DateTimeInterface $fecha_notificacion): static
     {
-        $this->fecha_notificacion = \DateTime::createFromFormat('d/m/Y H:i:s', $fecha_notificacion);
+        $this->fecha_notificacion = $fecha_notificacion;
 
         return $this;
     }

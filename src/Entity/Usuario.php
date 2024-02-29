@@ -33,6 +33,7 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'activo')]
     private ?bool $activo = true;
 
+
     #[ORM\Column(name: 'email')]
     private ?string $email = null;
 
@@ -72,6 +73,9 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'id_usuario', targetEntity: ValoracionNegativa::class, orphanRemoval: true)]
     private Collection $valoracionesNegativas;
 
+    #[ORM\Column(length: 10000)]
+    private ?string $foto = null;
+
     public function __construct()
     {
         $this->etiquetas = new ArrayCollection();
@@ -102,6 +106,7 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
 
     public function getPassword(): ?string
     {
@@ -488,6 +493,18 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this-> getUsername();
+    }
+
+    public function getFoto(): ?string
+    {
+        return $this->foto;
+    }
+
+    public function setFoto(string $foto): static
+    {
+        $this->foto = $foto;
+
+        return $this;
     }
 
 }
