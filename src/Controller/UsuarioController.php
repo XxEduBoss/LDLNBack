@@ -50,6 +50,7 @@ class UsuarioController extends AbstractController
         $user->setUsername($usuario->getUsername());
         $user->setPassword($usuario->getPassword());
         $user->setRolUsuario($usuario->getRolUsuario());
+        $user->setEmail($usuario->getEmail());
         $user->setComunidadAutonoma($usuario->getComunidadAutonoma());
         $user->setFoto($usuario->getFoto());
         $user->setActivo($usuario->isActivo());

@@ -78,7 +78,8 @@ class VideoRepository extends ServiceEntityRepository
         $idcanal = $id_canal["id_canal"];
         $sql = 'select v.* from apollo.canal c
                     join apollo.video v on c.id = v.id_canal
-                    where v.id_canal = :id_canal';
+                    where v.id_canal = :id_canal
+                    and v.activo = true';
 
         $resultSet = $conn->executeQuery($sql, ['id_canal' => $idcanal]);
         return $resultSet->fetchAllAssociative();

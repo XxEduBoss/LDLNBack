@@ -117,4 +117,16 @@ class ValoracionPositivaController extends AbstractController
             ]);
         }
     }
+
+    #[Route('/porvideo', name: "likes_por_video", methods: ["POST"])]
+    public function porVideo(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $json = json_decode($request->getContent(), true);
+
+        $likes = $entityManager->getRepository(ValoracionPositiva::class)->getLikesPorVideo(["id_video"=>$json["id"]]);
+
+        return $this->json($likes);
+
+    }
+
 }
