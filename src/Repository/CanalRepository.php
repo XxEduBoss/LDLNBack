@@ -90,7 +90,7 @@ class CanalRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = 'select c.* from apollo.canal c
-                    where c.id = :id';
+                    where c.id_usuario = :id';
 
         $resultSet = $conn->executeQuery($sql, $id);
         return $resultSet->fetchAllAssociative();

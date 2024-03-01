@@ -22,7 +22,7 @@ class MensajeController extends AbstractController
 {
 
     #[Route('', name: "mensaje_list", methods: ["POST"])]
-    public function list(MensajeRepository $mensajeRepository, Request $request , EntityManagerInterface $entityManager): JsonResponse
+    public function mensajeList(MensajeRepository $mensajeRepository, Request $request , EntityManagerInterface $entityManager): JsonResponse
     {
 
         $data = json_decode($request->getContent(), true);

@@ -121,7 +121,7 @@ class VisitaController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        $historial = $entityManager->getRepository(Visita::class)->getHistorialUsuario(["id_usuario"=>$data["id_usuario"]]);
+        $historial = $entityManager->getRepository(Visita::class)->getHistorialUsuario(["id_usuario"=>$data["id"]]);
 
         return $this->json($historial);
 
