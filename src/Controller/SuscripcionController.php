@@ -155,7 +155,7 @@ class SuscripcionController extends AbstractController
     public function CanalesSuscritosUsuario(EntityManagerInterface $entityManager, Request $request):JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $listaCanales = $entityManager->getRepository(Suscripcion::class)->getCanalaesSuscritosPorCanal(["id_usuario"=> $data["id_usuario"]]);
+        $listaCanales = $entityManager->getRepository(Suscripcion::class)->getCanalaesSuscritosPorCanal(["id_usuario"=> $data["id"]]);
 
         return $this->json($listaCanales, Response::HTTP_OK);
     }

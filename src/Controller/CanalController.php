@@ -213,7 +213,7 @@ class CanalController extends AbstractController
     public function EtiquetassPorCanal(EntityManagerInterface $entityManager, Request $request):JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $etiquetasCanal = $entityManager->getRepository(Canal::class)->getEtiquetasPorCanal(["id"=>$data['id']]);
+        $etiquetasCanal = $entityManager->getRepository(Canal::class)->getEtiquetasPorCanal(["idCanal"=>$data['id']]);
 
         return $this->json($etiquetasCanal, Response::HTTP_OK);
     }

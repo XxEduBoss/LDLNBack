@@ -78,7 +78,7 @@ class VideoController extends AbstractController
        return $this->json($listaVideosDTOs);
     }
 
-    #[Route('/get/{id}', name: "video_by_id", methods: ["GET"])]
+    #[Route('/{id}', name: "video_by_id", methods: ["GET"])]
     public function getById(EtiquetasRepository $etiquetasRepository, Video $v):JsonResponse
     {
 
@@ -281,16 +281,6 @@ class VideoController extends AbstractController
         return $this->json($listaVideos, Response::HTTP_OK);
     }
 
-    //Los videos en funcion de las etiquetas del video y del id del canal
-    #[Route('/poretiquetacanal', name: "get_videos_canal_etiquetas", methods: ["POST"])]
-    public function getVideosPorCanalEtiquetasController(EntityManagerInterface $entityManager, Request $request):JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-        $listaVideos = $entityManager->getRepository(Video::class)->getVideosTematicaCanal(["idCanal"=> $data["id"]]);
-
-        return $this->json($listaVideos, Response::HTTP_OK);
-    }
-
     #[Route('/videobuscador', name: "get_videos_buscador", methods: ["POST"])]
     public function VideoBuscadorController(EntityManagerInterface $entityManager, Request $request):JsonResponse
     {
@@ -307,13 +297,13 @@ class VideoController extends AbstractController
 
         $listaVideosEtiquetasCanal = [];
 
-        $listaEtiquetasCanal = $canalRepository->getEtiquetasPorCanal(["idCanal"=> $data["idCanal"]]);
+        $listaEtiquetasCanal = $canalRepository->getEtiquetasPorCanal(["idCanal"=> $data["id"]]);
 
         foreach ($listaEtiquetasCanal as $etiquetas){
 
             $videosEtiquetas = new VideoEtiquetaCanal();
             $videosEtiquetas->setEtiqueta($etiquetas["descripcion"]);
-            $videos = $videoRepository->getVideosTematicaCanal(["idCanal"=> $data["idCanal"], "etiqueta"=>$etiquetas["descripcion"]]);
+            $videos = $videoRepository->getVideosTematicaCanal(["idCanal"=> $data["id"], "etiqueta"=>$etiquetas["descripcion"]]);
             $videosEtiquetas->agregarVideos($videos);
             $listaVideosEtiquetasCanal[] = $videosEtiquetas;
         }
@@ -324,18 +314,13 @@ class VideoController extends AbstractController
     }
 
 
-    #[Route('/getEtiquetasCanal', name: "get_videos_etiquetas_canal", methods: ["POST"])]
-    public function getVideoEtiquetasCanal(VideoRepository $videoRepository):JsonResponse
-    {
-
-        $listaVideosVirales = $videoRepository->getVideosVirales();
-
-        return $this->json($listaVideosVirales, Response::HTTP_OK);
-    }
-
-
-
-
-
+//    #[Route('/getEtiquetasCanal', name: "get_videos_etiquetas_canal", methods: ["POST"])]
+//    public function getVideoEtiquetasCanal(VideoRepository $videoRepository):JsonResponse
+//    {
+//
+//        $listaVideosVirales = $videoRepository->getVideosVirales();
+//
+//        return $this->json($listaVideosVirales, Response::HTTP_OK);
+//    }
 
 }
