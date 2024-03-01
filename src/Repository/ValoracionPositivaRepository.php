@@ -56,16 +56,16 @@ class ValoracionPositivaRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
-    public function getLikesPorVideo(array $id_video): array
+    //Los Likes de un video
+    public function getLikesPorVideo(array $id): array
     {
         $conn = $this->getEntityManager()->getConnection();
+        $id_video = $id["id"];
+        $sql = 'select v.* from apollo.valoracion_positiva v
+                    join apollo.video v2 on v2.id = v.id_video
+                    where v2.id = :id';
 
-        $sql = 'SELECT count(v.*) as likes
-                FROM apollo.valoracion_positiva v 
-                WHERE v.id_video = :id_video';
-
-        $resultSet = $conn->executeQuery($sql, ['id_video' => $id_video["id_video"]]);
+        $resultSet = $conn->executeQuery($sql, ['id' => $id_video]);
         return $resultSet->fetchAllAssociative();
     }
-
 }

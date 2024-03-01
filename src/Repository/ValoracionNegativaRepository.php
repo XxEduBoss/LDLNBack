@@ -59,4 +59,17 @@ class ValoracionNegativaRepository extends ServiceEntityRepository
         $resultSet = $conn->executeQuery($sql, $params);
         return $resultSet->fetchAllAssociative();
     }
+
+    //Los Dislikes de un video
+    public function getDislikesPorVideo(array $id): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $id_video = $id["id"];
+        $sql = 'select v.* from apollo.valoracion_negativa v
+                    join apollo.video v2 on v2.id = v.id_video
+                    where v2.id = :id';
+
+        $resultSet = $conn->executeQuery($sql, ['id' => $id_video]);
+        return $resultSet->fetchAllAssociative();
+    }
 }

@@ -83,10 +83,10 @@ class SuscripcionController extends AbstractController
     }
 
     //Desactivar suscripcion
-    #[Route('/borrar/{id}', name: "suscripcion_desactivar", methods: ["PUT"])]
+    #[Route('/borrar/{id}', name: "suscripcion_desactivar", methods: ["DELETE"])]
     public function deletedById(EntityManagerInterface $entityManager, Suscripcion $suscripcion):JsonResponse
     {
-        $suscripcion-> setActivo(false);
+        $entityManager->remove($suscripcion);
         $entityManager->flush();
 
         return $this->json(['message' => 'Suscripcion desactivada'], Response::HTTP_OK);
@@ -115,8 +115,8 @@ class SuscripcionController extends AbstractController
         }
 
         $id_usuario = $data['usuario'];
-        $canal = $data['canal'];
-        $id_canal = $canal['id'];
+        //$canal = $data['canal'];
+        $id_canal = $data['canal'];
 
         $suscripcion = $entityManager->getRepository(Suscripcion::class)->getSuscripcionByIdUsuarioRepository([
             "id_usuario" => $id_usuario,

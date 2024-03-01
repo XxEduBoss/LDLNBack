@@ -115,4 +115,16 @@ class ValoracionNegativaController extends AbstractController
             ]);
         }
     }
+
+    #[Route('/porvideo', name: 'dislike_por_video', methods: ['POST'])]
+    public function porVideo(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    {
+
+        $data = json_decode($request->getContent(), true);
+
+        $listaDislikes = $entityManager->getRepository(ValoracionNegativa::class)->getDislikesPorVideo(["id"=>$data]);
+
+        return $this->json($listaDislikes);
+
+    }
 }
