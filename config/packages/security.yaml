@@ -49,6 +49,7 @@ security:
         - { path: ^/api,       roles: PUBLIC_ACCESS }
         - { path: ^/api/valoracion_positiva,       roles: PUBLIC_ACCESS }
         - { path: ^/api/valoracion_negativa,       roles: PUBLIC_ACCESS }
+        - { path: ^/api/reset_password,       roles: PUBLIC_ACCESS }
 
 
 when@test:

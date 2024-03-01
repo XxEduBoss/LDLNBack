@@ -1,3 +1,4 @@
+drop table if exists reset_password;
 drop table if exists etiquetas_video;
 drop table if exists etiquetas_canal;
 drop table if exists etiquetas_usuario;
@@ -231,6 +232,16 @@ create table etiquetas_usuario(
                                   id_usuario int not null,
                                   constraint fk_etiquetas_usuario_etiquetas foreign key (id_etiqueta) references etiquetas(id),
                                   constraint fk_etiquetas_usuario_usuario foreign key (id_usuario) references usuario(id)
+);
+
+create table reset_password_request(
+                               id serial,
+                               id_usuario int not null,
+                               selector varchar(20) not null,
+                               hashedToken varchar(100) not null,
+                               requested_at timestamp(6) not null,
+                               expires_at timestamp(6) not null,
+    constraint fk_reset_password_usuario foreign key (id_usuario) references usuario(id)
 );
 
 
