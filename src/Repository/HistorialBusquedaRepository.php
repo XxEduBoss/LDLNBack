@@ -14,6 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method HistorialBusqueda[]    findAll()
  * @method HistorialBusqueda[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
+
 class HistorialBusquedaRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -21,28 +22,15 @@ class HistorialBusquedaRepository extends ServiceEntityRepository
         parent::__construct($registry, HistorialBusqueda::class);
     }
 
-//    /**
-//     * @return HistorialBusqueda[] Returns an array of HistorialBusqueda objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('h')
-//            ->andWhere('h.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('h.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //Listar busquedas por id_usuario
+    public function getHistorialPorId(array $id): array{
+        $conn = $this->getEntityManager()->getConnection();
+        $idTipoCategoria = $id["id"];
+        $sql = 'select h.* from apollo.historial_busqueda h where h.id_usuario = :id;';
 
-//    public function findOneBySomeField($value): ?HistorialBusqueda
-//    {
-//        return $this->createQueryBuilder('h')
-//            ->andWhere('h.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $resultSet = $conn->executeQuery($sql, ['id' => $idTipoCategoria]);
+        return $resultSet->fetchAllAssociative();
+    }
+
+
 }

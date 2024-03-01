@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HistorialBusquedaRepository::class)]
+#[ORM\Table(name: 'historial_busqueda',schema: 'apollo')]
 class HistorialBusqueda
 {
     #[ORM\Id]

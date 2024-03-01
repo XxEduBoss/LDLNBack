@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Dto\CanalDTO;
 use App\Dto\UsuarioDTO;
 use App\Dto\VideoDTO;
+use App\Dto\VideoEtiquetaCanal;
 use App\Entity\Canal;
 use App\Entity\Etiquetas;
 use App\Entity\EtiquetasVideo;
@@ -12,6 +13,7 @@ use App\Entity\TipoVideo;
 use App\Entity\Usuario;
 use App\Entity\Video;
 use App\Controller\NotificacionController;
+use App\Repository\CanalRepository;
 use App\Repository\EtiquetasRepository;
 use App\Repository\VideoRepository;
 use App\Service\NotificacionService;
@@ -76,7 +78,7 @@ class VideoController extends AbstractController
        return $this->json($listaVideosDTOs);
     }
 
-    #[Route('/{id}', name: "video_by_id", methods: ["GET"])]
+    #[Route('/get/{id}', name: "video_by_id", methods: ["GET"])]
     public function getById(EtiquetasRepository $etiquetasRepository, Video $v):JsonResponse
     {
 
@@ -284,10 +286,53 @@ class VideoController extends AbstractController
     public function getVideosPorCanalEtiquetasController(EntityManagerInterface $entityManager, Request $request):JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $listaVideos = $entityManager->getRepository(Video::class)->getVideosTematicaCanal(["idCanal"=> $data["id"], "etiqueta"=>$data["etiqueta"]]);
+        $listaVideos = $entityManager->getRepository(Video::class)->getVideosTematicaCanal(["idCanal"=> $data["id"]]);
 
         return $this->json($listaVideos, Response::HTTP_OK);
     }
+
+    #[Route('/videobuscador', name: "get_videos_buscador", methods: ["POST"])]
+    public function VideoBuscadorController(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaVideos = $entityManager->getRepository(Video::class)->getVideosBuscador(["texto"=> $data["texto"]]);
+
+        return $this->json($listaVideos, Response::HTTP_OK);
+    }
+
+    #[Route('/videosEtiquetas2', name: "get_videos_etiquetas_canal2", methods: ["POST"])]
+    public function VideosEtiquetasCanal4(EntityManagerInterface $entityManager, Request $request, VideoRepository $videoRepository, CanalRepository $canalRepository):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $listaVideosEtiquetasCanal = [];
+
+        $listaEtiquetasCanal = $canalRepository->getEtiquetasPorCanal(["idCanal"=> $data["idCanal"]]);
+
+        foreach ($listaEtiquetasCanal as $etiquetas){
+
+            $videosEtiquetas = new VideoEtiquetaCanal();
+            $videosEtiquetas->setEtiqueta($etiquetas["descripcion"]);
+            $videos = $videoRepository->getVideosTematicaCanal(["idCanal"=> $data["idCanal"], "etiqueta"=>$etiquetas["descripcion"]]);
+            $videosEtiquetas->agregarVideos($videos);
+            $listaVideosEtiquetasCanal[] = $videosEtiquetas;
+        }
+
+
+
+        return $this->json($listaVideosEtiquetasCanal, Response::HTTP_OK);
+    }
+
+
+    #[Route('/getEtiquetasCanal', name: "get_videos_etiquetas_canal", methods: ["POST"])]
+    public function getVideoEtiquetasCanal(VideoRepository $videoRepository):JsonResponse
+    {
+
+        $listaVideosVirales = $videoRepository->getVideosVirales();
+
+        return $this->json($listaVideosVirales, Response::HTTP_OK);
+    }
+
 
 
 

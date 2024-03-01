@@ -48,13 +48,13 @@ class CanalRepository extends ServiceEntityRepository
     public function getEtiquetasPorCanal(array $id): array
     {
         $conn = $this->getEntityManager()->getConnection();
-        $idTipoCategoria = $id["id"];
+        $idTipoCategoria = $id["idCanal"];
         $sql = 'select e.descripcion from apollo.canal c
                 join apollo.etiquetas_canal ec on c.id = ec.id_canal
                 join apollo.etiquetas e on ec.id_etiqueta = e.id
-                     where c.id = :id';
+                     where c.id = :idCanal';
 
-        $resultSet = $conn->executeQuery($sql, ['id' => $idTipoCategoria]);
+        $resultSet = $conn->executeQuery($sql, ['idCanal' => $idTipoCategoria]);
         return $resultSet->fetchAllAssociative();
     }
 
@@ -115,6 +115,17 @@ class CanalRepository extends ServiceEntityRepository
                     where s.id_canal = :idCanal';
 
         $resultSet = $conn->executeQuery($sql, ['idCanal' => $idCanal]);
+        return $resultSet->fetchAllAssociative();
+    }
+
+    public function getCanalBuscador(array $datos): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $text = '%'.$datos["texto"].'%';
+        $sql = 'select c.*from apollo.canal c 
+                where c.nombre_canal ilike :texto group by c.id;';
+
+        $resultSet = $conn->executeQuery($sql, ['texto' => $text]);
         return $resultSet->fetchAllAssociative();
     }
 
