@@ -7,6 +7,7 @@ use App\Entity\Canal;
 use App\Entity\Usuario;
 use App\Entity\ValoracionPositiva;
 use App\Entity\Video;
+use App\Entity\Visita;
 use App\Repository\ValoracionPositivaRepository;
 use App\Service\NotificacionService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -116,5 +117,17 @@ class ValoracionPositivaController extends AbstractController
                 'id_video' => $like[0]['id_video'],
             ]);
         }
+    }
+
+    #[Route('/porvideo', name: 'like_por_video', methods: ['POST'])]
+    public function porVideo(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    {
+
+        $data = json_decode($request->getContent(), true);
+
+        $listaLikes = $entityManager->getRepository(ValoracionPositiva::class)->getLikesPorVideo(["id"=>$data]);
+
+        return $this->json($listaLikes);
+
     }
 }
