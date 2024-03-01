@@ -84,17 +84,20 @@ class VideoRepository extends ServiceEntityRepository
         return $resultSet->fetchAllAssociative();
     }
 
+
+    //Nos saca los videos en función de una etiqueta y el id_canal
     public function getVideosTematicaCanal(array $datos): array
     {
         $conn = $this->getEntityManager()->getConnection();
         $id_canal = $datos["idCanal"];
-        $sql = 'select v.*, e.descripcion from apollo.canal c
-                join apollo.video v on c.id = v.id_canal
-                join apollo.etiquetas_video ev on v.id = ev.id_video
-                join apollo.etiquetas e on e.id = ev.id_etiqueta
-                    where v.id_canal = :id';
+        $etiqueta = $datos["etiqueta"];
+        $sql = 'select v.* from apollo.canal c
+                                   join apollo.video v on c.id = v.id_canal
+                                   join apollo.etiquetas_video ev on v.id = ev.id_video
+                                   join apollo.etiquetas e on e.id = ev.id_etiqueta
+                                   where v.id_canal = :id and e.descripcion = :etiqueta';
 
-        $resultSet = $conn->executeQuery($sql, ['id' => $id_canal]);
+        $resultSet = $conn->executeQuery($sql, ['id' => $id_canal, 'etiqueta'=>$etiqueta]);
         return $resultSet->fetchAllAssociative();
     }
 
@@ -109,5 +112,21 @@ class VideoRepository extends ServiceEntityRepository
         $resultSet = $conn->executeQuery($sql, ['texto' => $text]);
         return $resultSet->fetchAllAssociative();
     }
+
+    public function getVideosVirales()
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'select v2.*, count(v.id) as total_visitas from apollo.visita v
+                join apollo.video v2 on v.id_video = v2.id
+                            where v.fecha_visita >= current_date - interval  \'1 month\'
+                            group by v2.id
+                            order by total_visitas desc
+                            limit 5';
+
+        $resultSet = $conn->executeQuery($sql);
+        return $resultSet->fetchAllAssociative();
+    }
+
 
 }

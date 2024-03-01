@@ -151,5 +151,15 @@ class SuscripcionController extends AbstractController
     }
 
 
+    #[Route('/canalessuscritosporusuario', name: "canales_suscritos_usuario", methods: ["POST"])]
+    public function CanalesSuscritosUsuario(EntityManagerInterface $entityManager, Request $request):JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $listaCanales = $entityManager->getRepository(Suscripcion::class)->getCanalaesSuscritosPorCanal(["id_usuario"=> $data["id_usuario"]]);
+
+        return $this->json($listaCanales, Response::HTTP_OK);
+    }
+
+
 
 }
