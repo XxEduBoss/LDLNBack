@@ -76,6 +76,9 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'id_usuario', targetEntity: HistorialBusqueda::class, orphanRemoval: true)]
     private Collection $historialBusqueda;
 
+    #[ORM\OneToMany(mappedBy: 'id_usuario', targetEntity: ResetPasswordRequest::class, orphanRemoval: true)]
+    private Collection $resetPassword;
+
     #[ORM\Column(length: 10000)]
     private ?string $foto = null;
 
@@ -92,6 +95,7 @@ class Usuario implements UserInterface,PasswordAuthenticatedUserInterface
         $this->valoracionesPositivas = new ArrayCollection();
         $this->valoracionesNegativas = new ArrayCollection();
         $this->historialBusqueda = new ArrayCollection();
+        $this->resetPassword = new ArrayCollection();
     }
 
     public function getId(): ?int

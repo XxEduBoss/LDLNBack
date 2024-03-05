@@ -1,3 +1,4 @@
+drop table if exists reset_password_request;
 drop table if exists etiquetas_video;
 drop table if exists etiquetas_canal;
 drop table if exists etiquetas_usuario;
@@ -233,6 +234,14 @@ create table etiquetas_usuario(
                                   constraint fk_etiquetas_usuario_usuario foreign key (id_usuario) references usuario(id)
 );
 
+CREATE TABLE reset_password_request (
+                                        id SERIAL PRIMARY KEY,
+                                        id_usuario INT NOT NULL,
+                                        expires_at TIMESTAMP NOT NULL,
+                                        selector VARCHAR(255) NOT NULL,
+                                        hashed_token VARCHAR(255) NOT NULL
+);
+
 
 insert into tipo_notificacion(descripcion) values ('SUBIDA VIDEO'),
                                                   ('SUSCRIPCION'),
@@ -263,7 +272,9 @@ drop table apollo.mensaje;
 
 ALTER TABLE canal
     ALTER COLUMN banner SET NOT NULL;
+alter table reset_password_request
 
+add column requested_at TIMESTAMP NOT NULL; -- Agregar esta línea
 
 
 
