@@ -1,3 +1,26 @@
+/* Reset de estilos y estilos globales */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    background-color: skyblue;
+    font-family: "Roboto", sans-serif;
+    margin: 2%;
+    padding: 5px;
+    background-color: #f0f0f0; /* Cambia el color de fondo según tus preferencias */
+}
+
+button{
+    background-color: #4B0082;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover{
+    background-color: #2a0059;
 }

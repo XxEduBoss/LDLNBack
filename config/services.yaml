@@ -13,6 +13,9 @@ services:
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
+
+    Symfony\Component\Mailer\MailerInterface: '@Symfony\Component\Mailer\Mailer'
+    Symfony\Component\Mailer\Mailer:
     App\:
         resource: '../src/'
         exclude:
