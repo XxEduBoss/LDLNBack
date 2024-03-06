@@ -38,11 +38,12 @@ class VisitaRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $id_usuario = $id_usuario["id_usuario"];
-        $sql = 'select v2.*, max(v.fecha_visita) as fecha_visita
+        $sql = 'select v2.*, max(v.fecha_visita) as fecha_visita, c.nombre_canal as nombre_canal
                         from apollo.visita v
                         join apollo.video v2 on v2.id = v.id_video
+                        join apollo.canal c on c.id = v2.id_canal
                         where v.id_usuario = :id_usuario
-                        group by v.id_video, v.id_usuario, v2.id 
+                        group by v.id_video, v.id_usuario, v2.id, c.nombre_canal 
                         order by max(v.fecha_visita) desc';
 
         $resultSet = $conn->executeQuery($sql, ['id_usuario' => $id_usuario]);

@@ -122,8 +122,7 @@ class CanalRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $text = '%'.$datos["texto"].'%';
-        $sql = 'select c.* , u.foto from apollo.canal c 
-           join apollo.usuario u on c.id_usuario = u.id
+        $sql = 'select c.* , u.foto from apollo.canal c join apollo.usuario u on c.id_usuario = u.id
                 where c.nombre_canal ilike :texto group by c.id , u.foto';
 
         $resultSet = $conn->executeQuery($sql, ['texto' => $text]);

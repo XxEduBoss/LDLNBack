@@ -3,12 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\ResetPasswordRequestRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestTrait;
 
 #[ORM\Entity(repositoryClass: ResetPasswordRequestRepository::class)]
+#[ORM\Table(name: 'reset_password_request',schema: 'apollo')]
 class ResetPasswordRequest implements ResetPasswordRequestInterface
 {
     use ResetPasswordRequestTrait;
@@ -19,15 +19,13 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
     private ?int $id = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name:'id_usuario',nullable: false)]
+    #[ORM\JoinColumn(name: 'id_usuario', nullable: false)]
     private ?Usuario $user = null;
 
-
-    public function __construct(Usuario $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken)
+    public function __construct(object $user, \DateTimeInterface $expiresAt, string $selector, string $hashed_token)
     {
         $this->user = $user;
-        $this->initialize($expiresAt, $selector, $hashedToken);
-
+        $this->initialize($expiresAt, $selector, $hashed_token);
     }
 
     public function getId(): ?int
@@ -39,5 +37,4 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
     {
         return $this->user;
     }
-
 }
