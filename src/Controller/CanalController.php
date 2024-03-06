@@ -80,6 +80,8 @@ class CanalController extends AbstractController
         $user->setComunidadAutonoma($canal->getUsuario()->getComunidadAutonoma());
         $user->setRolUsuario($canal->getUsuario()->getRolUsuario());
         $user->setActivo($canal->getUsuario()->isActivo());
+        $user->setFoto($canal->getUsuario()->getFoto());
+
 
         $canalDTO->setUsuario($user);
         $canalDTO->setActivo($canal->isActivo());

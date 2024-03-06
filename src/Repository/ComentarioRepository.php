@@ -26,9 +26,10 @@ class ComentarioRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $idVideo = $id["id"];
-        $sql = 'select c.* from apollo.comentario c
+        $sql = 'select c.*, u.foto from apollo.comentario c
+                    join apollo.usuario u on u.id = c.id_usuario
                     where c.id_video = :id 
-                    order by c.fecha_publicacion desc';
+                    order by c.fecha_publicacion, u.foto desc';
 
         $resultSet = $conn->executeQuery($sql, ['id' => $idVideo]);
         return $resultSet->fetchAllAssociative();

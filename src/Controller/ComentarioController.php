@@ -165,6 +165,7 @@ class ComentarioController extends AbstractController
             $user->setUsername($usuario1->getUsername());
             $user->setPassword($usuario1->getPassword());
             $user->setRolUsuario($usuario1->getRolUsuario());
+            $user->setFoto($usuario1->getFoto());
             $user->setActivo($usuario1->isActivo());
 
             $comentario->setUsuario($user);
