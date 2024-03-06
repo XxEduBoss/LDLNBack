@@ -26,10 +26,10 @@ class VideoRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $idTipoCategoria = $id["id"];
-        $sql = 'select v.* from apollo.suscripcion s
+        $sql = 'select v.*, c.nombre_canal from apollo.suscripcion s
                     join apollo.canal c on s.id_canal = c.id
                     join apollo.video v on c.id = v.id_canal
-                    where s.id_usuario = :id group by v.id';
+                    where s.id_usuario = :id group by v.id, c.nombre_canal';
 
         $resultSet = $conn->executeQuery($sql, ['id' => $idTipoCategoria]);
         return $resultSet->fetchAllAssociative();
@@ -92,11 +92,13 @@ class VideoRepository extends ServiceEntityRepository
         $conn = $this->getEntityManager()->getConnection();
         $id_canal = $datos["idCanal"];
         $etiqueta = $datos["etiqueta"];
-        $sql = 'select v.* from apollo.canal c
+        $sql = 'select v.*, c.nombre_canal, count(v2.*) as visitas from apollo.canal c
                                    join apollo.video v on c.id = v.id_canal
                                    join apollo.etiquetas_video ev on v.id = ev.id_video
                                    join apollo.etiquetas e on e.id = ev.id_etiqueta
-                                   where v.id_canal = :id and e.descripcion = :etiqueta';
+                                   left join apollo.visita v2 on v2.id_video = v.id
+                                   where v.id_canal = :id and e.descripcion = :etiqueta
+                                   group by v.id, c.nombre_canal';
 
         $resultSet = $conn->executeQuery($sql, ['id' => $id_canal, 'etiqueta'=>$etiqueta]);
         return $resultSet->fetchAllAssociative();
