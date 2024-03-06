@@ -18,8 +18,6 @@ use Symfony\Component\Mime\Email;
 #[Route('/api')]
 class RegistroController extends AbstractController
 {
-
-
     #[Route('/registro', name: 'registrar_usuario', methods: ['POST'])]
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, VerifyEmailHelperInterface $verifyEmailHelper, MailerInterface $mailer): JsonResponse
     {
@@ -55,8 +53,6 @@ class RegistroController extends AbstractController
 
         $entityManager->persist($user);
         $entityManager->flush();
-
-
 
         return new JsonResponse(['message' => 'Usuario registrado con éxito. Se ha enviado un correo electrónico de confirmación.'], 201);
     }
